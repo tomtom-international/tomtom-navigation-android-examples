@@ -12,8 +12,8 @@ dependencyResolutionManagement {
         mavenCentral()
         maven {
             credentials {
-                username = settings.ext.find('NavSDKUsername')
-                password = settings.ext.find('NavSDKPassword')
+                username = System.getenv("NavSDKUsername")
+                password = System.getenv("NavSDKPassword")
             }
             url = uri("https://repositories.tomtom.com/artifactory/maven")
 
