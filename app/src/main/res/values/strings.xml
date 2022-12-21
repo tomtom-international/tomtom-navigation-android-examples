@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Navigating with TomTom</string>
+    <string name="title_activity_map_demo_detail_host">MapDemoDetailHostActivity</string>
+    <string name="title_mapdemo_list">ItemsMapDemos</string>
+    <string name="title_mapdemo_detail">MapDemo Detail</string>
+    <string name="navigate">Navigate</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="basic_driving_app">Basic driving app</string>
+    <string name="map">Map demo</string>
+    <string name="search">Search demo</string>
+    <string name="routing">Routing demo</string>
+    <string name="navigation">Navigation demo</string>
+    <string name="offline_maps">Offline maps demo</string>
+    <string name="map_demo_activity_title">Map Demo</string>
+    <string name="navigation_activity_title">Navigation Demo</string>
+    <string name="offline_demo_activity_title">Offline Map Demo</string>
+    <string name="routing_demo_activity_title">Routing Demo</string>
+    <string name="search_demo_activity_title">Search Demo</string>
+    <string name="route">Route</string>
+
+</resources>

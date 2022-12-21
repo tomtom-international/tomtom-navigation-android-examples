@@ -1,0 +1,24 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            credentials {
+                username = settings.ext.find('NavSDKUsername')
+                password = settings.ext.find('NavSDKPassword')
+            }
+            url = uri("https://repositories.tomtom.com/artifactory/maven")
+
+        }
+    }
+}
+rootProject.name = "Navigating with TomTom"
+include ':app'

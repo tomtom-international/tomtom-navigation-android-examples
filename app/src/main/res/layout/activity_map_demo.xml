@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MapDemoActivity">
+
+    <EditText
+        android:id="@+id/editTextTextPersonName"
+        android:layout_width="216dp"
+        android:layout_height="44dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/map_demo_activity_title"
+        tools:layout_editor_absoluteX="94dp"
+        tools:layout_editor_absoluteY="343dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

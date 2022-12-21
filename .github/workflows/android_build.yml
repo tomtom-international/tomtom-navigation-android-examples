@@ -1,0 +1,24 @@
+name: Android Build
+
+on: push
+
+jobs:
+  build:
+    name: Build debug demo APp
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: SETUP JVM 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Print JVM version
+        run: javac -version
+      - name: Wrapper permissions
+        run: chmod +x ./gradlew
+      - name: Build
+        run: ./gradlew assemble
