@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">TomTom SDK Examples</string>
+    <string name="location_permission_denied">Location permissions denied</string>
+    <string name="title_activity_map_demo_detail_host">MapDemoDetailHostActivity</string>
+    <string name="title_mapdemo_list">ItemsMapDemos</string>
+    <string name="title_mapdemo_detail">MapDemo Detail</string>
+    <string name="navigate">Navigate</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="basic_driving_app">Basic driving app</string>
+    <string name="map">Map Display</string>
+    <string name="search">Search</string>
+    <string name="routing">Routing</string>
+    <string name="navigation">Navigation</string>
+    <string name="offline_maps">Offline</string>
+    <string name="map_demo_activity_title">Map display examples coming soon</string>
+    <string name="navigation_activity_title">Navigation examples coming soon</string>
+    <string name="offline_demo_activity_title">Offline examples coming soon</string>
+    <string name="routing_demo_activity_title">Routing examples coming soon</string>
+    <string name="search_demo_activity_title">Search examples coming soon</string>
+    <string name="route">Route</string>
+
+</resources>

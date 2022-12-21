@@ -1,0 +1,35 @@
+ext {
+    gosdkVersion = "0.3.1522"
+    androidXNavigation = "2.5.3"
+    androidXCoreVersion = "1.7.0"
+    androidXCompatVersion = "1.4.2"
+    androidXConstraintLayout = "1.4.2"
+    androidXJunit = "1.1.3"
+    androidXEspresso = "3.4.0"
+    materialVersion = "1.6.1"
+    junitVersion = "4.13.2"
+
+    tomTomLibraries = [
+            mapsDisplay                     : "com.tomtom.sdk.maps:map-display:$gosdkVersion",
+            routePlannerOnline              : "com.tomtom.sdk.routing:route-planner-online:$gosdkVersion",
+            locationAndroid                 : "com.tomtom.sdk.location:provider-android:$gosdkVersion",
+            locationSimulation              : "com.tomtom.sdk.location:provider-simulation:$gosdkVersion",
+            locationMapmatched              : "com.tomtom.sdk.location:provider-map-matched:$gosdkVersion",
+            navigation                      : "com.tomtom.sdk.navigation:navigation:$gosdkVersion",
+            navigationUi                    : "com.tomtom.sdk.navigation:ui:$gosdkVersion",
+            navigationRouteReplanner        : "com.tomtom.sdk.navigation:route-replanner-default:$gosdkVersion",
+            searchOnline                    : "com.tomtom.sdk.search:search-online:$gosdkVersion",
+            searchUi                        : "com.tomtom.sdk.search:ui:$gosdkVersion"
+    ]
+    libraries = [
+            androidXNavigationFragment      : "androidx.navigation:navigation-fragment-ktx:$androidXNavigation",
+            androidXNavigationUi            : "androidx.navigation:navigation-ui-ktx:$androidXNavigation",
+            androidXCore                    : "androidx.core:core-ktx:$androidXCoreVersion",
+            androidXCompat                  : "androidx.appcompat:appcompat:$androidXCompatVersion",
+            androidXConstraintLayout        : "androidx.constraintlayout:constraintlayout:$androidXConstraintLayout",
+            androidXJunit                   : "androidx.test.ext:junit:$androidXJunit",
+            androidXEspresso                : "androidx.test.espresso:espresso-core:$androidXEspresso",
+            material                        : "com.google.android.material:material:$materialVersion",
+            junit                           : "junit:junit:$junitVersion"
+    ]
+}
