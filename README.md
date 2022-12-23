@@ -1,6 +1,6 @@
 
 
-Hello and welcome to this demo application showcasing the TomTom Navigation SDK and other APIs
+Hello and welcome to this application with examples showcasing the TomTom Navigation SDK and other APIs
 
 This sample code is for the Android platform but TomTom also has a version for iOS. 
 
