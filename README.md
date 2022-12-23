@@ -1,20 +1,17 @@
 
-Sample code using the TomTom Nav SDK for the Android platform
 
-Hello everyone! Click the link to register on our Developer Portal : https://bit.ly/38nbvLX
+Hello and welcome to this demo application showcasing the TomTom Navigation SDK and other APIs
 
-We have been waiting for this moment for a loooong time. Here it is the TomTom Navigation SDK!
-So you can now build navigation application with the power of TomTom!
+This sample code is for the Android platform but TomTom also has a version for iOS. 
 
-This is the code for the video: https://youtu.be/raPYxWrqNjA
+Remember to register in our Developer Portal : https://bit.ly/38nbvLX to get access to your free API and all the documentation and examples for our SDKs You will find this tutorial as well - if you prefer to read.
 
-In this tutorial we do it in the Android platform but TomTom also has a version for iOS. 
-Check all the information here : https://developer.tomtom.com/android/navigation/documentation/overview/introduction
-You will find this tutorial as well - if you prefer to read.
+This code is based on the following video in our Youtube channel: https://youtu.be/raPYxWrqNjA
 
 ** NOTE **
 In order to compile this demo, you need 2 things:
-1. Access to the TomTom Maven repository ( Artifactory ) . Please contact TomTom for a password to download the binaries
-2. An API KEY! get one for free in the developer portal and make sure that it has the navigation feature activated. 
+1. Access to the TomTom Maven repository ( Artifactory ) . Please contact TomTom for a password to download the binaries. You will need to add tehe credentials as ENV variables. Check the settings.gradle file.
 
-Happy mapping!
+2. An API KEY! get one for free in the developer portal and make sure that it has the navigation feature activated. If not, our contact page is only one click away.
+
+Happy navigating!
