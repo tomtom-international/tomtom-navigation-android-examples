@@ -30,11 +30,8 @@ import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.route.Instruction
 import com.tomtom.sdk.map.display.route.RouteOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
+import com.tomtom.sdk.navigation.*
 
-import com.tomtom.sdk.navigation.NavigationConfiguration
-import com.tomtom.sdk.navigation.NavigationError
-import com.tomtom.sdk.navigation.RoutePlan
-import com.tomtom.sdk.navigation.TomTomNavigation
 import com.tomtom.sdk.navigation.routereplanner.RouteReplanner
 import com.tomtom.sdk.navigation.routereplanner.default.DefaultRouteReplanner
 
@@ -96,7 +93,7 @@ class BasicNavActivity : AppCompatActivity() , RouteProcessFragment.NavigateOpti
     private lateinit var routingPlanner: RoutePlanner
 
     // Dynamic routing engine for creating routes.
-    private lateinit var RoutingReplanner: RouteReplanner
+    private lateinit var routingReplanner: RouteReplanner
 
     // Location update listener - for when we get GPS updates
     private lateinit var locationUpdateListener:OnLocationUpdateListener
@@ -271,16 +268,26 @@ class BasicNavActivity : AppCompatActivity() , RouteProcessFragment.NavigateOpti
 
         // Add routing API
         routingPlanner = OnlineRoutePlanner.create(context = this, apiKey = apikey)
-        RoutingReplanner = DefaultRouteReplanner.create(routingPlanner)
+        routingReplanner = DefaultRouteReplanner.create(routingPlanner)
 
         // Adding Navigation
         val navigationConfiguration = NavigationConfiguration(
             context = this,
             apiKey = apikey,
             locationProvider = locationEngine,
-            routeReplanner = RoutingReplanner
+            routeReplanner = routingReplanner
         )
         tomtomNavigation = TomTomNavigation.create(navigationConfiguration)
+
+        tomtomNavigation.addOnRouteUpdatedListener(object : OnRouteUpdatedListener {
+            override fun onRouteUpdated(route: Route, updateReason: RouteUpdateReason) {
+                // We got a new route - usually we would listen to the RouteUpdateReason
+                // to inform the driver about what happened. In this case we are updating routes
+                // if the engine do it.
+                // We re draw the new route:
+                drawRoute(route, false)
+            }
+        })
 
         mapFragment.getMapAsync { map ->
             tomTomMap = map
@@ -405,7 +412,7 @@ class BasicNavActivity : AppCompatActivity() , RouteProcessFragment.NavigateOpti
     private val routePlanningCallback = object : RoutePlanningCallback {
         override fun onSuccess(result: RoutePlanningResult) {
             route = result.routes.first()
-            drawRoute(route)
+            drawRoute(route, true)
         }
 
         override fun onError(error: RoutingError) {
@@ -414,7 +421,7 @@ class BasicNavActivity : AppCompatActivity() , RouteProcessFragment.NavigateOpti
 
         override fun onRoutePlanned(route: Route) {
             this@BasicNavActivity.route = route
-            drawRoute(route)
+            drawRoute(route, true)
         }
     }
 
@@ -428,7 +435,7 @@ class BasicNavActivity : AppCompatActivity() , RouteProcessFragment.NavigateOpti
         }
     }
 
-    private fun drawRoute(route: Route) {
+    private fun drawRoute(route: Route, zoom: Boolean) {
         val instructions = route.mapInstructions()
         val geometry = route.legs.flatMap { it.points }
         val routeOptions = RouteOptions(
@@ -437,9 +444,12 @@ class BasicNavActivity : AppCompatActivity() , RouteProcessFragment.NavigateOpti
             departureMarkerVisible = true,
             instructions = instructions
         )
+        tomTomMap.removeRoutes()
         tomTomMap.addRoute(routeOptions)
-        val zoomPadding = 20
-        tomTomMap.zoomToRoutes(zoomPadding)
+        if (zoom) {
+            val zoomPadding = 20
+            tomTomMap.zoomToRoutes(zoomPadding)
+        }
 
     }
 
