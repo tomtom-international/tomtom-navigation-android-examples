@@ -1,9 +1,4 @@
 
-
-Hello and welcome to this application with examples showcasing the TomTom Navigation SDK and other APIs
-
-
-
 # TomTom Navigation Android SDK Examples
 
 Hello and welcome to this repository with examples showcasing the TomTom Navigation SDK and other APIs [TomTom Navigation SDK for Android](https://developer.tomtom.com/android/navigation/documentation/overview/introduction) using the version 0.3.1014
