@@ -26,7 +26,7 @@ Visit our developer portal and follow the [Setup](https://developer.tomtom.com/a
 
 ### Repository
 
-1. `git clone git@github.com:`
+1. `git clone https://github.com/tomtom-international/navigation-android-examples.git`
 2. Create a 'local.properties' files if it doesnt exist and add your API KEY there as
 
 #TomTomApiKey="you key from developer.tomtom.com"
@@ -37,8 +37,8 @@ Visit our developer portal and follow the [Setup](https://developer.tomtom.com/a
 
 ## Getting Help
 
-- **Found a bug? To report** [Open an issue](https://github.com//issues). If possible, include the version of the TomTom Nav SDK and a copy of the logcat.
-- **Do you have a request?** [Open an issue](https://github.com/issues/). Let us know what would you like and why. Thanks!
+- **Found a bug? To report** [Open an issue](https://github.com/tomtom-international/navigation-android-examples.git/issues). If possible, include the version of the TomTom Nav SDK and a copy of the logcat.
+- **Do you have a request?** [Open an issue](https://github.com/tomtom-international/navigation-android-examples.git/issues/). Let us know what would you like and why. Thanks!
 
 ## Contributing
 
