@@ -20,5 +20,5 @@ dependencyResolutionManagement {
         }
     }
 }
-rootProject.name = "Navigating with TomTom"
+rootProject.name = "TomTom SDK Examples"
 include ':app'
