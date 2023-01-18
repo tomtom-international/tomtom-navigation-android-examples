@@ -5,6 +5,8 @@ pluginManagement {
         mavenCentral()
     }
 }
+//artifactoryUsername=adrian.glasnapp@tomtom.com
+//        artifactoryPassword=cmVmdGtuOjAxOjE3MDU0OTE4MDM6NHBQUFZiaDEyUXZzaTMwS3E4cEdoUDdOSDBN
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -12,8 +14,8 @@ dependencyResolutionManagement {
         mavenCentral()
         maven {
             credentials {
-                username = System.getenv("NavSDKUsername")
-                password = System.getenv("NavSDKPassword")
+                username = artifactoryUsername
+                password = artifactoryPassword
             }
             url = uri("https://repositories.tomtom.com/artifactory/maven")
 

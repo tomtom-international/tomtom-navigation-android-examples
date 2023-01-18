@@ -21,8 +21,4 @@ jobs:
       - name: Wrapper permissions
         run: chmod +x ./gradlew
       - name: Build
-        run: NavSDKUsername=$ARTIFACTORY_USERNAME NavSDKPassword=$ARTIFACTORY_PASSWORD ./gradlew assemble
-        env:
-          ARTIFACTORY_USERNAME: ${{ secrets.USERNAME_ARTIFACTORY }}
-          ARTIFACTORY_PASSWORD: ${{ secrets.CODE_ARTIFACTORY }}
-
+        run: ./gradlew assemble -PartifactoryUsername=${{secrets.ARTIFACTORY_USERNAME}} -PartifactoryPassword=${{secrets.ARTIFACTORY_PASSWORD}}
