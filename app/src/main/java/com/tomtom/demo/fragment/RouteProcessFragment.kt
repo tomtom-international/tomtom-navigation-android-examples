@@ -11,6 +11,7 @@ import com.tomtom.demo.navdemoapp.R
 import com.tomtom.sdk.common.location.GeoPoint
 import com.tomtom.sdk.search.ui.model.Place
 
+// move to companion object
 // the fragment initialization parameter ARG_ADDRESS
 private const val ARG_ADDRESS = "address"
 
@@ -19,6 +20,7 @@ private const val ARG_ADDRESS = "address"
  * Use the [RouteProcessFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+// I think the viewmodel with livedata should be used instead of passing the interface
 class RouteProcessFragment(place: Place, navigationInterface: NavigateOptionsInterface) : Fragment() {
     private var address: String? = null
     private var listener: NavigateOptionsInterface = navigationInterface
@@ -44,8 +46,8 @@ class RouteProcessFragment(place: Place, navigationInterface: NavigateOptionsInt
     ): View? {
         // Inflate the layout for this fragment
         val view: ViewGroup = inflater.inflate(R.layout.fragment_route_process, container, false) as ViewGroup
-        val addressField: TextView = view.findViewById(R.id.address)
-        addressField.setText(address)
+        val addressField: TextView = view.findViewById(R.id.address) // consider using view binding https://developer.android.com/topic/libraries/view-binding
+        addressField.text = address
 
         val navigateButton = view.findViewById<Button>(R.id.navigateButton)
         navigateButton.setOnClickListener {

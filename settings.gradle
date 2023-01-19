@@ -5,6 +5,7 @@ pluginManagement {
         mavenCentral()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -12,7 +13,7 @@ dependencyResolutionManagement {
         mavenCentral()
         maven {
             credentials {
-                username = artifactoryUsername
+                username = artifactoryUsername // would be nice to store artifactory credentials also in local.properties
                 password = artifactoryPassword
             }
             url = uri("https://repositories.tomtom.com/artifactory/maven")
