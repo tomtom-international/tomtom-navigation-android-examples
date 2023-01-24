@@ -31,3 +31,8 @@ updates:
       # Check for updates at 2am UTC
       time: "02:00"
     open-pull-requests-limit: 10
+    reviewers:
+      - "joserojas-tomtom"
+      - "AdrianGlasnapp-TomTom"
+      - "ioanakanda-tomtom"
+      - "LukaszWitkowski-tomtom"
