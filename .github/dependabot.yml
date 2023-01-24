@@ -16,11 +16,6 @@
 
 version: 2
 registries:
-  sdk-release:
-    type: maven-repository
-    url: https://repositories.tomtom.com/artifactory/maven
-    username: ${{secrets.ARTIFACTORY_USERNAME}}
-    password: ${{secrets.ARTIFACTORY_PASSWORD}}
   main-release:
     type: maven-repository
     url: https://artifactory.tomtomgroup.com/artifactory/sdk-maven
@@ -30,7 +25,6 @@ updates:
   - package-ecosystem: "gradle"
     directory: "/"
     registries:
-      - sdk-release
       - main-release
     schedule:
       interval: "daily"
