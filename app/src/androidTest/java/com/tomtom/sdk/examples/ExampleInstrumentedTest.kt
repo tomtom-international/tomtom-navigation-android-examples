@@ -1,4 +1,4 @@
-package com.tomtom.demo.navdemoapp
+package com.tomtom.sdk.examples
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

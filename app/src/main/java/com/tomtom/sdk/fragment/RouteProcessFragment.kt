@@ -1,4 +1,4 @@
-package com.tomtom.demo.fragment
+package com.tomtom.sdk.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.TextView
 import android.view.ViewGroup
 import android.widget.Button
-import com.tomtom.demo.navdemoapp.R
+import com.tomtom.sdk.examples.R
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.Place
 

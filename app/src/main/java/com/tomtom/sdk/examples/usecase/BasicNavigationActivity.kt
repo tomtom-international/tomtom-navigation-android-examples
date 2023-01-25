@@ -8,7 +8,7 @@
  * not the licensee, you are not authorized to use this software in any manner and should
  * immediately return or destroy it.
  */
-package com.tomtom.demo.navdemoapp
+package com.tomtom.sdk.examples.usecase
 
 
 import android.Manifest
@@ -18,6 +18,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.tomtom.sdk.examples.BuildConfig
+import com.tomtom.sdk.examples.R
 import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
@@ -29,6 +31,7 @@ import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraTrackingMode
 import com.tomtom.sdk.map.display.camera.CameraChangeListener
+import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.common.screen.Padding
 import com.tomtom.sdk.map.display.gesture.MapLongClickListener
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
@@ -43,7 +46,6 @@ import com.tomtom.sdk.navigation.ProgressUpdatedListener
 import com.tomtom.sdk.navigation.RoutePlan
 import com.tomtom.sdk.navigation.TomTomNavigation
 import com.tomtom.sdk.navigation.TomTomNavigationFactory
-import com.tomtom.sdk.navigation.UnitSystemType.Companion.default
 import com.tomtom.sdk.navigation.routereplanner.DefaultRouteReplanner
 import com.tomtom.sdk.navigation.routereplanner.RouteReplanner
 import com.tomtom.sdk.navigation.ui.NavigationFragment
@@ -76,7 +78,7 @@ class BasicNavigationActivity : AppCompatActivity() {
     private lateinit var navigationFragment: NavigationFragment
 
     // API Key
-    private val apiKey = BuildConfig.TomTomApiKey // https://developer.tomtom.com/user/register
+    private val apiKey = BuildConfig.TomTomApiKey
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

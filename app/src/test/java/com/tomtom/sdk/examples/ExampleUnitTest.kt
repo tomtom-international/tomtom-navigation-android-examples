@@ -1,4 +1,4 @@
-package com.tomtom.demo.navdemoapp
+package com.tomtom.sdk.examples
 
 import org.junit.Test
 

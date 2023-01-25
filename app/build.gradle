@@ -9,7 +9,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.tomtom.demo.navdemoapp"
+        applicationId "com.tomtom.sdk.examples"
         minSdk 24
         targetSdk 32
         versionCode 1
