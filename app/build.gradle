@@ -51,15 +51,15 @@ android {
 }
 
 dependencies {
-    implementation tomTomLibraries.routingClientOnline
+    implementation tomTomLibraries.routePlannerOnline
     implementation tomTomLibraries.locationAndroid
     implementation tomTomLibraries.locationSimulation
     implementation tomTomLibraries.locationMapmatched
     implementation tomTomLibraries.mapsDisplay
     implementation tomTomLibraries.navigation
     implementation tomTomLibraries.navigationUi
-    implementation tomTomLibraries.navigationDynamicRoutingOnline
-    implementation tomTomLibraries.searchClientOnline
+    implementation tomTomLibraries.navigationRouteReplanner
+    implementation tomTomLibraries.searchOnline
     implementation tomTomLibraries.searchUi
 
     implementation libraries.androidXCore

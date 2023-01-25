@@ -1,5 +1,5 @@
 ext {
-    gosdkVersion = "0.3.1014"
+    gosdkVersion = "0.3.1486"
     androidXNavigation = "2.5.3"
     androidXCoreVersion = "1.7.0"
     androidXCompatVersion = "1.4.2"
@@ -10,16 +10,17 @@ ext {
     junitVersion = "4.13.2"
 
     tomTomLibraries = [
-            mapsDisplay                     : "com.tomtom.sdk:maps-display:$gosdkVersion",
-            routingClientOnline             : "com.tomtom.sdk:routing-client-online:$gosdkVersion",
-            locationAndroid                 : "com.tomtom.sdk:location-android:$gosdkVersion",
-            locationSimulation              : "com.tomtom.sdk:location-simulation:$gosdkVersion",
-            locationMapmatched              : "com.tomtom.sdk:location-mapmatched:$gosdkVersion",
-            navigation                      : "com.tomtom.sdk:navigation:$gosdkVersion",
-            navigationUi                    : "com.tomtom.sdk:navigation-ui:$gosdkVersion",
-            navigationDynamicRoutingOnline  : "com.tomtom.sdk:navigation-dynamic-routing-online:$gosdkVersion",
-            searchClientOnline              : "com.tomtom.sdk:search-client-online:$gosdkVersion",
-            searchUi                        : "com.tomtom.sdk:search-ui:$gosdkVersion"
+            mapsDisplay                     : "com.tomtom.sdk.maps:map-display:$gosdkVersion",
+            routePlannerOnline              : "com.tomtom.sdk.routing:route-planner-online:$gosdkVersion",
+            locationAndroid                 : "com.tomtom.sdk.location:provider-android:$gosdkVersion",
+            locationSimulation              : "com.tomtom.sdk.location:provider-simulation:$gosdkVersion",
+            locationMapmatched              : "com.tomtom.sdk.location:provider-map-matched:$gosdkVersion",
+            navigation                      : "com.tomtom.sdk.navigation:navigation:$gosdkVersion",
+            navigationUi                    : "com.tomtom.sdk.navigation:ui:$gosdkVersion",
+            navigationRouteReplanner        : "com.tomtom.sdk.navigation:route-replanner-default:$gosdkVersion",
+            searchOnline                    : "com.tomtom.sdk.search:search-online:$gosdkVersion",
+            searchUi                        : "com.tomtom.sdk.search:ui:$gosdkVersion",
+            vehicle                         : "com.tomtom.sdk:vehicle:$gosdkVersion",
     ]
     libraries = [
             androidXNavigationFragment      : "androidx.navigation:navigation-fragment-ktx:$androidXNavigation",

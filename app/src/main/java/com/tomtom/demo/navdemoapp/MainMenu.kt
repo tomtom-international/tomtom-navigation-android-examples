@@ -12,7 +12,7 @@ class MainMenu : AppCompatActivity() {
     }
 
     fun launchBasicDriving(button : android.view.View) {
-        val myIntent = Intent(this@MainMenu, BasicNavActivity::class.java)
+        val myIntent = Intent(this@MainMenu, BasicNavigationActivity::class.java)
         this@MainMenu.startActivity(myIntent)
     }
 

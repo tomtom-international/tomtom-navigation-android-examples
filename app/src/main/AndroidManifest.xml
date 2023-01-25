@@ -17,22 +17,25 @@
         android:theme="@style/Theme.NavigatingWithTomTom"
         tools:targetApi="31">
         <activity
-            android:name="com.tomtom.demo.navdemoapp.OfflineMapsDemoActivity"
+            android:name=".BasicNavigationActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.demo.navdemoapp.NavigationDemoActivity"
+            android:name=".OfflineMapsDemoActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.demo.navdemoapp.RoutingDemoActivity"
+            android:name=".NavigationDemoActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.demo.navdemoapp.SearchDemoActivity"
+            android:name=".RoutingDemoActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.demo.navdemoapp.MapDemoActivity"
+            android:name=".SearchDemoActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.demo.navdemoapp.MainMenu"
+            android:name=".MapDemoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainMenu"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,18 +43,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.tomtom.demo.navdemoapp.BasicNavActivity"
-            android:exported="true">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
