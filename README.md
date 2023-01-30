@@ -17,10 +17,10 @@ Once you have obtained access, do the following:
 
 2. Clone the repository `https://github.com/tomtom-international/navigation-android-examples.git`
 
-3. Create a 'local.properties' files if it doesn't exist and add your API KEY there as
-`TomTomApiKey = "YOUR KEY"`
+3. Create a `local.properties` files if it doesn't exist and add your *API KEY* there as
+`TomTomApiKey = "YOUR API KEY"`
 
-4. Add your credentials from the TomTom Artifactory repo as ENV variables (NavSDKUsername and NavSDKPassword) or update the Settings.gradle file with these credentials.
+4. Add your credentials from the TomTom Maven repo as ENV variables (NavSDKUsername and NavSDKPassword) or update the Settings.gradle file with these credentials.
 
 5. Run the application.
 
