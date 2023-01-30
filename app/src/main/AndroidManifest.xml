@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.tomtom.demo.navdemoapp">
+    package="com.tomtom.sdk.examples">
     <!-- Always include this permission -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Include only if your app benefits from precise location access. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -17,22 +17,25 @@
         android:theme="@style/Theme.NavigatingWithTomTom"
         tools:targetApi="31">
         <activity
-            android:name="com.tomtom.demo.navdemoapp.OfflineMapsDemoActivity"
+            android:name="com.tomtom.sdk.examples.usecase.BasicNavigationActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.demo.navdemoapp.NavigationDemoActivity"
+            android:name="com.tomtom.sdk.examples.offline.OfflineMapsDemoActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.demo.navdemoapp.RoutingDemoActivity"
+            android:name="com.tomtom.sdk.examples.navigation.NavigationDemoActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.demo.navdemoapp.SearchDemoActivity"
+            android:name="com.tomtom.sdk.examples.routing.RoutingDemoActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.demo.navdemoapp.MapDemoActivity"
+            android:name="com.tomtom.sdk.examples.search.SearchDemoActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.demo.navdemoapp.MainMenu"
+            android:name="com.tomtom.sdk.examples.maps.MapDemoActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.tomtom.sdk.examples.MainMenu"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,18 +43,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.tomtom.demo.navdemoapp.BasicNavActivity"
-            android:exported="true">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
