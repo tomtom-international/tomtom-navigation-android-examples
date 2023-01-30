@@ -20,7 +20,7 @@ Once you have obtained access, do the following:
 3. Create a `local.properties` files if it doesn't exist and add your *API KEY* there as
 `TomTomApiKey = "YOUR API KEY"`
 
-4. Add your credentials from the TomTom Maven repo as ENV variables (NavSDKUsername and NavSDKPassword) or update the Settings.gradle file with these credentials.
+4. Add your credentials from the TomTom Maven repo as ENV variables (*NavSDKUsername* and *NavSDKPassword*) or update the `settings.gradle` file with these credentials.
 
 5. Run the application.
 
