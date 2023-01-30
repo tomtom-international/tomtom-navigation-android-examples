@@ -6,7 +6,7 @@ Hello and welcome to this repository with examples showcasing the [TomTom Naviga
 *Note: Navigation SDK for Android is only available upon request. [Contact us](https://developer.tomtom.com/tomtom-sdk-for-android/request-access "Contact us") to get access.*
 
 <div align="center">
-  <img align="center" src=".github/navsdk-splash.png" width="400"/>
+  <img align="center" src=".github/nav-sdk-phone.png" width="400"/>
 </div>
 
 ## Setup
