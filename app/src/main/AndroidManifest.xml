@@ -20,19 +20,19 @@
             android:name="com.tomtom.sdk.examples.usecase.BasicNavigationActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.sdk.examples.offline.OfflineMapsDemoActivity"
+            android:name="com.tomtom.sdk.examples.offline.OfflineExamplesActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.sdk.examples.navigation.NavigationDemoActivity"
+            android:name="com.tomtom.sdk.examples.navigation.NavigationExamplesActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.sdk.examples.routing.RoutingDemoActivity"
+            android:name="com.tomtom.sdk.examples.routing.RoutingExamplesActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.sdk.examples.search.SearchDemoActivity"
+            android:name="com.tomtom.sdk.examples.search.SearchExamplesActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.sdk.examples.maps.MapDemoActivity"
+            android:name="com.tomtom.sdk.examples.maps.MapExamplesActivity"
             android:exported="false" />
         <activity
             android:name="com.tomtom.sdk.examples.MainMenu"

@@ -14,9 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.tomtom.sdk.examples.R
 
-class RoutingDemoActivity : AppCompatActivity() {
+class RoutingExamplesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_routing_demo)
+        setContentView(R.layout.activity_routing_examples)
     }
 }

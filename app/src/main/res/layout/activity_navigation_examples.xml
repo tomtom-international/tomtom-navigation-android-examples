@@ -4,14 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".search.SearchDemoActivity">
-    <EditText
-        android:id="@+id/editTextTextPersonName"
+    tools:context=".navigation.NavigationExamplesActivity">
+
+    <TextView
+        android:id="@+id/navExampleList"
         android:layout_width="216dp"
         android:layout_height="44dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/search_demo_activity_title"
-        tools:layout_editor_absoluteX="94dp"
-        tools:layout_editor_absoluteY="343dp" />
+        android:text="@string/navigation_activity_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
