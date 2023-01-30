@@ -14,9 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.tomtom.sdk.examples.R
 
-class OfflineMapsDemoActivity : AppCompatActivity() {
+class OfflineExamplesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_offline_maps_demo)
+        setContentView(R.layout.activity_offline_examples)
     }
 }

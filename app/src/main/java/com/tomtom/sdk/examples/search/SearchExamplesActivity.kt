@@ -8,15 +8,16 @@
  * not the licensee, you are not authorized to use this software in any manner and should
  * immediately return or destroy it.
  */
-package com.tomtom.sdk.examples.navigation
+package com.tomtom.sdk.examples.search
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.tomtom.sdk.examples.R
 
-class NavigationDemoActivity : AppCompatActivity() {
+
+class SearchExamplesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_navigation_demo)
+        setContentView(R.layout.activity_search_examples)
     }
 }

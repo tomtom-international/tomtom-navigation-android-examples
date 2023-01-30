@@ -13,11 +13,11 @@ package com.tomtom.sdk.examples
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.tomtom.sdk.examples.maps.MapDemoActivity
-import com.tomtom.sdk.examples.navigation.NavigationDemoActivity
-import com.tomtom.sdk.examples.offline.OfflineMapsDemoActivity
-import com.tomtom.sdk.examples.routing.RoutingDemoActivity
-import com.tomtom.sdk.examples.search.SearchDemoActivity
+import com.tomtom.sdk.examples.maps.MapExamplesActivity
+import com.tomtom.sdk.examples.navigation.NavigationExamplesActivity
+import com.tomtom.sdk.examples.offline.OfflineExamplesActivity
+import com.tomtom.sdk.examples.routing.RoutingExamplesActivity
+import com.tomtom.sdk.examples.search.SearchExamplesActivity
 import com.tomtom.sdk.examples.usecase.BasicNavigationActivity
 
 
@@ -33,27 +33,27 @@ class MainMenu : AppCompatActivity() {
     }
 
     fun launchMapDemo(button : android.view.View) {
-        val myIntent = Intent(this@MainMenu, MapDemoActivity::class.java)
+        val myIntent = Intent(this@MainMenu, MapExamplesActivity::class.java)
         this@MainMenu.startActivity(myIntent)
     }
 
     fun launchNavigationDemo(button : android.view.View) {
-        val myIntent = Intent(this@MainMenu, NavigationDemoActivity::class.java)
+        val myIntent = Intent(this@MainMenu, NavigationExamplesActivity::class.java)
         this@MainMenu.startActivity(myIntent)
     }
 
     fun launchOfflineMapsDemo(button : android.view.View) {
-        val myIntent = Intent(this@MainMenu, OfflineMapsDemoActivity::class.java)
+        val myIntent = Intent(this@MainMenu, OfflineExamplesActivity::class.java)
         this@MainMenu.startActivity(myIntent)
     }
 
     fun launchRoutingDemo(button : android.view.View) {
-        val myIntent = Intent(this@MainMenu, RoutingDemoActivity::class.java)
+        val myIntent = Intent(this@MainMenu, RoutingExamplesActivity::class.java)
         this@MainMenu.startActivity(myIntent)
     }
 
     fun launchSearchDemo(button : android.view.View) {
-        val myIntent = Intent(this@MainMenu, SearchDemoActivity::class.java)
+        val myIntent = Intent(this@MainMenu, SearchExamplesActivity::class.java)
         this@MainMenu.startActivity(myIntent)
     }
 }
