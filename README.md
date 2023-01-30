@@ -1,7 +1,7 @@
 
 # TomTom Navigation Android SDK Examples
 
-Hello and welcome to this repository with examples showcasing the TomTom Navigation SDK and other APIs [TomTom Navigation SDK for Android](https://developer.tomtom.com/android/navigation/documentation/overview/introduction) using the version 0.3.1014
+Hello and welcome to this repository with examples showcasing the TomTom Navigation SDK and other APIs [TomTom Navigation SDK for Android](https://developer.tomtom.com/android/navigation/documentation/overview/introduction) using the version 0.3.1486
 
 This sample code is for the Android platform but TomTom also has a version for iOS [here](https://github.com/tomtom-international/migration-tutorial-ios-sdk)
 
@@ -31,7 +31,7 @@ Visit our developer portal and follow the [Setup](https://developer.tomtom.com/a
 
 #TomTomApiKey="you key from developer.tomtom.com"
 
-3. Add your credentials from the TomTom Artifactory repo as ENV variables (NavSDKUsername and NavSDKPassword)
+3. Add your credentials from the TomTom Artifactory repo as ENV variables (NavSDKUsername and NavSDKPassword) or update the Settings.gradle file with these credentials.
 4. Run the sample under `app`.
 
 
