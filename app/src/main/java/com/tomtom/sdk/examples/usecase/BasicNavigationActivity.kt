@@ -23,6 +23,7 @@ import com.tomtom.sdk.examples.R
 import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
+import com.tomtom.sdk.location.OnLocationUpdateListener
 import com.tomtom.sdk.location.android.AndroidLocationProvider
 import com.tomtom.sdk.location.mapmatched.MapMatchedLocationProvider
 import com.tomtom.sdk.location.simulation.SimulationLocationProvider
@@ -80,6 +81,7 @@ class BasicNavigationActivity : AppCompatActivity() {
     private lateinit var mapFragment: MapFragment
     private lateinit var tomTomMap: TomTomMap
     private lateinit var locationProvider: LocationProvider
+    private lateinit var onLocationUpdateListener: OnLocationUpdateListener
     private lateinit var routePlanner: RoutePlanner
     private lateinit var routeReplanner: RouteReplanner
     private var route: Route? = null
@@ -175,6 +177,12 @@ class BasicNavigationActivity : AppCompatActivity() {
      */
     private fun showUserLocation() {
         locationProvider.enable()
+        // zoom to current location at city level
+        onLocationUpdateListener = OnLocationUpdateListener { location ->
+            tomTomMap.moveCamera(CameraOptions(location.position, zoom = 8.0))
+            locationProvider.removeOnLocationUpdateListener(onLocationUpdateListener)
+        }
+        locationProvider.addOnLocationUpdateListener(onLocationUpdateListener)
         tomTomMap.setLocationProvider(locationProvider)
         val locationMarker = LocationMarkerOptions(type = LocationMarkerOptions.Type.Pointer)
         tomTomMap.enableLocationMarker(locationMarker)
