@@ -12,11 +12,11 @@
     <string name="routing">Routing</string>
     <string name="navigation">Navigation</string>
     <string name="offline_maps">Offline</string>
-    <string name="map_demo_activity_title">Map display examples</string>
-    <string name="navigation_activity_title">Navigation example</string>
-    <string name="offline_demo_activity_title">Offline examples</string>
-    <string name="routing_demo_activity_title">Routing examples</string>
-    <string name="search_demo_activity_title">Search examples</string>
+    <string name="map_demo_activity_title">Map display examples coming soon</string>
+    <string name="navigation_activity_title">Navigation examples coming soon</string>
+    <string name="offline_demo_activity_title">Offline examples coming soon</string>
+    <string name="routing_demo_activity_title">Routing examples coming soon</string>
+    <string name="search_demo_activity_title">Search examples coming soon</string>
     <string name="route">Route</string>
 
 </resources>
