@@ -1,45 +1,31 @@
 
 # TomTom Navigation Android SDK Examples
 
-Hello and welcome to this repository with examples showcasing the TomTom Navigation SDK and other APIs [TomTom Navigation SDK for Android](https://developer.tomtom.com/android/navigation/documentation/overview/introduction) using the version 0.3.1486
+Hello and welcome to this repository with examples showcasing the [TomTom Navigation SDK for Android](https://developer.tomtom.com/android/navigation/documentation/overview/introduction) using version 0.3.1486.
 
-This sample code is for the Android platform but TomTom also has a version for iOS [here](https://github.com/tomtom-international/migration-tutorial-ios-sdk)
-
-Remember to register in our Developer Portal : https://bit.ly/38nbvLX to get access to your free API and all the documentation and examples for our SDKs You will find this tutorial as well - if you prefer to read.
-
-This code is based on the following video in our Youtube channel: https://youtu.be/raPYxWrqNjA
-
-## Preparation
-
-In order to compile this demo, you need 2 things:
-1. Access to the TomTom Maven repository ( Artifactory ) . Please contact TomTom for a password to download the binaries. You will need these to add the credentials as ENV variables. Check the settings.gradle file.
-
-2. An API KEY. Get one for free in the developer portal and make sure that it has the navigation feature activated. If not, contact us.
+*Note: Navigation SDK for Android is only available upon request. [Contact us](https://developer.tomtom.com/tomtom-sdk-for-android/request-access "Contact us") to get access.*
 
 <div align="center">
   <img align="center" src=".github/navsdk-splash.png" width="400"/>
 </div>
 
-## Installation
+## Setup
 
-Visit our developer portal and follow the [Setup](https://developer.tomtom.com/android/navigation/documentation/overview/project-set-up) guide. Once you have your artifactory credentials, do the following:
+Once you have obtained access, do the following:
 
-### Repository
+1. Make sure that the minimum SDK API level is set to at least 21 (Android 5.0 "Lollipop") and that the compile SDK API level is set to 31.
 
-1. `git clone https://github.com/tomtom-international/navigation-android-examples.git`
-2. Create a 'local.properties' files if it doesnt exist and add your API KEY there as
+2. Clone the repository `https://github.com/tomtom-international/navigation-android-examples.git`
 
-#TomTomApiKey="you key from developer.tomtom.com"
+3. Create a 'local.properties' files if it doesn't exist and add your API KEY there as
+`TomTomApiKey = "YOUR KEY"`
 
-3. Add your credentials from the TomTom Artifactory repo as ENV variables (NavSDKUsername and NavSDKPassword) or update the Settings.gradle file with these credentials.
-4. Run the sample under `app`.
+4. Add your credentials from the TomTom Artifactory repo as ENV variables (NavSDKUsername and NavSDKPassword) or update the Settings.gradle file with these credentials.
+
+5. Run the application.
 
 
 ## Getting Help
 
-- **Found a bug? To report** [Open an issue](https://github.com/tomtom-international/navigation-android-examples/issues). If possible, include the version of the TomTom Nav SDK and a copy of the logcat.
-- **Do you have a request?** [Open an issue](https://github.com/tomtom-international/navigation-android-examples/issues/). Let us know what would you like and why. Thanks!
-
-## Contributing
-
-We welcome feedback and happy navigating!
+- **Found a bug? To report** [open an issue](https://github.com/tomtom-international/navigation-android-examples/issues). If possible, include the version of the TomTom Nav SDK and a copy of the logcat.
+- **Do you have a request?** [Open an issue](https://github.com/tomtom-international/navigation-android-examples/issues/). Let us know what would you like and why.
