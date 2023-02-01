@@ -91,7 +91,7 @@ class BasicNavigationActivity : AppCompatActivity() {
      * Navigation SDK is only avaialble upon request.
      * Use the API key provided by TomTom to start using the SDK.
      */
-    private val apiKey = BuildConfig.TomTomApiKey
+    private val apiKey = BuildConfig.TOMTOM_API_KEY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
