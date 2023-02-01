@@ -45,14 +45,17 @@ android {
     }
 }
 
+def gosdkVersion = "0.3.1486"
+
 dependencies {
+    implementation "com.tomtom.sdk.vehicle:vehicle-provider:$gosdkVersion"
     implementation tomTomLibraries.routePlannerOnline
     implementation tomTomLibraries.locationAndroid
     implementation tomTomLibraries.locationSimulation
     implementation tomTomLibraries.locationMapmatched
     implementation tomTomLibraries.mapsDisplay
-    implementation tomTomLibraries.navigation
-    implementation tomTomLibraries.navigationUi
+    implementation "com.tomtom.sdk.navigation:navigation:$gosdkVersion"
+    implementation "com.tomtom.sdk.navigation:ui:$gosdkVersion"
     implementation tomTomLibraries.navigationRouteReplanner
     implementation tomTomLibraries.searchOnline
     implementation tomTomLibraries.searchUi
