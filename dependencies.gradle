@@ -13,7 +13,7 @@ ext {
             mapsDisplay                     : "com.tomtom.sdk.maps:map-display:0.3.1486",
             routePlannerOnline              : "com.tomtom.sdk.routing:route-planner-online:0.3.1486",
             locationAndroid                 : "com.tomtom.sdk.location:provider-android:0.3.1486",
-            locationSimulation              : "com.tomtom.sdk.location:provider-simulation:0.3.1486",
+            locationSimulation              : "com.tomtom.sdk.location:provider-simulation:0.3.1522",
             locationMapmatched              : "com.tomtom.sdk.location:provider-map-matched:0.3.1486",
             navigation                      : "com.tomtom.sdk.navigation:navigation:0.3.1486",
             navigationUi                    : "com.tomtom.sdk.navigation:ui:0.3.1486",
