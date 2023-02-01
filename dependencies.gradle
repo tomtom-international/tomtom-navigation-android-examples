@@ -10,7 +10,7 @@ ext {
     junitVersion = "4.13.2"
 
     tomTomLibraries = [
-            mapsDisplay                     : "com.tomtom.sdk.maps:map-display:0.3.1486",
+            mapsDisplay                     : "com.tomtom.sdk.maps:map-display:0.3.1522",
             routePlannerOnline              : "com.tomtom.sdk.routing:route-planner-online:0.3.1486",
             locationAndroid                 : "com.tomtom.sdk.location:provider-android:0.3.1486",
             locationSimulation              : "com.tomtom.sdk.location:provider-simulation:0.3.1486",
