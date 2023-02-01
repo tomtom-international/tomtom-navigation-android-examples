@@ -10,20 +10,34 @@ Hello and welcome to this repository with examples showcasing the [TomTom Naviga
 </div>
 
 ## Setup
-
 Once you have obtained access, do the following:
 
-1. Make sure that the minimum SDK API level is set to at least 21 (Android 5.0 "Lollipop") and that the compile SDK API level is set to 31.
+### Android setup
+Make sure that the minimum SDK API level is set to at least 21 (Android 5.0 "Lollipop") and that the compile SDK API level is set to 31.
 
-2. Clone the repository `https://github.com/tomtom-international/navigation-android-examples.git`
+### Cloning the repository
+Clone the repository `https://github.com/tomtom-international/navigation-android-examples.git`
 
-3. Create a `local.properties` files if it doesn't exist and add your *API KEY* there as
-`TomTomApiKey = "YOUR API KEY"`
+### Add gradle.properties file
+Add the entries below to the global `~/.gradle/gradle.properties` file at `$HOME/.gradle/gradle.properties`.
 
-4. Add your credentials from the TomTom Maven repo as ENV variables (*NavSDKUsername* and *NavSDKPassword*) or update the `settings.gradle` file with these credentials.
+```bash
 
-5. Run the application.
+# required for accessing to artifactory
+artifactoryUsername=###
+artifactoryPassword=###
 
+# required in order to use TomTom's APIs
+tomtomApiKey = "YOUR API KEY"
+```
+
+
+### Run the application.
+Gradle commands to install demo apps </summary>
+
+```bash
+./gradlew :app:iD
+```
 
 ## Getting Help
 
