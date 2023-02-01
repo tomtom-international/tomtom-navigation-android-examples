@@ -15,7 +15,7 @@ ext {
             locationAndroid                 : "com.tomtom.sdk.location:provider-android:0.3.1486",
             locationSimulation              : "com.tomtom.sdk.location:provider-simulation:0.3.1486",
             locationMapmatched              : "com.tomtom.sdk.location:provider-map-matched:0.3.1486",
-            navigation                      : "com.tomtom.sdk.navigation:navigation:0.3.1486",
+            navigation                      : "com.tomtom.sdk.navigation:navigation:0.3.1522",
             navigationUi                    : "com.tomtom.sdk.navigation:ui:0.3.1486",
             navigationRouteReplanner        : "com.tomtom.sdk.navigation:route-replanner-default:0.3.1486",
             searchOnline                    : "com.tomtom.sdk.search:search-online:0.3.1486",
