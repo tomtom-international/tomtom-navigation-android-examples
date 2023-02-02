@@ -19,8 +19,7 @@ ext {
             navigationUi                    : "com.tomtom.sdk.navigation:ui:$gosdkVersion",
             navigationRouteReplanner        : "com.tomtom.sdk.navigation:route-replanner-default:$gosdkVersion",
             searchOnline                    : "com.tomtom.sdk.search:search-online:$gosdkVersion",
-            searchUi                        : "com.tomtom.sdk.search:ui:$gosdkVersion",
-//            vehicle                         : "com.tomtom.sdk.vehicle:vehicle-provider:$gosdkVersion",
+            searchUi                        : "com.tomtom.sdk.search:ui:$gosdkVersion"
     ]
     libraries = [
             androidXNavigationFragment      : "androidx.navigation:navigation-fragment-ktx:$androidXNavigation",
