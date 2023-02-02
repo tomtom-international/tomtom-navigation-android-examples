@@ -46,7 +46,7 @@ android {
 }
 
 dependencies {
-    implementation "com.tomtom.sdk.vehicle:vehicle-provider:$gosdkVehicleVersion"
+    implementation "com.tomtom.sdk.vehicle:vehicle-provider:${gosdkVehicleVersion}"
     implementation tomTomLibraries.routePlannerOnline
     implementation tomTomLibraries.locationAndroid
     implementation tomTomLibraries.locationSimulation
@@ -56,7 +56,7 @@ dependencies {
     implementation tomTomLibraries.navigationUi
     implementation tomTomLibraries.navigationRouteReplanner
     implementation tomTomLibraries.searchOnline
-    implementation "com.tomtom.sdk.search:ui:$gosdkVehicleVersion"
+    implementation "com.tomtom.sdk.search:ui:${gosdkVehicleVersion}"
 
     implementation libraries.androidXCore
     implementation libraries.androidXCompat
