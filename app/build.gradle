@@ -45,7 +45,7 @@ android {
     }
 }
 
-def gosdkVehicleVersion = "0.3.1486"
+def gosdkVehicleVersion = "0.3.1522"
 
 dependencies {
     implementation "com.tomtom.sdk.traffic:traffic:${gosdkVehicleVersion}"
