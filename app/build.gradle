@@ -48,7 +48,8 @@ android {
 def gosdkVehicleVersion = "0.3.1486"
 
 dependencies {
-    implementation "com.tomtom.sdk.vehicle:vehicle-provider:${gosdkVehicleVersion}"
+    implementation "com.tomtom.sdk.traffic:traffic:${gosdkVehicleVersion}"
+    implementation "com.tomtom.sdk.traffic:model:${gosdkVehicleVersion}"
     implementation tomTomLibraries.routePlannerOnline
     implementation tomTomLibraries.locationAndroid
     implementation tomTomLibraries.locationSimulation
