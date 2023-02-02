@@ -1,5 +1,5 @@
-def gosdkVersion = "0.3.1486"
 ext {
+    gosdkVersion = "0.3.1486"
     androidXNavigation = "2.5.3"
     androidXCoreVersion = "1.7.0"
     androidXCompatVersion = "1.4.2"

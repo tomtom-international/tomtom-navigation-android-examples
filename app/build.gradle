@@ -58,7 +58,7 @@ dependencies {
     implementation tomTomLibraries.navigationUi
     implementation tomTomLibraries.navigationRouteReplanner
     implementation tomTomLibraries.searchOnline
-    implementation "com.tomtom.sdk.search:ui:${gosdkVehicleVersion}"
+    implementation tomTomLibraries.searchUi
 
     implementation libraries.androidXCore
     implementation libraries.androidXCompat
