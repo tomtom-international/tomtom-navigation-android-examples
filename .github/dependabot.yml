@@ -18,7 +18,7 @@ version: 2
 registries:
   main-release:
     type: maven-repository
-    url: https://artifactory.tomtomgroup.com/artifactory/sdk-maven
+    url: https://repositories.tomtom.com/artifactory/sdk-maven
     username: ${{secrets.ARTIFACTORY_USERNAME}}
     password: ${{secrets.ARTIFACTORY_PASSWORD}}
 updates:
