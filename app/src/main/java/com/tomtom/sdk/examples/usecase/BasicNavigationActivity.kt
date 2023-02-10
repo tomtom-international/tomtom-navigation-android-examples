@@ -396,7 +396,18 @@ class BasicNavigationActivity : AppCompatActivity() {
     private fun setMapNavigationPadding() {
         val paddingBottom = resources.getDimensionPixelOffset(R.dimen.map_padding_bottom)
         val padding = Padding(0, 0, 0, paddingBottom)
-        tomTomMap.setPadding(padding)
+        setPadding(padding)
+    }
+
+    private fun setPadding(padding: Padding) {
+        val scale: Float = resources.displayMetrics.density
+        val paddingInPixels = Padding(
+            top = (padding.top * scale).toInt(),
+            left = (padding.left * scale).toInt(),
+            right = (padding.right * scale).toInt(),
+            bottom = (padding.bottom * scale).toInt()
+        )
+        tomTomMap.setPadding(paddingInPixels)
     }
 
     private fun resetMapPadding() {
