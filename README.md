@@ -28,6 +28,6 @@ artifactoryUsername=###
 artifactoryPassword=###
 
 # required in order to use TomTom's APIs
-tomtomApiKey = "YOUR API KEY"
+tomtomApiKey = YOUR_API_KEY
 ```
 
