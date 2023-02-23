@@ -344,6 +344,7 @@ class BasicNavigationActivity : AppCompatActivity() {
             stopNavigation()
         }
     }
+
     /**
      * Used to initialize the NavigationFragment to display the UI navigation information,
      */
@@ -360,6 +361,7 @@ class BasicNavigationActivity : AppCompatActivity() {
     private val progressUpdatedListener = ProgressUpdatedListener {
         tomTomMap.routes.first().progress = it.distanceAlongRoute
     }
+
     /**
      * Use the SimulationLocationProvider for testing purposes.
      */
@@ -380,6 +382,7 @@ class BasicNavigationActivity : AppCompatActivity() {
      */
     private fun stopNavigation() {
         navigationFragment.stopNavigation()
+        mapFragment.currentLocationButton.visibilityPolicy = VisibilityPolicy.InvisibleWhenRecentered
         tomTomMap.cameraTrackingMode = CameraTrackingMode.None
         tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Pointer))
         resetMapPadding()
@@ -413,6 +416,7 @@ class BasicNavigationActivity : AppCompatActivity() {
     private fun resetMapPadding() {
         tomTomMap.setPadding(Padding(0, 0, 0, 0))
     }
+
     /**
      * Once navigation is started, the camera is set to follow the user position, and the location indicator is changed to a chevron.
      * To match raw location updates to the routes, use MapMatchedLocationProvider and set it to the TomTomMap.
@@ -422,6 +426,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         tomTomMap.setLocationProvider(mapMatchedLocationProvider)
         mapMatchedLocationProvider.enable()
     }
+
     /**
      *
      * The method removes all polygons, circles, routes, and markers that were previously added to the map.
@@ -429,6 +434,7 @@ class BasicNavigationActivity : AppCompatActivity() {
     private fun clearMap() {
         tomTomMap.clear()
     }
+
     private fun requestLocationPermission() {
         locationPermissionRequest.launch(
             arrayOf(
