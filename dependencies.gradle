@@ -1,5 +1,5 @@
 ext {
-    gosdkVersion = "0.3.1547"
+    gosdkVersion = "0.3.1617"
     androidXNavigation = "2.5.3"
     androidXCoreVersion = "1.7.0"
     androidXCompatVersion = "1.4.2"
@@ -17,7 +17,7 @@ ext {
             locationMapmatched              : "com.tomtom.sdk.location:provider-map-matched:$gosdkVersion",
             navigation                      : "com.tomtom.sdk.navigation:navigation:$gosdkVersion",
             navigationUi                    : "com.tomtom.sdk.navigation:ui:$gosdkVersion",
-            navigationRouteReplanner        : "com.tomtom.sdk.navigation:route-replanner-default:$gosdkVersion",
+            navigationRouteReplannerOnline  : "com.tomtom.sdk.navigation:route-replanner-online:$gosdkVersion",
             searchOnline                    : "com.tomtom.sdk.search:search-online:$gosdkVersion",
             searchUi                        : "com.tomtom.sdk.search:ui:$gosdkVersion"
     ]

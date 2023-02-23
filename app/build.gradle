@@ -53,7 +53,7 @@ dependencies {
     implementation tomTomLibraries.mapsDisplay
     implementation tomTomLibraries.navigation
     implementation tomTomLibraries.navigationUi
-    implementation tomTomLibraries.navigationRouteReplanner
+    implementation tomTomLibraries.navigationRouteReplannerOnline
     implementation tomTomLibraries.searchOnline
     implementation tomTomLibraries.searchUi
 
