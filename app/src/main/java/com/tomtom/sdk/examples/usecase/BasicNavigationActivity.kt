@@ -47,8 +47,8 @@ import com.tomtom.sdk.navigation.ProgressUpdatedListener
 import com.tomtom.sdk.navigation.RoutePlan
 import com.tomtom.sdk.navigation.TomTomNavigation
 import com.tomtom.sdk.navigation.TomTomNavigationFactory
-import com.tomtom.sdk.navigation.routereplanner.DefaultRouteReplanner
 import com.tomtom.sdk.navigation.routereplanner.RouteReplanner
+import com.tomtom.sdk.navigation.routereplanner.online.OnlineRouteReplannerFactory
 import com.tomtom.sdk.navigation.ui.NavigationFragment
 import com.tomtom.sdk.navigation.ui.NavigationUiOptions
 import com.tomtom.sdk.routing.RoutePlanner
@@ -140,7 +140,7 @@ class BasicNavigationActivity : AppCompatActivity() {
     private fun initRouting() {
         routePlanner =
             OnlineRoutePlanner.create(context = this, apiKey = apiKey)
-        routeReplanner = DefaultRouteReplanner.create(routePlanner)
+        routeReplanner = OnlineRouteReplannerFactory.create(routePlanner)
     }
 
     /**
