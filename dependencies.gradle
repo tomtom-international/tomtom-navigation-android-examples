@@ -1,5 +1,5 @@
 ext {
-    gosdkVersion = "0.3.1617"
+    gosdkVersion = "0.3.1844-staging"
     androidXNavigation = "2.5.3"
     androidXCoreVersion = "1.7.0"
     androidXCompatVersion = "1.4.2"
