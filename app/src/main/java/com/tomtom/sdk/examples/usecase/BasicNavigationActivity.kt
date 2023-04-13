@@ -41,12 +41,7 @@ import com.tomtom.sdk.map.display.route.RouteClickListener
 import com.tomtom.sdk.map.display.route.RouteOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.currentlocation.CurrentLocationButton.VisibilityPolicy
-import com.tomtom.sdk.navigation.NavigationConfiguration
-import com.tomtom.sdk.navigation.NavigationFailure
-import com.tomtom.sdk.navigation.ProgressUpdatedListener
-import com.tomtom.sdk.navigation.RoutePlan
-import com.tomtom.sdk.navigation.TomTomNavigation
-import com.tomtom.sdk.navigation.TomTomNavigationFactory
+import com.tomtom.sdk.navigation.*
 import com.tomtom.sdk.navigation.routereplanner.RouteReplanner
 import com.tomtom.sdk.navigation.routereplanner.online.OnlineRouteReplannerFactory
 import com.tomtom.sdk.navigation.ui.NavigationFragment
@@ -273,7 +268,7 @@ class BasicNavigationActivity : AppCompatActivity() {
      * Used to draw route on the map
      * You can show the overview of the added routes using the TomTomMap.zoomToRoutes(Int) method. Note that its padding parameter is expressed in pixels.
      */
-    private fun drawRoute(route: Route) {
+    private fun drawRoute(route: Route, withZoom: Boolean = true) {
         val instructions = route.mapInstructions()
         val routeOptions = RouteOptions(
             geometry = route.geometry,
@@ -283,7 +278,9 @@ class BasicNavigationActivity : AppCompatActivity() {
             routeOffset = route.routePoints.map { it.routeOffset }
         )
         tomTomMap.addRoute(routeOptions)
-        tomTomMap.zoomToRoutes(ZOOM_TO_ROUTE_PADDING)
+        if (withZoom) {
+            tomTomMap.zoomToRoutes(ZOOM_TO_ROUTE_PADDING)
+        }
     }
 
     /**
@@ -316,6 +313,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         navigationFragment.startNavigation(routePlan)
         navigationFragment.addNavigationListener(navigationListener)
         tomTomNavigation.addProgressUpdatedListener(progressUpdatedListener)
+        tomTomNavigation.addRouteUpdatedListener(routeUpdatedListener)
     }
 
     /**
@@ -362,6 +360,18 @@ class BasicNavigationActivity : AppCompatActivity() {
         tomTomMap.routes.first().progress = it.distanceAlongRoute
     }
 
+    private val routeUpdatedListener by lazy {
+        RouteUpdatedListener { route, updateReason ->
+            if (updateReason != RouteUpdateReason.Refresh &&
+                updateReason != RouteUpdateReason.Increment &&
+                updateReason != RouteUpdateReason.LanguageChange
+            ) {
+                tomTomMap.removeRoutes()
+                drawRoute(route = route, withZoom = false)
+            }
+        }
+    }
+
     /**
      * Use the SimulationLocationProvider for testing purposes.
      */
@@ -388,6 +398,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         resetMapPadding()
         navigationFragment.removeNavigationListener(navigationListener)
         tomTomNavigation.removeProgressUpdatedListener(progressUpdatedListener)
+        tomTomNavigation.removeRouteUpdatedListener(routeUpdatedListener)
         clearMap()
         initLocationProvider()
         enableUserLocation()
