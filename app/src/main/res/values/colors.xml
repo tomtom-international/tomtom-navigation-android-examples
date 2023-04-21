@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="tt_color_white">#FFFFFFFF</color>
+    <color name="tt_color_title_light">#FF727C85</color>
+    <color name="tt_color_primary_light">#FF1988CF</color>
+    <color name="tt_color_secondary_content_light">#FF727C85</color>
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MainMenuTitle">
+        <item name="android:textColor">@color/tt_color_title_light</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:textSize">@dimen/main_menu_title_text_size</item>
+        <item name="lineHeight">@dimen/main_menu_title_line_height</item>
+        <item name="android:text">@string/main_menu</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:focusable">false</item>
+    </style>
+
+    <style name="MainMenuNavigationButton">
+        <item name="android:layout_marginStart">@dimen/main_menu_navigation_button_margin_horizontal</item>
+        <item name="android:layout_marginEnd">@dimen/main_menu_navigation_button_margin_horizontal</item>
+        <item name="android:padding">@dimen/main_menu_navigation_button_padding</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:textSize">@dimen/main_menu_navigation_button_text_size</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textAppearance">?attr/textAppearanceBody1</item>
+        <item name="cornerRadius">@dimen/main_menu_navigation_button_corner_radius</item>
+        <item name="iconSize">32dp</item>
+        <item name="android:shadowDy">0</item>
+    </style>
+</resources>
