@@ -480,8 +480,9 @@ class BasicNavigationActivity : AppCompatActivity() {
     ) == PackageManager.PERMISSION_GRANTED
 
     override fun onDestroy() {
-        locationProvider.close()
+        tomTomMap.setLocationProvider(null)
         tomTomNavigation.close()
+        locationProvider.close()
         super.onDestroy()
     }
 
