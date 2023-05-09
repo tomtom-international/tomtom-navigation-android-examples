@@ -1,19 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".maps.MapExamplesActivity">
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/map_examples"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical"
+        tools:context=".maps.MapExamplesActivity">
 
-    <TextView
-        android:id="@+id/editTextTextPersonName"
-        android:layout_width="216dp"
-        android:layout_height="44dp"
-        android:ems="10"
-        android:text="@string/map_demo_activity_title"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="vertical" >
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/map_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"/>
+
+                <ImageView
+                    android:id="@+id/map_box_imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/rounded_map_box" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/dropdown_layout"
+                    android:onClick="expand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+
+                    <TextView
+                        android:id="@+id/dropdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/conf_map_title"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text"
+                        app:drawableRightCompat="@drawable/ic_tomtom_arrow_up" />
+
+                    <TextView
+                        android:id="@+id/details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:visibility="visible"
+                        android:text="@string/conf_map_description"
+                        android:textSize="20sp"
+                        android:lineSpacingExtra="10dp"/>
+        <!--            android:lineSpacingMultiplier="1.2"-->
+
+<!--                    <Button-->
+<!--                        android:id="@+id/button_try"-->
+<!--                        android:visibility="visible"-->
+<!--                        android:onClick="tryMapView"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:height="60dp"-->
+<!--                        android:drawableLeft="@drawable/ic_tomtom_play"-->
+<!--                        android:drawableTint="@color/icon_white"-->
+<!--                        android:background="@drawable/button_primary"-->
+<!--                        android:text="@string/try_it_mapdemo"-->
+<!--                        android:textAllCaps="false"-->
+<!--                        android:textSize="20sp"-->
+<!--                        android:paddingHorizontal="135dp"-->
+<!--                        android:gravity="center_vertical|end"/>-->
+
+
+        <!--                Original (without ripple effect) -->
+        <!--            <Button-->
+        <!--                android:id="@+id/button_try"-->
+        <!--                android:visibility="visible"-->
+        <!--                android:onClick="tryMapView"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginTop="10dp"-->
+        <!--                android:height="60dp"-->
+        <!--                android:drawableLeft="@drawable/ic_tomtom_play"-->
+        <!--                android:drawableTint="@color/icon_white"-->
+        <!--                android:backgroundTint="@color/primary"-->
+        <!--                android:text="@string/try_it_mapdemo"-->
+        <!--                android:textAllCaps="false"-->
+        <!--                android:textSize="20sp"-->
+        <!--                android:paddingHorizontal="135dp"-->
+        <!--                android:gravity="center_vertical|end"-->
+        <!--                app:cornerRadius="20dp"/>-->
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tryItBtn_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true"
+                    android:background="@drawable/button_primary"
+                    android:gravity="center_horizontal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="tryMapView">
+<!--                    <ImageView-->
+<!--                        android:layout_width=""-->
+<!--                        android:layout_height="">-->
+
+<!--                    </ImageView>-->
+
+<!--                    <TextView></TextView>-->
+
+                    <Button
+                        android:id="@+id/button_try"
+                        android:visibility="visible"
+                        android:onClick="tryMapView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_tomtom_play"
+                        android:drawableTint="@color/icon_white"
+                        android:background="@drawable/button_transparent"
+                        app:backgroundTint="@color/primary"
+                        android:text="@string/try_it_mapdemo"
+                        android:textAllCaps="false"
+                        android:textSize="20sp"
+                        android:gravity="center_vertical|end"/>
+                </LinearLayout>
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/tryItBtn_layout"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginBottom="10dp"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:animateLayoutChanges="true">-->
+
+<!--                    <Button-->
+<!--                        android:id="@+id/button_try"-->
+<!--                        android:visibility="visible"-->
+<!--                        android:onClick="tryMapView"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:drawableLeft="@drawable/ic_tomtom_play"-->
+<!--                        android:drawableTint="@color/icon_white"-->
+<!--                        android:background="@drawable/button_primary"-->
+<!--                        app:backgroundTint="@color/primary"-->
+<!--                        android:text="@string/try_it_mapdemo"-->
+<!--                        android:textAllCaps="false"-->
+<!--                        android:textSize="20sp"-->
+<!--                        android:paddingHorizontal="135dp"-->
+<!--                        android:gravity="center_vertical|end"/>-->
+<!--                </LinearLayout>-->
+
+            </LinearLayout>
+        </LinearLayout>
+</ScrollView>

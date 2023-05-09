@@ -69,14 +69,14 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="5dp"
                 android:height="90dp"
-                android:backgroundTint="#FFFFFF"
+                android:backgroundTint="@color/white"
                 android:drawableLeft="@drawable/ic_tomtom_map"
-                android:drawableTint="#000000"
+                android:drawableTint="@color/icon_primary"
                 android:foregroundTint="#00000000"
                 android:onClick="launchMapDemo"
                 android:text="@string/map"
                 android:textAlignment="textStart"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@color/text"
                 app:cornerRadius="20dp" />
 
             <Button

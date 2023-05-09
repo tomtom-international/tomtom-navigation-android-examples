@@ -19,4 +19,10 @@
     <string name="search_demo_activity_title">Search examples coming soon</string>
     <string name="route">Route</string>
 
+    <string name="try_it_mapdemo">Try it</string>
+    <string name="conf_map_title">Configurable Map</string>
+    <string name="conf_map_description">Shows examples of base map styles and map detail layers that can be toggled on/off. \n\n<b>Features:</b> Light Driving, Light Browsing, Dark Driving, Dark Driving, Satellite and Monochrome map styles.
+Road Network, 3D Buildings, Traffic Incidents, Hill Shading, House Numbers,  Traffic Flow, Vehicle Restrictions and Lane Highlighting.</string>
+    <string name="go_back">Go back</string>
+
 </resources>
