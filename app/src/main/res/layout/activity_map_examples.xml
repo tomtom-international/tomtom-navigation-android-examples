@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/map_examples"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
@@ -16,28 +16,26 @@
         android:orientation="vertical"
         tools:context=".maps.MapExamplesActivity">
 
-            <FrameLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/vector_map_card"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="15dp"
-                android:orientation="vertical" >
-
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/map_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="3dp"/>
+                android:orientation="vertical"
+                app:cardCornerRadius="7dp">
 
                 <ImageView
-                    android:id="@+id/map_box_imageView"
+                    android:id="@+id/vector_map_iv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/rounded_map_box" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_tomtom_vector_map"
+                    android:contentDescription="@string/descr_vector_map_image" />
 
-            </FrameLayout>
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,105 +78,41 @@
                         android:lineSpacingExtra="10dp"/>
         <!--            android:lineSpacingMultiplier="1.2"-->
 
-<!--                    <Button-->
-<!--                        android:id="@+id/button_try"-->
-<!--                        android:visibility="visible"-->
-<!--                        android:onClick="tryMapView"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:height="60dp"-->
-<!--                        android:drawableLeft="@drawable/ic_tomtom_play"-->
-<!--                        android:drawableTint="@color/icon_white"-->
-<!--                        android:background="@drawable/button_primary"-->
-<!--                        android:text="@string/try_it_mapdemo"-->
-<!--                        android:textAllCaps="false"-->
-<!--                        android:textSize="20sp"-->
-<!--                        android:paddingHorizontal="135dp"-->
-<!--                        android:gravity="center_vertical|end"/>-->
-
-
-        <!--                Original (without ripple effect) -->
-        <!--            <Button-->
-        <!--                android:id="@+id/button_try"-->
-        <!--                android:visibility="visible"-->
-        <!--                android:onClick="tryMapView"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_marginTop="10dp"-->
-        <!--                android:height="60dp"-->
-        <!--                android:drawableLeft="@drawable/ic_tomtom_play"-->
-        <!--                android:drawableTint="@color/icon_white"-->
-        <!--                android:backgroundTint="@color/primary"-->
-        <!--                android:text="@string/try_it_mapdemo"-->
-        <!--                android:textAllCaps="false"-->
-        <!--                android:textSize="20sp"-->
-        <!--                android:paddingHorizontal="135dp"-->
-        <!--                android:gravity="center_vertical|end"-->
-        <!--                app:cornerRadius="20dp"/>-->
-
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/tryItBtn_layout"
+                    android:id="@+id/try_it_layout_button"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    android:orientation="vertical"
                     android:animateLayoutChanges="true"
                     android:background="@drawable/button_primary"
-                    android:gravity="center_horizontal"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="tryMapView">
-<!--                    <ImageView-->
-<!--                        android:layout_width=""-->
-<!--                        android:layout_height="">-->
+                    android:onClick="tryMapView"
+                    android:orientation="horizontal"
+                    android:gravity="center">
 
-<!--                    </ImageView>-->
-
-<!--                    <TextView></TextView>-->
-
-                    <Button
-                        android:id="@+id/button_try"
-                        android:visibility="visible"
-                        android:onClick="tryMapView"
+                    <ImageView
+                        android:id="@+id/try_it_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_tomtom_play"
-                        android:drawableTint="@color/icon_white"
-                        android:background="@drawable/button_transparent"
-                        app:backgroundTint="@color/primary"
+                        android:src="@drawable/ic_tomtom_play"
+                        android:layout_gravity="center_vertical"
+                        android:contentDescription="@string/descr_play_icon_for_try_vector_map" />
+
+                    <TextView
+                        android:id="@+id/try_it_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/try_it_mapdemo"
                         android:textAllCaps="false"
                         android:textSize="20sp"
-                        android:gravity="center_vertical|end"/>
+                        android:textColor="@color/white"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="8dp" />
+
                 </LinearLayout>
-
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/tryItBtn_layout"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginBottom="10dp"-->
-<!--                    android:orientation="vertical"-->
-<!--                    android:animateLayoutChanges="true">-->
-
-<!--                    <Button-->
-<!--                        android:id="@+id/button_try"-->
-<!--                        android:visibility="visible"-->
-<!--                        android:onClick="tryMapView"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:drawableLeft="@drawable/ic_tomtom_play"-->
-<!--                        android:drawableTint="@color/icon_white"-->
-<!--                        android:background="@drawable/button_primary"-->
-<!--                        app:backgroundTint="@color/primary"-->
-<!--                        android:text="@string/try_it_mapdemo"-->
-<!--                        android:textAllCaps="false"-->
-<!--                        android:textSize="20sp"-->
-<!--                        android:paddingHorizontal="135dp"-->
-<!--                        android:gravity="center_vertical|end"/>-->
-<!--                </LinearLayout>-->
 
             </LinearLayout>
         </LinearLayout>

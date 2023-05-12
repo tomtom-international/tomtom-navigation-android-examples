@@ -1,20 +1,17 @@
 package com.tomtom.sdk.examples.maps
 
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import com.tomtom.sdk.examples.R
-import com.tomtom.sdk.examples.utils.matchers.ButtonViewHasDrawableMatcher.hasDrawable
+import com.tomtom.sdk.examples.utils.matchers.CardViewHasRadiusMatcher.hasCardCornerRadius
 import com.tomtom.sdk.examples.utils.matchers.ImageViewHasDrawableMatcher.hasDrawableSrc
 import com.tomtom.sdk.examples.utils.matchers.TextViewHasCompoundDrawableMatcher.hasCompoundDrawable
 import org.hamcrest.CoreMatchers.allOf
@@ -27,14 +24,14 @@ class MapExamplesActivityTest {
     val activityRule : ActivityScenarioRule<MapExamplesActivity> = ActivityScenarioRule(MapExamplesActivity::class.java)
 
     @Test
-    fun test_onButtonTryClick_isNavigatedToConfigMapView() {
-        onView(withId(R.id.button_try)).perform(click())
+    fun test_onTryItLayoutButtonClick_isNavigatedToConfigMapView() {
+        onView(withId(R.id.try_it_layout_button)).perform(scrollTo(), click())
         onView(withId(R.id.configurable_map_view)).check(matches(isDisplayed()))
     }
 
     @Test
     fun test_onGoBackClick_isNavigatedToMapExamples() {
-        onView(withId(R.id.button_try)).perform(click())
+        onView(withId(R.id.try_it_layout_button)).perform(scrollTo(), click())
         onView(withId(R.id.configurable_map_view)).check(matches(isDisplayed()))
 //        onView(withId(R.id.go_back_iv)).perform(click()) //method 1
         pressBack() //method 2
@@ -49,18 +46,20 @@ class MapExamplesActivityTest {
     }
 
     @Test
-    fun test_onMapContainer_isDisplayed() { //check if it is displayed on screen
-        onView(withId(R.id.map_container)).check(matches(isDisplayed()))
+    fun test_onVectorMapCardView_isDisplayedWithCornerRadius() {
+        onView(withId(R.id.vector_map_card))
+            .check(matches(isDisplayed()))
+            .check(matches(hasCardCornerRadius(7f)))
     }
 
     @Test
-    fun test_onImageView_isDisplayed() {
-        onView(withId(R.id.map_box_imageView)).check(matches(isDisplayed()))
+    fun test_onVectorMapImageView_isDisplayed() {
+        onView(withId(R.id.vector_map_iv)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_onImageView_hasDrawable() {
-        onView(withId(R.id.map_box_imageView)).check(matches(hasDrawableSrc(R.drawable.rounded_map_box)))
+    fun test_onVectorMapImageView_hasDrawable() {
+        onView(withId(R.id.vector_map_iv)).check(matches(hasDrawableSrc(R.drawable.img_tomtom_vector_map)))
     }
 
     @Test
@@ -94,30 +93,25 @@ class MapExamplesActivityTest {
     }
 
     @Test
-    fun test_onButtonTry_isDisplayed() {
-        onView(withId(R.id.button_try)).check(matches(isDisplayed()))
+    fun test_onTryItLayoutButton_isDisplayed() {
+        onView(withId(R.id.try_it_layout_button))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_onButtonTry_isVisible() {
-        onView(withId(R.id.button_try)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-    }
-
-    @Test
-    fun test_onButtonTry_isBackgroundDrawableDisplayed() {
-        onView(allOf(withId(R.id.button_try),
+    fun test_onTryItLayoutButton_isBackgroundDrawableDisplayed() {
+        onView(allOf(withId(R.id.try_it_layout_button),
             hasBackground(R.drawable.button_primary), isDisplayed()));
     }
 
     @Test
-    fun test_onButtonTry_isTextDisplayed() {
-        onView(withId(R.id.button_try)).check(matches(withText(R.string.try_it_mapdemo)))
+    fun test_onTryItText_isTextDisplayed() {
+        onView(withId(R.id.try_it_text)).check(matches(withText(R.string.try_it_mapdemo)))
     }
 
     @Test
-    fun test_onButtonTry_isPlayDrawableDisplayedLeft() {
-        onView(withId(R.id.button_try)).check(matches(hasDrawable(R.drawable.ic_tomtom_play, 0)))
+    fun test_onTryItIcon_isPlayDrawableDisplayedLeft() {
+        onView(withId(R.id.try_it_icon)).check(matches(hasDrawableSrc(R.drawable.ic_tomtom_play)))
     }
-
-//    onView(withId(R.id.dropdown_layout)).perform(click())
 }

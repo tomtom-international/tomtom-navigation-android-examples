@@ -24,5 +24,7 @@
     <string name="conf_map_description">Shows examples of base map styles and map detail layers that can be toggled on/off. \n\n<b>Features:</b> Light Driving, Light Browsing, Dark Driving, Dark Driving, Satellite and Monochrome map styles.
 Road Network, 3D Buildings, Traffic Incidents, Hill Shading, House Numbers,  Traffic Flow, Vehicle Restrictions and Lane Highlighting.</string>
     <string name="go_back">Go back</string>
+    <string name="descr_vector_map_image">Vector Map View</string>
+    <string name="descr_play_icon_for_try_vector_map">Play Icon for Try Vector Map</string>
 
 </resources>
