@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:windowBackground">@drawable/dialog_background_rounded</item>
+    </style>
+    <style name="ToolbarTitleTextAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:gravity">center</item>
+    </style>
+</resources>
