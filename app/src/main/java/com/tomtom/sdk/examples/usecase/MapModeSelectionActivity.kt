@@ -51,25 +51,24 @@ class MapModeSelectionActivity : AppCompatActivity() {
             mapMode = MapMode.ONLINE
         }
 
+        /*
         hybridButton?.setOnClickListener {
-            /*
             selectButton(hybridButtonId)
             mapMode = MapMode.HYBRID
-            */
 
             // In order to activate, please remove the comment lines,
             // and remove the darker gray tint of ImageView in the xml file
         }
 
         offlineButton?.setOnClickListener {
-            /*
             selectButton(offlineButtonId)
             mapMode = MapMode.OFFLINE
-             */
 
             // In order to activate, please remove the comment lines,
             // and remove the darker gray tint of ImageView in the xml file
         }
+        */
+
 
         findViewById<Button>(R.id.bt_proceed).setOnClickListener {
             proceed()
