@@ -51,23 +51,33 @@ class MapModeSelectionActivity : AppCompatActivity() {
             mapMode = MapMode.ONLINE
         }
 
-        /*hybridButton?.setOnClickListener {
+        hybridButton?.setOnClickListener {
+            /*
             selectButton(hybridButtonId)
             mapMode = MapMode.HYBRID
+            */
+
+            // In order to activate, please remove the comment lines,
+            // and remove the darker gray tint of ImageView in the xml file
         }
 
         offlineButton?.setOnClickListener {
+            /*
             selectButton(offlineButtonId)
             mapMode = MapMode.OFFLINE
-        }*/
+             */
+
+            // In order to activate, please remove the comment lines,
+            // and remove the darker gray tint of ImageView in the xml file
+        }
 
         findViewById<Button>(R.id.bt_proceed).setOnClickListener {
             proceed()
         }
     }
 
-    private fun proceed(){
-        when(mapMode){
+    private fun proceed() {
+        when (mapMode) {
             MapMode.ONLINE -> {
                 val myIntent = Intent(this, BasicNavigationActivity::class.java)
                 this.startActivity(myIntent)

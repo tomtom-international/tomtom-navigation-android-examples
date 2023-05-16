@@ -7,4 +7,12 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="container_margin">8dp</dimen>
     <dimen name="container_horizontal_margin">16dp</dimen>
+    <dimen name="large_radio_button_padding">40dp</dimen>
+    <dimen name="large_radio_button_radius">24dp</dimen>
+    <dimen name="large_radio_button_margin_correction">3dp</dimen>
+    <dimen name="large_radio_button_elevation">8dp</dimen>
+    <dimen name="quarter_padding">4dp</dimen>
+    <dimen name="half_padding">8dp</dimen>
+    <dimen name="full_padding">16dp</dimen>
+    <dimen name="double_padding">32dp</dimen>
 </resources>

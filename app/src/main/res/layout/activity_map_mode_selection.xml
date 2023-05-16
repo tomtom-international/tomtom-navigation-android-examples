@@ -22,16 +22,16 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginVertical="16dp"
-            android:elevation="8dp"
+            android:layout_marginHorizontal="@dimen/half_padding"
+            android:layout_marginVertical="@dimen/full_padding"
+            android:elevation="@dimen/large_radio_button_elevation"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             tools:ignore="MissingConstraints" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="16dp"
+            android:layout_marginVertical="@dimen/full_padding"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingHorizontal="16dp">
@@ -46,9 +46,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                android:textSize="20sp"
-                android:text="@string/map_mode" />
+                android:paddingHorizontal="@dimen/half_padding"
+                android:text="@string/map_mode"
+                android:textSize="20sp" />
 
             <View
                 android:layout_width="0dp"
@@ -66,33 +66,36 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="@dimen/half_padding">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/online_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="3dp"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="8dp"
-                    app:strokeWidth="4dp"
-                    app:strokeColor="@color/active_color">
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/large_radio_button_margin_correction"
+                    android:layout_weight="6"
+                    app:cardCornerRadius="@dimen/large_radio_button_radius"
+                    app:cardElevation="@dimen/large_radio_button_elevation"
+                    app:strokeColor="@color/active_color"
+                    app:strokeWidth="4dp">
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/bt_icon_online"
+                        android:padding="@dimen/large_radio_button_padding"
+                        android:src="@drawable/ic_online"
                         tools:ignore="ContentDescription" />
 
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/half_padding"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/online"
                     android:textSize="16sp" />
@@ -104,28 +107,32 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="@dimen/half_padding">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/hybrid_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="3dp"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="8dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/large_radio_button_margin_correction"
+                    android:layout_weight="6"
+                    app:cardCornerRadius="@dimen/large_radio_button_radius"
+                    app:cardElevation="@dimen/large_radio_button_elevation"
                     app:strokeColor="@color/active_color">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/bt_icon_hybrid"
+                        android:padding="@dimen/large_radio_button_padding"
+                        android:src="@drawable/ic_hybrid"
+                        app:tint="@android:color/darker_gray"
                         tools:ignore="ContentDescription" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/large_radio_button_elevation"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/hybrid"
                     android:textSize="16sp" />
@@ -134,24 +141,27 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="@dimen/half_padding">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/offline_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="3dp"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/large_radio_button_margin_correction"
+                    android:layout_weight="6"
+                    app:cardCornerRadius="@dimen/large_radio_button_radius"
+                    app:cardElevation="@dimen/large_radio_button_elevation"
                     app:strokeColor="@color/active_color">
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/bt_icon_offline"
+                        android:padding="@dimen/large_radio_button_padding"
+                        android:src="@drawable/ic_offline"
+                        app:tint="@android:color/darker_gray"
                         tools:ignore="ContentDescription" />
 
                 </com.google.android.material.card.MaterialCardView>
@@ -159,8 +169,9 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/large_radio_button_elevation"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/offline"
                     android:textSize="16sp" />
