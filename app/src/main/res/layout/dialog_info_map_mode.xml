@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="@dimen/half_padding">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/title_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="@dimen/half_padding">
 
         <TextView
             style="@style/TextAppearance.AppCompat.Title"
@@ -24,7 +25,7 @@
             android:id="@+id/bt_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/half_padding"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_cancel"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,92 +34,61 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/online_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/title_layout"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:paddingHorizontal="@dimen/full_padding"
+        android:paddingBottom="@dimen/half_padding">
 
         <ImageView
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:layout_weight="1"
+            android:paddingEnd="@dimen/full_padding"
             android:src="@drawable/ic_online"
-            tools:ignore="ContentDescription,RtlSymmetry"
-            android:paddingEnd="16dp"/>
+            tools:ignore="ContentDescription,RtlSymmetry" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:orientation="vertical"
-            android:paddingTop="4dp">
+            android:paddingTop="@dimen/quarter_padding">
 
             <TextView
+                style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:textSize="16sp"
+                android:paddingBottom="@dimen/quarter_padding"
                 android:text="@string/online"
-                android:paddingBottom="4dp"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/online_description"/>
+                android:text="@string/online_description" />
         </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/hybrid_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/online_layout"
         android:orientation="horizontal"
-        android:padding="16dp">
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_hybrid"
-            tools:ignore="ContentDescription,RtlSymmetry"
-            android:paddingEnd="16dp"/>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="8"
-            android:orientation="vertical"
-            android:paddingTop="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:textSize="16sp"
-                android:text="@string/hybrid"
-                android:paddingBottom="4dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/hybrid_description"/>
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp">
+        android:paddingHorizontal="@dimen/full_padding"
+        android:paddingBottom="@dimen/half_padding">
 
         <ImageView
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_offline"
-            tools:ignore="ContentDescription,RtlSymmetry"
-            android:paddingEnd="16dp"/>
+            android:paddingEnd="@dimen/full_padding"
+            android:src="@drawable/ic_hybrid"
+            tools:ignore="ContentDescription,RtlSymmetry" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -127,19 +97,56 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:textSize="16sp"
-                android:text="@string/offline"
-                android:paddingBottom="4dp"/>
+                android:paddingBottom="@dimen/quarter_padding"
+                android:text="@string/hybrid"
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/offline_description"/>
+                android:text="@string/hybrid_description" />
         </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/offline_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hybrid_layout"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/full_padding"
+        android:paddingBottom="@dimen/half_padding">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:paddingEnd="@dimen/full_padding"
+            android:src="@drawable/ic_offline"
+            tools:ignore="ContentDescription,RtlSymmetry" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/quarter_padding"
+                android:text="@string/offline"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/offline_description" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
