@@ -21,7 +21,10 @@
             android:exported="false"
             android:label="@string/map_mode_selection_title" />
         <activity
-            android:name=".usecase.BasicNavigationActivity"
+            android:name="com.tomtom.sdk.examples.usecase.online.OnlineNavigationActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.tomtom.sdk.examples.usecase.offline.OfflineNavigationActivity"
             android:exported="false" />
         <activity
             android:name="com.tomtom.sdk.examples.offline.OfflineExamplesActivity"

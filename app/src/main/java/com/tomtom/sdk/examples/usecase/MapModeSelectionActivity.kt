@@ -15,6 +15,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.google.android.material.card.MaterialCardView
 import com.tomtom.sdk.examples.R
+import com.tomtom.sdk.examples.usecase.offline.OfflineNavigationActivity
+import com.tomtom.sdk.examples.usecase.online.OnlineNavigationActivity
 
 
 class MapModeSelectionActivity : AppCompatActivity() {
@@ -32,9 +34,9 @@ class MapModeSelectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map_mode_selection)
         val toolbar = findViewById<View>(R.id.toolbar) as? Toolbar
-        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val onlineButtonId = R.id.online_button
         val hybridButtonId = R.id.hybrid_button
@@ -59,6 +61,7 @@ class MapModeSelectionActivity : AppCompatActivity() {
             // In order to activate, please remove the comment lines,
             // and remove the darker gray tint of ImageView in the xml file
         }
+        */
 
         offlineButton?.setOnClickListener {
             selectButton(offlineButtonId)
@@ -67,8 +70,6 @@ class MapModeSelectionActivity : AppCompatActivity() {
             // In order to activate, please remove the comment lines,
             // and remove the darker gray tint of ImageView in the xml file
         }
-        */
-
 
         findViewById<Button>(R.id.bt_proceed).setOnClickListener {
             proceed()
@@ -78,14 +79,17 @@ class MapModeSelectionActivity : AppCompatActivity() {
     private fun proceed() {
         when (mapMode) {
             MapMode.ONLINE -> {
-                val myIntent = Intent(this, BasicNavigationActivity::class.java)
+                val myIntent = Intent(this, OnlineNavigationActivity::class.java)
                 this.startActivity(myIntent)
             }
+
             MapMode.HYBRID -> {
                 TODO()
             }
+
             MapMode.OFFLINE -> {
-                TODO()
+                val myIntent = Intent(this, OfflineNavigationActivity::class.java)
+                this.startActivity(myIntent)
             }
         }
     }
@@ -102,7 +106,7 @@ class MapModeSelectionActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.info_button, menu);
+        menuInflater.inflate(R.menu.info_button, menu)
 
         val infoMenuItem = menu?.findItem(R.id.action_info)
 
@@ -119,6 +123,7 @@ class MapModeSelectionActivity : AppCompatActivity() {
                 onBackPressed()
                 true
             }
+
             R.id.action_info -> {
                 val dialogView = layoutInflater.inflate(R.layout.dialog_info_map_mode, null)
 
@@ -143,6 +148,7 @@ class MapModeSelectionActivity : AppCompatActivity() {
                 dialog.show()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

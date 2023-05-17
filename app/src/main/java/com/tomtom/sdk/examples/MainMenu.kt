@@ -18,7 +18,6 @@ import com.tomtom.sdk.examples.navigation.NavigationExamplesActivity
 import com.tomtom.sdk.examples.offline.OfflineExamplesActivity
 import com.tomtom.sdk.examples.routing.RoutingExamplesActivity
 import com.tomtom.sdk.examples.search.SearchExamplesActivity
-import com.tomtom.sdk.examples.usecase.BasicNavigationActivity
 import com.tomtom.sdk.examples.usecase.MapModeSelectionActivity
 
 

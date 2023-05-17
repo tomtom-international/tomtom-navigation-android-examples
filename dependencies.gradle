@@ -10,26 +10,32 @@ ext {
     junitVersion = "4.13.2"
 
     tomTomLibraries = [
-            mapsDisplay                     : "com.tomtom.sdk.maps:map-display:$gosdkVersion",
-            routePlannerOnline              : "com.tomtom.sdk.routing:route-planner-online:$gosdkVersion",
-            locationAndroid                 : "com.tomtom.sdk.location:provider-android:$gosdkVersion",
-            locationSimulation              : "com.tomtom.sdk.location:provider-simulation:$gosdkVersion",
-            locationMapmatched              : "com.tomtom.sdk.location:provider-map-matched:$gosdkVersion",
-            navigation                      : "com.tomtom.sdk.navigation:navigation:$gosdkVersion",
-            navigationUi                    : "com.tomtom.sdk.navigation:ui:$gosdkVersion",
-            navigationRouteReplannerOnline  : "com.tomtom.sdk.navigation:route-replanner-online:$gosdkVersion",
-            searchOnline                    : "com.tomtom.sdk.search:search-online:$gosdkVersion",
-            searchUi                        : "com.tomtom.sdk.search:ui:$gosdkVersion"
+            mapsDisplay                   : "com.tomtom.sdk.maps:map-display:$gosdkVersion",
+            routePlannerOnline            : "com.tomtom.sdk.routing:route-planner-online:$gosdkVersion",
+            locationAndroid               : "com.tomtom.sdk.location:provider-android:$gosdkVersion",
+            locationSimulation            : "com.tomtom.sdk.location:provider-simulation:$gosdkVersion",
+            locationMapmatched            : "com.tomtom.sdk.location:provider-map-matched:$gosdkVersion",
+            navigation                    : "com.tomtom.sdk.navigation:navigation:$gosdkVersion",
+            navigationUi                  : "com.tomtom.sdk.navigation:ui:$gosdkVersion",
+            navigationRouteReplannerOnline: "com.tomtom.sdk.navigation:route-replanner-online:$gosdkVersion",
+            searchOnline                  : "com.tomtom.sdk.search:search-online:$gosdkVersion",
+            searchUi                      : "com.tomtom.sdk.search:ui:$gosdkVersion",
+            ndsStore                      : "com.tomtom.sdk:onboard-nds-store:$gosdkVersion",
+            styleProviderOffline          : "com.tomtom.sdk.maps:style-provider-offline:$gosdkVersion",
+            dataProviderOffline           : "com.tomtom.sdk.maps:data-provider-offline:$gosdkVersion",
+            navigationOffline             : "com.tomtom.sdk.navigation:navigation-offline:$gosdkVersion",
+            routePlannerOffline           : "com.tomtom.sdk.routing:route-planner-offline:$gosdkVersion",
+            featureToggle                 : "com.tomtom.sdk:feature-toggle:$gosdkVersion"
     ]
     libraries = [
-            androidXNavigationFragment      : "androidx.navigation:navigation-fragment-ktx:$androidXNavigation",
-            androidXNavigationUi            : "androidx.navigation:navigation-ui-ktx:$androidXNavigation",
-            androidXCore                    : "androidx.core:core-ktx:$androidXCoreVersion",
-            androidXCompat                  : "androidx.appcompat:appcompat:$androidXCompatVersion",
-            androidXConstraintLayout        : "androidx.constraintlayout:constraintlayout:$androidXConstraintLayout",
-            androidXJunit                   : "androidx.test.ext:junit:$androidXJunit",
-            androidXEspresso                : "androidx.test.espresso:espresso-core:$androidXEspresso",
-            material                        : "com.google.android.material:material:$materialVersion",
-            junit                           : "junit:junit:$junitVersion"
+            androidXNavigationFragment: "androidx.navigation:navigation-fragment-ktx:$androidXNavigation",
+            androidXNavigationUi      : "androidx.navigation:navigation-ui-ktx:$androidXNavigation",
+            androidXCore              : "androidx.core:core-ktx:$androidXCoreVersion",
+            androidXCompat            : "androidx.appcompat:appcompat:$androidXCompatVersion",
+            androidXConstraintLayout  : "androidx.constraintlayout:constraintlayout:$androidXConstraintLayout",
+            androidXJunit             : "androidx.test.ext:junit:$androidXJunit",
+            androidXEspresso          : "androidx.test.espresso:espresso-core:$androidXEspresso",
+            material                  : "com.google.android.material:material:$materialVersion",
+            junit                     : "junit:junit:$junitVersion"
     ]
 }

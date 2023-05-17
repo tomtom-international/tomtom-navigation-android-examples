@@ -56,6 +56,12 @@ dependencies {
     implementation tomTomLibraries.navigationRouteReplannerOnline
     implementation tomTomLibraries.searchOnline
     implementation tomTomLibraries.searchUi
+    implementation tomTomLibraries.ndsStore
+    implementation tomTomLibraries.styleProviderOffline
+    implementation tomTomLibraries.dataProviderOffline
+    implementation tomTomLibraries.navigationOffline
+    implementation tomTomLibraries.routePlannerOffline
+    implementation tomTomLibraries.featureToggle
 
     implementation libraries.androidXCore
     implementation libraries.androidXCompat
