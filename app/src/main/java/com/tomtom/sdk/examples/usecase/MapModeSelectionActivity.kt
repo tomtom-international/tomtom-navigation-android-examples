@@ -25,7 +25,6 @@ class MapModeSelectionActivity : AppCompatActivity() {
 
     companion object {
         private const val STROKE_WIDTH = 4
-        private const val DIALOG_WIDTH = 1300
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,14 +131,6 @@ class MapModeSelectionActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
 
-                dialog.setOnShowListener {
-                    val dialogWindow = dialog.window
-                    val layoutParams = WindowManager.LayoutParams()
-                    layoutParams.copyFrom(dialogWindow?.attributes)
-                    layoutParams.width = DIALOG_WIDTH
-                    layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-                    dialogWindow?.attributes = layoutParams
-                }
                 dialog.show()
                 true
             }
