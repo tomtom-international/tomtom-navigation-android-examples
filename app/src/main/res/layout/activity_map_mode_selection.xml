@@ -161,7 +161,6 @@
                         android:layout_height="match_parent"
                         android:padding="@dimen/large_radio_button_padding"
                         android:src="@drawable/ic_offline"
-                        app:tint="@android:color/darker_gray"
                         tools:ignore="ContentDescription" />
 
                 </com.google.android.material.card.MaterialCardView>
