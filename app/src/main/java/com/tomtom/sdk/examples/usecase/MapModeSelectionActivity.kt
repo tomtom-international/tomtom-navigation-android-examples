@@ -132,14 +132,6 @@ class MapModeSelectionActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
 
-                dialog.setOnShowListener {
-                    val dialogWindow = dialog.window
-                    val layoutParams = WindowManager.LayoutParams()
-                    layoutParams.copyFrom(dialogWindow?.attributes)
-                    layoutParams.width = DIALOG_WIDTH
-                    layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-                    dialogWindow?.attributes = layoutParams
-                }
                 dialog.show()
                 true
             }
