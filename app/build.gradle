@@ -42,6 +42,7 @@ android {
 
     buildTypes.each {
         it.buildConfigField 'String', 'TOMTOM_API_KEY', "\"$tomtomApiKey\""
+        it.buildConfigField 'String', 'NDS_MAP_LICENSE', "\"$ndsMapLicense\""
     }
 }
 

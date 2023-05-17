@@ -110,7 +110,7 @@ class OfflineNavigationActivity : AppCompatActivity() {
             context = this, NdsStoreConfiguration(
                 ndsStorePath = path.resolve(RELATIVE_NDS_STORE_PATH),
                 keystorePath = path.resolve(RELATIVE_KEYSTORE_PATH),
-                storeAccessPermit = NdsStoreAccessPermit.MapLicense(NDS_MAPLICENSE),
+                storeAccessPermit = NdsStoreAccessPermit.MapLicense(NDS_MAP_LICENSE),
                 ndsStoreUpdateConfig = NdsStoreUpdateConfig(
                     updateStoragePath = path.resolve(RELATIVE_UPDATE_STORAGE_PATH),
                     persistentStoragePath = path.resolve(RELATIVE_MAP_UPDATE_PERSISTENCE_PATH),
@@ -444,7 +444,7 @@ class OfflineNavigationActivity : AppCompatActivity() {
         private const val IQ_MAPS_RELEVANT_REGIONS_UPDATE = true
         private val IQ_MAPS_RELEVANT_REGIONS_RADIUS = Distance.kilometers(20.0)
         private val IQ_MAPS_RELEVANT_REGIONS_UPDATE_INTERVAL = 60.minutes
-        private const val NDS_MAPLICENSE = "MAP-LICENSE"
+        private const val NDS_MAP_LICENSE = BuildConfig.NDS_MAP_LICENSE
         private const val UPDATE_SERVER_URL = "https://api.tomtom.com/nds-test/updates/1/fetch"
         private const val SPEED_METERS_PER_SECOND = 30.0
         private const val ZOOM_TO_ROUTE_PADDING = 100
