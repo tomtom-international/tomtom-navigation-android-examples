@@ -22,5 +22,6 @@
         <item name="cornerRadius">@dimen/main_menu_navigation_button_corner_radius</item>
         <item name="iconSize">32dp</item>
         <item name="android:shadowDy">0</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 </resources>
