@@ -16,6 +16,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+    }
+
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
     buildTypes {
@@ -63,7 +68,18 @@ dependencies {
     implementation libraries.androidXNavigationUi
     implementation libraries.androidXConstraintLayout
     implementation libraries.material
+    implementation 'androidx.test.uiautomator:uiautomator:2.2.0'
     testImplementation libraries.junit
     androidTestImplementation libraries.androidXJunit
     androidTestImplementation libraries.androidXEspresso
+
+    // Tests
+    testImplementation "com.google.truth:truth:1.0.1"
+    androidTestImplementation "com.google.truth:truth:1.0.1"
+
+//    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.3")
+//    androidTestImplementation 'androidx.fragment:fragment-testing:1.5.7'
+
+    androidTestUtil 'androidx.test:orchestrator:1.4.2'
+
 }

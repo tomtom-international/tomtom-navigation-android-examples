@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.tomtom.sdk.examples.BuildConfig
 import com.tomtom.sdk.examples.R
+import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
 import com.tomtom.sdk.location.android.AndroidLocationProvider
@@ -19,9 +20,11 @@ import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
+import com.tomtom.sdk.map.display.ui.MapView
 
 class ConfigurableMapActivity : AppCompatActivity() {
 
+    private lateinit var mapView: MapView
     private lateinit var mapFragment: MapFragment
     private lateinit var tomTomMap: TomTomMap
     private lateinit var locationProvider: LocationProvider
@@ -39,12 +42,20 @@ class ConfigurableMapActivity : AppCompatActivity() {
         loadMapViewPage()
     }
 
+    override fun onStart() {
+        super.onStart()
+        mapView = mapFragment.view as MapView
+        mapView.contentDescription = "MAP NOT READY"
+//        Toast.makeText(this, "Visible", Toast.LENGTH_SHORT).show()
+    }
+
+
     /**
      * All functions needed to load the activity_map_view layout page
      */
     private fun loadMapViewPage() {
         setContentView(R.layout.activity_map_view)
-        displayMapWithLocation()
+        displayMap()
         initViews()
         setTagsToViewsWithDrawable()
     }
@@ -63,9 +74,8 @@ class ConfigurableMapActivity : AppCompatActivity() {
         goBackIV.tag = R.drawable.ic_tomtom_arrow_left
     }
 
-    private fun displayMapWithLocation() {
+    private fun displayMap() {
         initMap()
-        initLocationProvider()
     }
 
     /**
@@ -91,6 +101,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
             .commit()
         mapFragment.getMapAsync { map ->
             tomTomMap = map
+            mapView.contentDescription = "MAP READY"
             enableUserLocation()
         }
     }
@@ -124,6 +135,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
      * Read more about user location on the map in the Showing User Location guide.
      */
     private fun showUserLocation() {
+        initLocationProvider()
         locationProvider.enable()
         // zoom to current location at city level
         onLocationUpdateListener = OnLocationUpdateListener { location ->
@@ -134,6 +146,16 @@ class ConfigurableMapActivity : AppCompatActivity() {
         tomTomMap.setLocationProvider(locationProvider)
         val locationMarker = LocationMarkerOptions(type = LocationMarkerOptions.Type.Pointer)
         tomTomMap.enableLocationMarker(locationMarker)
+        mapView.contentDescription = "MAP WITH LOCATION"
+    }
+
+    private fun showDefaultLocation() {
+        val amsterdam = GeoPoint(52.379189, 4.899431)
+        val cameraOptions = CameraOptions(
+            position = amsterdam,
+            zoom = 8.0
+        )
+        tomTomMap.moveCamera(cameraOptions)
     }
 
     private fun requestLocationPermission() {
@@ -158,6 +180,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
                 getString(R.string.location_permission_denied),
                 Toast.LENGTH_SHORT
             ).show()
+            showDefaultLocation()
         }
     }
 
