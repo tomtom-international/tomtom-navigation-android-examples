@@ -30,9 +30,9 @@ import com.tomtom.sdk.location.simulation.SimulationLocationProvider
 import com.tomtom.sdk.location.simulation.strategy.InterpolationStrategy
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
+import com.tomtom.sdk.map.display.camera.CameraTrackingMode
 import com.tomtom.sdk.map.display.camera.CameraChangeListener
 import com.tomtom.sdk.map.display.camera.CameraOptions
-import com.tomtom.sdk.map.display.camera.CameraTrackingMode
 import com.tomtom.sdk.map.display.common.screen.Padding
 import com.tomtom.sdk.map.display.gesture.MapLongClickListener
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
@@ -41,7 +41,12 @@ import com.tomtom.sdk.map.display.route.RouteClickListener
 import com.tomtom.sdk.map.display.route.RouteOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.currentlocation.CurrentLocationButton.VisibilityPolicy
-import com.tomtom.sdk.navigation.*
+import com.tomtom.sdk.navigation.NavigationConfiguration
+import com.tomtom.sdk.navigation.NavigationFailure
+import com.tomtom.sdk.navigation.ProgressUpdatedListener
+import com.tomtom.sdk.navigation.RoutePlan
+import com.tomtom.sdk.navigation.TomTomNavigation
+import com.tomtom.sdk.navigation.TomTomNavigationFactory
 import com.tomtom.sdk.navigation.routereplanner.RouteReplanner
 import com.tomtom.sdk.navigation.routereplanner.online.OnlineRouteReplannerFactory
 import com.tomtom.sdk.navigation.ui.NavigationFragment
@@ -50,10 +55,15 @@ import com.tomtom.sdk.routing.RoutePlanner
 import com.tomtom.sdk.routing.RoutePlanningCallback
 import com.tomtom.sdk.routing.RoutePlanningResponse
 import com.tomtom.sdk.routing.RoutingFailure
-import com.tomtom.sdk.routing.online.OnlineRoutePlanner
 import com.tomtom.sdk.routing.options.Itinerary
 import com.tomtom.sdk.routing.options.RoutePlanningOptions
-import com.tomtom.sdk.routing.options.guidance.*
+import com.tomtom.sdk.routing.options.guidance.AnnouncementPoints
+import com.tomtom.sdk.routing.options.guidance.ExtendedSections
+import com.tomtom.sdk.routing.options.guidance.GuidanceOptions
+import com.tomtom.sdk.routing.options.guidance.InstructionPhoneticsType
+import com.tomtom.sdk.routing.options.guidance.InstructionType
+import com.tomtom.sdk.routing.options.guidance.ProgressPoints
+import com.tomtom.sdk.routing.online.OnlineRoutePlanner
 import com.tomtom.sdk.routing.route.Route
 import com.tomtom.sdk.vehicle.Vehicle
 
