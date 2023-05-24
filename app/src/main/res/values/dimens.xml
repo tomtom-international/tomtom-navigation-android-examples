@@ -14,5 +14,6 @@
     <dimen name="quarter_padding">4dp</dimen>
     <dimen name="half_padding">8dp</dimen>
     <dimen name="full_padding">16dp</dimen>
+    <dimen name="one_and_half_padding">24dp</dimen>
     <dimen name="double_padding">32dp</dimen>
 </resources>
