@@ -65,7 +65,11 @@ import com.tomtom.sdk.routing.options.guidance.InstructionType
 import com.tomtom.sdk.routing.options.guidance.ProgressPoints
 import com.tomtom.sdk.routing.online.OnlineRoutePlanner
 import com.tomtom.sdk.routing.route.Route
+import com.tomtom.sdk.vehicle.DefaultVehicleProvider
 import com.tomtom.sdk.vehicle.Vehicle
+import com.tomtom.sdk.vehicle.VehicleType
+import com.tomtom.sdk.vehicle.parameters.CommercialVehicle
+import com.tomtom.sdk.vehicle.parameters.VehicleParameter
 
 /**
  * This example shows how to build a simple navigation application using the TomTom Navigation SDK for Android.
@@ -153,6 +157,7 @@ class BasicNavigationActivity : AppCompatActivity() {
             locationProvider = locationProvider,
             routeReplanner = routeReplanner
         )
+        (navigationConfiguration.vehicleProvider as DefaultVehicleProvider).setVehicle(VehicleType.Truck, arrayListOf(CommercialVehicle(true)))
         tomTomNavigation = TomTomNavigationFactory.create(navigationConfiguration)
     }
 
@@ -245,7 +250,7 @@ class BasicNavigationActivity : AppCompatActivity() {
                 extendedSections = ExtendedSections.All,
                 progressPoints = ProgressPoints.All
             ),
-            vehicle = Vehicle.Car()
+            vehicle = Vehicle.Truck()
         )
         routePlanner.planRoute(routePlanningOptions, routePlanningCallback)
     }

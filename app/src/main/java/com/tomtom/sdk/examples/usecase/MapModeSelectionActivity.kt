@@ -1,7 +1,6 @@
 package com.tomtom.sdk.examples.usecase
 
 import android.content.Intent
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,7 +10,6 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import com.google.android.material.card.MaterialCardView
 import com.tomtom.sdk.examples.R
 
@@ -34,18 +32,22 @@ class MapModeSelectionActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
-        val onlineButtonId = R.id.online_button
-        val hybridButtonId = R.id.hybrid_button
-        val offlineButtonId = R.id.offline_button
+        initRadioButtons()
 
-        onlineButton = findViewById(onlineButtonId)
-        hybridButton = findViewById(hybridButtonId)
-        offlineButton = findViewById(offlineButtonId)
+        findViewById<Button>(R.id.bt_proceed).setOnClickListener {
+            proceed()
+        }
+    }
+
+    private fun initRadioButtons(){
+        onlineButton = findViewById(R.id.online_button)
+        hybridButton = findViewById(R.id.hybrid_button)
+        offlineButton = findViewById(R.id.offline_button)
 
         onlineButton?.isSelected = true
 
         onlineButton?.setOnClickListener {
-            selectButton(onlineButtonId)
+            selectButton(onlineButton)
             mapMode = MapMode.ONLINE
         }
 
@@ -66,11 +68,6 @@ class MapModeSelectionActivity : AppCompatActivity() {
             // and remove the darker gray tint of ImageView in the xml file
         }
         */
-
-
-        findViewById<Button>(R.id.bt_proceed).setOnClickListener {
-            proceed()
-        }
     }
 
     private fun proceed() {
@@ -88,7 +85,7 @@ class MapModeSelectionActivity : AppCompatActivity() {
         }
     }
 
-    private fun selectButton(selectedButtonId: Int) {
+    private fun selectButton(selectedButton: MaterialCardView?) {
         onlineButton?.strokeWidth = 0
         hybridButton?.strokeWidth = 0
         offlineButton?.strokeWidth = 0
@@ -96,17 +93,11 @@ class MapModeSelectionActivity : AppCompatActivity() {
         val density = resources.displayMetrics.density
         val strokeWidthPixels = (STROKE_WIDTH * density).toInt()
 
-        findViewById<MaterialCardView>(selectedButtonId).strokeWidth = strokeWidthPixels
+        selectedButton?.strokeWidth = strokeWidthPixels
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.info_button, menu);
-
-        val infoMenuItem = menu?.findItem(R.id.action_info)
-
-        val iconTint = ContextCompat.getColor(this, R.color.active_color)
-        val icon = infoMenuItem?.icon
-        icon?.setColorFilter(iconTint, PorterDuff.Mode.SRC_IN)
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -117,24 +108,27 @@ class MapModeSelectionActivity : AppCompatActivity() {
                 onBackPressed()
                 true
             }
-            R.id.action_info -> {
-                val dialogView = layoutInflater.inflate(R.layout.dialog_info_map_mode, null)
-
-                val dialog = AlertDialog.Builder(this, R.style.CustomDialogTheme)
-                    .setView(dialogView)
-                    .create()
-
-                val dialogButton = dialogView.findViewById<ImageButton>(R.id.bt_close)
-
-                dialogButton.setOnClickListener {
-                    dialog.dismiss()
-                }
-
-                dialog.show()
-                true
-            }
+            R.id.action_info -> showInfoDialog()
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showInfoDialog(): Boolean{
+        val dialogView = layoutInflater.inflate(R.layout.dialog_info_map_mode, null)
+
+        val dialog = AlertDialog.Builder(this, R.style.CustomDialogTheme)
+            .setView(dialogView)
+            .create()
+
+        val dialogButton = dialogView.findViewById<ImageButton>(R.id.bt_close)
+
+        dialogButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+
+        return true
     }
 
     enum class MapMode {
