@@ -382,8 +382,7 @@ class BasicNavigationActivity : AppCompatActivity() {
      */
     private fun stopNavigation() {
         navigationFragment.stopNavigation()
-        mapFragment.currentLocationButton.visibilityPolicy =
-            VisibilityPolicy.InvisibleWhenRecentered
+        mapFragment.currentLocationButton.visibilityPolicy = VisibilityPolicy.InvisibleWhenRecentered
         tomTomMap.cameraTrackingMode = CameraTrackingMode.None
         tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Pointer))
         resetMapPadding()
