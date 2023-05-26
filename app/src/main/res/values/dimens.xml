@@ -16,4 +16,5 @@
     <dimen name="full_padding">16dp</dimen>
     <dimen name="one_and_half_padding">24dp</dimen>
     <dimen name="double_padding">32dp</dimen>
+    <dimen name="dialog_icon_height">20dp</dimen>
 </resources>
