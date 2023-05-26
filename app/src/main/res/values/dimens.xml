@@ -18,4 +18,9 @@
     <dimen name="double_padding">32dp</dimen>
     <dimen name="dialog_icon_height">20dp</dimen>
     <dimen name="dialog_text_size">16sp</dimen>
+    <dimen name="map_mode_selection_title_text_size">20sp</dimen>
+    <dimen name="map_mode_selection_text_size">16sp</dimen>
+    <dimen name="divider_height">2dp</dimen>
+    <dimen name="custom_radio_button_layout_height">150dp</dimen>
+    <dimen name="custom_radio_button_selected_stroke_width">4dp</dimen>
 </resources>

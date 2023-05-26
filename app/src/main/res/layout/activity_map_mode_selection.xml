@@ -34,11 +34,11 @@
             android:layout_marginVertical="@dimen/full_padding"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="@dimen/full_padding">
 
             <View
                 android:layout_width="0dp"
-                android:layout_height="2dp"
+                android:layout_height="@dimen/divider_height"
                 android:layout_weight="1"
                 android:alpha="0.5"
                 android:background="@android:color/darker_gray" />
@@ -48,11 +48,11 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/half_padding"
                 android:text="@string/map_mode"
-                android:textSize="20sp" />
+                android:textSize="@dimen/map_mode_selection_title_text_size" />
 
             <View
                 android:layout_width="0dp"
-                android:layout_height="2dp"
+                android:layout_height="@dimen/divider_height"
                 android:layout_weight="1"
                 android:alpha="0.5"
                 android:background="@android:color/darker_gray" />
@@ -60,7 +60,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="@dimen/custom_radio_button_layout_height"
             android:orientation="horizontal"
             android:baselineAligned="false">
 
@@ -80,7 +80,7 @@
                     app:cardCornerRadius="@dimen/large_radio_button_radius"
                     app:cardElevation="@dimen/large_radio_button_elevation"
                     app:strokeColor="@color/active_color"
-                    app:strokeWidth="4dp">
+                    app:strokeWidth="@dimen/custom_radio_button_selected_stroke_width">
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -98,7 +98,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/online"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/map_mode_selection_text_size" />
 
             </LinearLayout>
 
@@ -135,7 +135,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/hybrid"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/map_mode_selection_title_text_size" />
 
             </LinearLayout>
 
@@ -174,7 +174,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/offline"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/map_mode_selection_title_text_size" />
             </LinearLayout>
         </LinearLayout>
 
