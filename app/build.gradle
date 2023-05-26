@@ -74,12 +74,8 @@ dependencies {
     androidTestImplementation libraries.androidXEspresso
 
     // Tests
-    testImplementation "com.google.truth:truth:1.0.1"
-    androidTestImplementation "com.google.truth:truth:1.0.1"
+    testImplementation libraries.truth
+    androidTestImplementation libraries.truth
 
-//    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.3")
-//    androidTestImplementation 'androidx.fragment:fragment-testing:1.5.7'
-
-    androidTestUtil 'androidx.test:orchestrator:1.4.2'
-
+    androidTestUtil libraries.testOrchestrator
 }

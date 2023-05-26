@@ -10,11 +10,9 @@
  */
 package com.tomtom.sdk.examples.maps
 
-import android.Manifest
 import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.RotateDrawable
 import android.os.Bundle
@@ -24,20 +22,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.tomtom.sdk.examples.BuildConfig
 import com.tomtom.sdk.examples.R
-import com.tomtom.sdk.location.LocationProvider
-import com.tomtom.sdk.location.OnLocationUpdateListener
-import com.tomtom.sdk.location.android.AndroidLocationProvider
-import com.tomtom.sdk.map.display.MapOptions
-import com.tomtom.sdk.map.display.TomTomMap
-import com.tomtom.sdk.map.display.camera.CameraOptions
-import com.tomtom.sdk.map.display.location.LocationMarkerOptions
-import com.tomtom.sdk.map.display.ui.MapFragment
 
 
 /**
@@ -54,11 +40,39 @@ class MapExamplesActivity : AppCompatActivity() {
     private lateinit var dropdown: TextView
     private lateinit var rotateDrawable: RotateDrawable
     private lateinit var layerDrawable: LayerDrawable
-//    private lateinit var animator: ObjectAnimator
+
+    companion object {
+        // The index value that stands for right as drawable icon position relative to the text in TextView
+        const val DRAWABLE_TO_RIGHT_SIDE_INDEX = 2
+
+        // The value that stands for the maximum state or full visibility level of a drawable icon in ObjectAnimator
+        const val FULL_DRAWABLE_VISIBILITY = 10000
+
+        // The value that stands for invisibility level of a drawable icon in ObjectAnimator
+        const val DRAWABLE_INVISIBILITY = 0
+
+        // The value that sets the degrees of the initial rotation angle on a drawable icon
+        const val INITIAL_ROTATION_ANGLE_DRAWABLE = 0f
+
+        // The value that sets the degrees of the target rotation angle on a drawable icon
+        const val TARGET_ROTATION_ANGLE_DRAWABLE = 180f
+
+        // The value that sets the duration of the animated rotation on a drawable icon
+        const val ROTATION_ANIMATION_DURATION: Long = 500
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadMapExamplesPage()
+
+        tryItLayoutButton.setOnClickListener {
+            tryMapView()
+        }
+
+        dropdownLayout.setOnClickListener {
+            expand()
+        }
     }
 
     /**
@@ -94,7 +108,7 @@ class MapExamplesActivity : AppCompatActivity() {
     /**
      * Triggered on click of button "Try it" to change layout activity
      */
-    fun tryMapView(view: View) {
+    private fun tryMapView() {
         val intent = Intent(this, ConfigurableMapActivity::class.java)
         startActivity(intent)
     }
@@ -114,7 +128,7 @@ class MapExamplesActivity : AppCompatActivity() {
      * Toggle the visibility of the detailsText and tryItButton views by using the TransitionManager
      * and AutoTransition() to apply a visual transition animation effect when views are shown or hidden.
      */
-    fun expand(view: View) {
+    private fun expand() {
         TransitionManager.beginDelayedTransition(dropdownLayout, AutoTransition())
         TransitionManager.beginDelayedTransition(tryItLayoutButton, AutoTransition())
         detailsText.visibility = if (detailsText.visibility == View.GONE) View.VISIBLE else View.GONE
@@ -125,33 +139,15 @@ class MapExamplesActivity : AppCompatActivity() {
      * Set up the elements for animated rotation
      */
     private fun initRotationElements() {
-        val drawable = dropdown.compoundDrawables[2] // Get the end drawable
+        val drawable = dropdown.compoundDrawables[DRAWABLE_TO_RIGHT_SIDE_INDEX] // Get the right-end drawable
 
         rotateDrawable = RotateDrawable()
         rotateDrawable.drawable = drawable
-        rotateDrawable.level = 10000 // Set the level to show the drawable
-        rotateDrawable.toDegrees = 0f // Set the initial toDegrees value to 0 degrees
+        rotateDrawable.level = FULL_DRAWABLE_VISIBILITY
+        rotateDrawable.toDegrees = INITIAL_ROTATION_ANGLE_DRAWABLE
 
         layerDrawable = LayerDrawable(arrayOf(rotateDrawable)) // Create a LayerDrawable and add the RotateDrawable to it
         dropdown.setCompoundDrawablesWithIntrinsicBounds(null, null, layerDrawable, null)
-
-        /**
-        //Rotates from both sides (like making 360 degrees) - optimized
-//        val drawable = dropdown.compoundDrawables[2] // Get the drawable
-//
-//        rotateDrawable = RotateDrawable().apply {
-//            this.drawable = drawable
-//            level = 10000 // Set the level to show the drawable (fully visible)
-//            toDegrees = 0f // Set the initial toDegrees value to 0 degrees
-//        }
-//
-//        layerDrawable = LayerDrawable(arrayOf(rotateDrawable)) // Create a LayerDrawable and add the RotateDrawable to it
-//        dropdown.setCompoundDrawablesWithIntrinsicBounds(null, null, layerDrawable, null)
-//
-//        animator = ObjectAnimator.ofInt(layerDrawable.getDrawable(0), "level", 0, 10000).apply {
-//            duration = 500
-        */
-//        }
     }
     /**
      * Rotate with animation the arrow icon by 180 degrees relative to its current rotation.
@@ -160,26 +156,13 @@ class MapExamplesActivity : AppCompatActivity() {
     private fun animateRotation() {
         // Rotate the drawable by 180 degrees from its previous direction
         rotateDrawable.fromDegrees = rotateDrawable.toDegrees
-        rotateDrawable.toDegrees = if (isArrowUp) 180f else 0f
+        rotateDrawable.toDegrees = if (isArrowUp) TARGET_ROTATION_ANGLE_DRAWABLE else INITIAL_ROTATION_ANGLE_DRAWABLE
         isArrowUp = !isArrowUp // Toggle the arrow's direction
 
         // Create a new animator with the updated rotation angles
-        val animator = ObjectAnimator.ofInt(layerDrawable.getDrawable(0), "level", 0, 10000)
-        animator.duration = 500
+        val animator = ObjectAnimator.ofInt(layerDrawable.getDrawable(0), "level", DRAWABLE_INVISIBILITY, FULL_DRAWABLE_VISIBILITY)
+        animator.duration = ROTATION_ANIMATION_DURATION
 
         animator.start()
-
-        /**
-//        Rotate in 360 degrees(optimized)
-        val currentRotation = rotateDrawable.toDegrees % 360 // Get the current rotation of the arrow
-        rotateDrawable.fromDegrees = currentRotation
-        rotateDrawable.toDegrees = currentRotation + 180f // Rotate the arrow by 180 degrees
-
-        // Update the animator with the new target drawable and animation parameters
-        animator.target = layerDrawable.getDrawable(0)
-        animator.setIntValues(0, 10000)
-
-        animator.start()
-        */
     }
 }

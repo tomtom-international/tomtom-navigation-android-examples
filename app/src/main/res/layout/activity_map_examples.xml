@@ -9,23 +9,17 @@
         android:id="@+id/map_examples"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_margin="@dimen/view_margin_common_20"
         android:orientation="vertical"
         tools:context=".maps.MapExamplesActivity">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/vector_map_card"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginStart="2dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="15dp"
+                android:layout_height="@dimen/map_image_height"
+                android:layout_margin="@dimen/map_image_margin"
                 android:orientation="vertical"
-                app:cardCornerRadius="7dp">
+                app:cardCornerRadius="@dimen/map_image_radius">
 
                 <ImageView
                     android:id="@+id/vector_map_iv"
@@ -40,18 +34,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginStart="@dimen/view_margin_common_5"
+                android:layout_marginEnd="@dimen/view_margin_common_5"
+                android:layout_marginTop="@dimen/view_margin_common_10"
+                android:layout_marginBottom="@dimen/view_margin_common_20"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/dropdown_layout"
-                    android:onClick="expand"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="@dimen/view_margin_common_10"
                     android:orientation="vertical"
                     android:animateLayoutChanges="true">
 
@@ -59,9 +52,9 @@
                         android:id="@+id/dropdown"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="@dimen/view_margin_common_10"
                         android:text="@string/conf_map_title"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_size"
                         android:textStyle="bold"
                         android:textColor="@color/text"
                         app:drawableRightCompat="@drawable/ic_tomtom_arrow_up" />
@@ -70,12 +63,11 @@
                         android:id="@+id/details"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="@dimen/view_margin_common_10"
                         android:visibility="visible"
                         android:text="@string/conf_map_description"
-                        android:textSize="20sp"
-                        android:lineSpacingExtra="10dp"/>
+                        android:textSize="@dimen/text_size"
+                        android:lineSpacingExtra="@dimen/map_descr_line_spacing"/>
         <!--            android:lineSpacingMultiplier="1.2"-->
 
                 </LinearLayout>
@@ -83,13 +75,13 @@
                 <LinearLayout
                     android:id="@+id/try_it_layout_button"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_height="@dimen/btn_try_height"
+                    android:layout_marginTop="@dimen/view_margin_common_5"
+                    android:layout_marginBottom="@dimen/view_margin_common_10"
                     android:animateLayoutChanges="true"
                     android:background="@drawable/button_primary"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="tryMapView"
                     android:orientation="horizontal"
                     android:gravity="center">
 
@@ -107,10 +99,10 @@
                         android:layout_height="wrap_content"
                         android:text="@string/try_it_mapdemo"
                         android:textAllCaps="false"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_size"
                         android:textColor="@color/white"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="8dp" />
+                        android:layout_marginStart="@dimen/view_margin_common_10" />
 
                 </LinearLayout>
 

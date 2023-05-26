@@ -7,15 +7,15 @@ import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import com.tomtom.sdk.examples.R
 import com.tomtom.sdk.examples.utils.matchers.CardViewHasRadiusMatcher.hasCardCornerRadius
 import com.tomtom.sdk.examples.utils.matchers.ImageViewHasDrawableMatcher.hasDrawableSrc
 import com.tomtom.sdk.examples.utils.matchers.TextViewHasCompoundDrawableMatcher.hasCompoundDrawable
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
 class MapExamplesActivityTest {
@@ -41,7 +41,6 @@ class MapExamplesActivityTest {
 
     @Test
     fun test_isActivityInView() {
-//        val activityScenario = ActivityScenario.launch(MapExamplesActivity::class.java)
         onView(withId(R.id.map_examples)).check(matches(isDisplayed()))
     }
 
@@ -102,7 +101,7 @@ class MapExamplesActivityTest {
     @Test
     fun test_onTryItLayoutButton_isBackgroundDrawableDisplayed() {
         onView(allOf(withId(R.id.try_it_layout_button),
-            hasBackground(R.drawable.button_primary), isDisplayed()));
+            hasBackground(R.drawable.button_primary), isDisplayed()))
     }
 
     @Test

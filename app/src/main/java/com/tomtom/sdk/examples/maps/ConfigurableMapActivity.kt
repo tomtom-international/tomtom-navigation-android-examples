@@ -3,7 +3,6 @@ package com.tomtom.sdk.examples.maps
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,6 +20,11 @@ import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.MapView
+
+/**
+ * This activity is responsible for displaying the TomTom Vector Map, both with location and without.
+ *
+ */
 
 class ConfigurableMapActivity : AppCompatActivity() {
 
@@ -40,13 +44,19 @@ class ConfigurableMapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadMapViewPage()
+
+        /**
+         * Triggered on button go back click to return to the main view with the map styles
+         */
+        goBackIV.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     override fun onStart() {
         super.onStart()
         mapView = mapFragment.view as MapView
         mapView.contentDescription = "MAP NOT READY"
-//        Toast.makeText(this, "Visible", Toast.LENGTH_SHORT).show()
     }
 
 
@@ -76,13 +86,6 @@ class ConfigurableMapActivity : AppCompatActivity() {
 
     private fun displayMap() {
         initMap()
-    }
-
-    /**
-     * Triggered on button go back click to return to the main view for the map examples
-     */
-    fun goBack(view: View) {
-        onBackPressed()
     }
 
     /**
@@ -191,9 +194,4 @@ class ConfigurableMapActivity : AppCompatActivity() {
         this,
         Manifest.permission.ACCESS_COARSE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
-
-    override fun onDestroy() {
-//        locationProvider.close()
-        super.onDestroy()
-    }
 }
