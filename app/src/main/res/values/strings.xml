@@ -18,5 +18,15 @@
     <string name="routing_demo_activity_title">Routing examples coming soon</string>
     <string name="search_demo_activity_title">Search examples coming soon</string>
     <string name="route">Route</string>
-
+    <string name="map_mode_selection_title">Options</string>
+    <string name="info">Info</string>
+    <string name="offline">Offline</string>
+    <string name="online">Online</string>
+    <string name="map_mode">Map Mode</string>
+    <string name="hybrid">Hybrid</string>
+    <string name="next">Next</string>
+    <string name="map_modes">Map Modes</string>
+    <string name="online_description">You can browse any location and see live traffic and road incidents.</string>
+    <string name="hybrid_description"><![CDATA[A combination of live & downloaded map data, which can be useful in locations that have intermittent internet access.]]></string>
+    <string name="offline_description">Allows you to browse regions you’ve downloaded and view fixed road incidents, like speed cameras.</string>
 </resources>
