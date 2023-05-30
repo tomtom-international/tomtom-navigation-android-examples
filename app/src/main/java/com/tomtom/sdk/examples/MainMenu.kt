@@ -19,6 +19,7 @@ import com.tomtom.sdk.examples.offline.OfflineExamplesActivity
 import com.tomtom.sdk.examples.routing.RoutingExamplesActivity
 import com.tomtom.sdk.examples.search.SearchExamplesActivity
 import com.tomtom.sdk.examples.usecase.BasicNavigationActivity
+import com.tomtom.sdk.examples.usecase.MapModeSelectionActivity
 
 
 class MainMenu : AppCompatActivity() {
@@ -28,7 +29,7 @@ class MainMenu : AppCompatActivity() {
     }
 
     fun launchBasicDriving(button : android.view.View) {
-        val myIntent = Intent(this@MainMenu, BasicNavigationActivity::class.java)
+        val myIntent = Intent(this@MainMenu, MapModeSelectionActivity::class.java)
         this@MainMenu.startActivity(myIntent)
     }
 
