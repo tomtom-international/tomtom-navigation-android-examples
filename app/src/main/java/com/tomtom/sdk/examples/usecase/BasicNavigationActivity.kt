@@ -255,6 +255,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         override fun onSuccess(result: RoutePlanningResponse) {
             route = result.routes.first()
             drawRoute(route!!)
+            tomTomMap.zoomToRoutes(ZOOM_TO_ROUTE_PADDING)
         }
 
         override fun onFailure(failure: RoutingFailure) {
@@ -268,7 +269,7 @@ class BasicNavigationActivity : AppCompatActivity() {
      * Used to draw route on the map
      * You can show the overview of the added routes using the TomTomMap.zoomToRoutes(Int) method. Note that its padding parameter is expressed in pixels.
      */
-    private fun drawRoute(route: Route, withZoom: Boolean = true) {
+    private fun drawRoute(route: Route) {
         val instructions = route.mapInstructions()
         val routeOptions = RouteOptions(
             geometry = route.geometry,
@@ -278,9 +279,6 @@ class BasicNavigationActivity : AppCompatActivity() {
             routeOffset = route.routePoints.map { it.routeOffset }
         )
         tomTomMap.addRoute(routeOptions)
-        if (withZoom) {
-            tomTomMap.zoomToRoutes(ZOOM_TO_ROUTE_PADDING)
-        }
     }
 
     /**
@@ -367,7 +365,7 @@ class BasicNavigationActivity : AppCompatActivity() {
                 updateReason != RouteUpdateReason.LanguageChange
             ) {
                 tomTomMap.removeRoutes()
-                drawRoute(route = route, withZoom = false)
+                drawRoute(route)
             }
         }
     }
