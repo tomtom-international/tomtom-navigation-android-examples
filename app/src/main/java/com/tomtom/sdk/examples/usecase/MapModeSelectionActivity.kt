@@ -4,20 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.google.android.material.card.MaterialCardView
 import com.tomtom.sdk.examples.R
+import com.tomtom.sdk.examples.databinding.ActivityMapModeSelectionBinding
 
 
 class MapModeSelectionActivity : AppCompatActivity() {
-    private var onlineButton: MaterialCardView? = null
-    private var offlineButton: MaterialCardView? = null
-    private var hybridButton: MaterialCardView? = null
+    private lateinit var binding: ActivityMapModeSelectionBinding
     private var mapMode = MapMode.ONLINE
 
     companion object {
@@ -26,34 +22,33 @@ class MapModeSelectionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map_mode_selection)
-        val toolbar = findViewById<View>(R.id.toolbar) as? Toolbar
-        setSupportActionBar(toolbar);
+
+        binding = ActivityMapModeSelectionBinding.inflate(layoutInflater)
+        val rootView = binding.root
+        setContentView(rootView)
+
+        setSupportActionBar(binding.toolbar);
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
         initRadioButtons()
 
-        findViewById<Button>(R.id.bt_proceed).setOnClickListener {
+        binding.btProceed.setOnClickListener {
             proceed()
         }
     }
 
-    private fun initRadioButtons(){
-        onlineButton = findViewById(R.id.online_button)
-        hybridButton = findViewById(R.id.hybrid_button)
-        offlineButton = findViewById(R.id.offline_button)
+    private fun initRadioButtons() {
+        binding.onlineButton.isSelected = true
 
-        onlineButton?.isSelected = true
-
-        onlineButton?.setOnClickListener {
-            selectButton(onlineButton)
+        binding.onlineButton.setOnClickListener {
+            selectButton(binding.onlineButton)
             mapMode = MapMode.ONLINE
         }
 
         /*
         hybridButton?.setOnClickListener {
-            selectButton(hybridButtonId)
+            selectButton(binding.hybridButton)
             mapMode = MapMode.HYBRID
 
             // In order to activate, please remove the comment lines,
@@ -61,7 +56,7 @@ class MapModeSelectionActivity : AppCompatActivity() {
         }
 
         offlineButton?.setOnClickListener {
-            selectButton(offlineButtonId)
+            selectButton(binding.offlineButton)
             mapMode = MapMode.OFFLINE
 
             // In order to activate, please remove the comment lines,
@@ -74,7 +69,7 @@ class MapModeSelectionActivity : AppCompatActivity() {
         when (mapMode) {
             MapMode.ONLINE -> {
                 val myIntent = Intent(this, BasicNavigationActivity::class.java)
-                this.startActivity(myIntent)
+                startActivity(myIntent)
             }
             MapMode.HYBRID -> {
                 TODO()
@@ -86,9 +81,9 @@ class MapModeSelectionActivity : AppCompatActivity() {
     }
 
     private fun selectButton(selectedButton: MaterialCardView?) {
-        onlineButton?.strokeWidth = 0
-        hybridButton?.strokeWidth = 0
-        offlineButton?.strokeWidth = 0
+        binding.onlineButton.strokeWidth = 0
+        binding.hybridButton.strokeWidth = 0
+        binding.offlineButton.strokeWidth = 0
 
         val density = resources.displayMetrics.density
         val strokeWidthPixels = (STROKE_WIDTH * density).toInt()
@@ -106,6 +101,7 @@ class MapModeSelectionActivity : AppCompatActivity() {
         return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
+
                 true
             }
             R.id.action_info -> showInfoDialog()
@@ -113,7 +109,7 @@ class MapModeSelectionActivity : AppCompatActivity() {
         }
     }
 
-    private fun showInfoDialog(): Boolean{
+    private fun showInfoDialog(): Boolean {
         val dialogView = layoutInflater.inflate(R.layout.dialog_info_map_mode, null)
 
         val dialog = AlertDialog.Builder(this, R.style.CustomDialogTheme)

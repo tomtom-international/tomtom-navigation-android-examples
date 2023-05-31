@@ -10,13 +10,17 @@
  */
 package com.tomtom.sdk.examples.maps
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.tomtom.sdk.examples.R
+import androidx.appcompat.app.AppCompatActivity
+import com.tomtom.sdk.examples.databinding.ActivityMapExamplesBinding
 
 class MapExamplesActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMapExamplesBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map_examples)
+
+        binding = ActivityMapExamplesBinding.inflate(layoutInflater)
+        val rootView = binding.root
+        setContentView(rootView)
     }
 }

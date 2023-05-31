@@ -10,14 +10,18 @@
  */
 package com.tomtom.sdk.examples.search
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.tomtom.sdk.examples.R
+import androidx.appcompat.app.AppCompatActivity
+import com.tomtom.sdk.examples.databinding.ActivitySearchExamplesBinding
 
 
 class SearchExamplesActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySearchExamplesBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search_examples)
+
+        binding = ActivitySearchExamplesBinding.inflate(layoutInflater)
+        val rootView = binding.root
+        setContentView(rootView)
     }
 }
