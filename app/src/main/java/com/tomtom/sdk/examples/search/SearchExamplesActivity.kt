@@ -21,7 +21,6 @@ class SearchExamplesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivitySearchExamplesBinding.inflate(layoutInflater)
-        val rootView = binding.root
-        setContentView(rootView)
+        setContentView(binding.root)
     }
 }

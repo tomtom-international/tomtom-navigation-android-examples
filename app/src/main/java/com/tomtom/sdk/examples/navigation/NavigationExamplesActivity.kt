@@ -20,7 +20,6 @@ class NavigationExamplesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityNavigationExamplesBinding.inflate(layoutInflater)
-        val rootView = binding.root
-        setContentView(rootView)
+        setContentView(binding.root)
     }
 }

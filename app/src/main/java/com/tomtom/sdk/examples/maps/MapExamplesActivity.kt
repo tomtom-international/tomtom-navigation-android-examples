@@ -20,7 +20,6 @@ class MapExamplesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMapExamplesBinding.inflate(layoutInflater)
-        val rootView = binding.root
-        setContentView(rootView)
+        setContentView(binding.root)
     }
 }

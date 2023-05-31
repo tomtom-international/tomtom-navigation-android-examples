@@ -24,8 +24,7 @@ class MapModeSelectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMapModeSelectionBinding.inflate(layoutInflater)
-        val rootView = binding.root
-        setContentView(rootView)
+        setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar);
 
@@ -101,7 +100,6 @@ class MapModeSelectionActivity : AppCompatActivity() {
         return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
-
                 true
             }
             R.id.action_info -> showInfoDialog()

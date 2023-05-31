@@ -96,8 +96,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityBasicNavigationBinding.inflate(layoutInflater)
-        val rootView = binding.root
-        setContentView(rootView)
+        setContentView(binding.root)
 
         initMap()
         initLocationProvider()
