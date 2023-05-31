@@ -135,7 +135,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/hybrid"
-                    android:textSize="@dimen/map_mode_selection_title_text_size" />
+                    android:textSize="@dimen/map_mode_selection_text_size" />
 
             </LinearLayout>
 
@@ -174,7 +174,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/offline"
-                    android:textSize="@dimen/map_mode_selection_title_text_size" />
+                    android:textSize="@dimen/map_mode_selection_text_size" />
             </LinearLayout>
         </LinearLayout>
 

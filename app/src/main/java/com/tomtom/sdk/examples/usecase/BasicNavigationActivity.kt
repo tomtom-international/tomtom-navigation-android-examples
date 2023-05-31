@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.tomtom.sdk.examples.BuildConfig
 import com.tomtom.sdk.examples.R
+import com.tomtom.sdk.examples.databinding.ActivityBasicNavigationBinding
 import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
@@ -73,6 +74,7 @@ import com.tomtom.sdk.vehicle.Vehicle
  **/
 
 class BasicNavigationActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityBasicNavigationBinding
     private lateinit var mapFragment: MapFragment
     private lateinit var tomTomMap: TomTomMap
     private lateinit var locationProvider: LocationProvider
@@ -92,7 +94,11 @@ class BasicNavigationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_basic_navigation)
+
+        binding = ActivityBasicNavigationBinding.inflate(layoutInflater)
+        val rootView = binding.root
+        setContentView(rootView)
+
         initMap()
         initLocationProvider()
         initRouting()
@@ -390,7 +396,8 @@ class BasicNavigationActivity : AppCompatActivity() {
      */
     private fun stopNavigation() {
         navigationFragment.stopNavigation()
-        mapFragment.currentLocationButton.visibilityPolicy = VisibilityPolicy.InvisibleWhenRecentered
+        mapFragment.currentLocationButton.visibilityPolicy =
+            VisibilityPolicy.InvisibleWhenRecentered
         tomTomMap.cameraTrackingMode = CameraTrackingMode.None
         tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Pointer))
         resetMapPadding()
