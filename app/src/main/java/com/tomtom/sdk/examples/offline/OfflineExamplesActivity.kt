@@ -20,7 +20,6 @@ class OfflineExamplesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityOfflineExamplesBinding.inflate(layoutInflater)
-        val rootView = binding.root
-        setContentView(rootView)
+        setContentView(binding.root)
     }
 }

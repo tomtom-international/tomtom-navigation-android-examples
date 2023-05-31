@@ -20,7 +20,6 @@ class RoutingExamplesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityRoutingExamplesBinding.inflate(layoutInflater)
-        val rootView = binding.root
-        setContentView(rootView)
+        setContentView(binding.root)
     }
 }
