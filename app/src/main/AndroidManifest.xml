@@ -17,6 +17,15 @@
         android:theme="@style/Theme.NavigatingWithTomTom"
         tools:targetApi="31">
         <activity
+            android:name=".startnavigation.NavigationActivity"
+            android:exported="true"
+            android:label="startnavigation" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".usecase.MapModeSelectionActivity"
             android:exported="false"
             android:label="@string/map_mode_selection_title" />
@@ -40,12 +49,7 @@
             android:exported="false" />
         <activity
             android:name="com.tomtom.sdk.examples.MainMenu"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false" >
         </activity>
 
         <meta-data
