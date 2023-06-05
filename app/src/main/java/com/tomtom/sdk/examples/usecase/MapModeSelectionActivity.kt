@@ -38,16 +38,16 @@ class MapModeSelectionActivity : AppCompatActivity() {
     }
 
     private fun initRadioButtons() {
-        binding.onlineButton.isSelected = true
+        binding.btOnline.isSelected = true
 
-        binding.onlineButton.setOnClickListener {
-            selectButton(binding.onlineButton)
+        binding.btOnline.setOnClickListener {
+            selectButton(binding.btOnline)
             mapMode = MapMode.ONLINE
         }
 
         /*
         hybridButton?.setOnClickListener {
-            selectButton(binding.hybridButton)
+            selectButton(binding.btHybrid)
             mapMode = MapMode.HYBRID
 
             // In order to activate, please remove the comment lines,
@@ -55,7 +55,7 @@ class MapModeSelectionActivity : AppCompatActivity() {
         }
 
         offlineButton?.setOnClickListener {
-            selectButton(binding.offlineButton)
+            selectButton(binding.btOffline)
             mapMode = MapMode.OFFLINE
 
             // In order to activate, please remove the comment lines,
@@ -80,9 +80,9 @@ class MapModeSelectionActivity : AppCompatActivity() {
     }
 
     private fun selectButton(selectedButton: MaterialCardView?) {
-        binding.onlineButton.strokeWidth = 0
-        binding.hybridButton.strokeWidth = 0
-        binding.offlineButton.strokeWidth = 0
+        binding.btOnline.strokeWidth = 0
+        binding.btHybrid.strokeWidth = 0
+        binding.btOffline.strokeWidth = 0
 
         val density = resources.displayMetrics.density
         val strokeWidthPixels = (STROKE_WIDTH * density).toInt()

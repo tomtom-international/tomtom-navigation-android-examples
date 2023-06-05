@@ -72,7 +72,7 @@
                 android:paddingHorizontal="@dimen/half_padding">
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/online_button"
+                    android:id="@+id/bt_online"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_margin="@dimen/large_radio_button_margin_correction"
@@ -110,7 +110,7 @@
                 android:paddingHorizontal="@dimen/half_padding">
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/hybrid_button"
+                    android:id="@+id/bt_hybrid"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_margin="@dimen/large_radio_button_margin_correction"
@@ -147,7 +147,7 @@
                 android:paddingHorizontal="@dimen/half_padding">
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/offline_button"
+                    android:id="@+id/bt_offline"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_margin="@dimen/large_radio_button_margin_correction"
