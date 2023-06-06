@@ -17,4 +17,20 @@
     <dimen name="map_image_radius">7dp</dimen>
     <dimen name="btn_try_height">50dp</dimen>
     <dimen name="map_descr_line_spacing">10dp</dimen>
+    <dimen name="large_radio_button_padding">40dp</dimen>
+    <dimen name="large_radio_button_radius">24dp</dimen>
+    <dimen name="large_radio_button_margin_correction">3dp</dimen>
+    <dimen name="large_radio_button_elevation">8dp</dimen>
+    <dimen name="quarter_padding">4dp</dimen>
+    <dimen name="half_padding">8dp</dimen>
+    <dimen name="full_padding">16dp</dimen>
+    <dimen name="one_and_half_padding">24dp</dimen>
+    <dimen name="double_padding">32dp</dimen>
+    <dimen name="dialog_icon_height">20dp</dimen>
+    <dimen name="dialog_text_size">16sp</dimen>
+    <dimen name="map_mode_selection_title_text_size">20sp</dimen>
+    <dimen name="map_mode_selection_text_size">16sp</dimen>
+    <dimen name="divider_height">2dp</dimen>
+    <dimen name="custom_radio_button_layout_height">150dp</dimen>
+    <dimen name="custom_radio_button_selected_stroke_width">4dp</dimen>
 </resources>

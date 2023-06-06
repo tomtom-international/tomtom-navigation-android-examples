@@ -41,12 +41,7 @@ import com.tomtom.sdk.map.display.route.RouteClickListener
 import com.tomtom.sdk.map.display.route.RouteOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.currentlocation.CurrentLocationButton.VisibilityPolicy
-import com.tomtom.sdk.navigation.NavigationConfiguration
-import com.tomtom.sdk.navigation.NavigationFailure
-import com.tomtom.sdk.navigation.ProgressUpdatedListener
-import com.tomtom.sdk.navigation.RoutePlan
-import com.tomtom.sdk.navigation.TomTomNavigation
-import com.tomtom.sdk.navigation.TomTomNavigationFactory
+import com.tomtom.sdk.navigation.*
 import com.tomtom.sdk.navigation.routereplanner.RouteReplanner
 import com.tomtom.sdk.navigation.routereplanner.online.OnlineRouteReplannerFactory
 import com.tomtom.sdk.navigation.ui.NavigationFragment
@@ -260,6 +255,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         override fun onSuccess(result: RoutePlanningResponse) {
             route = result.routes.first()
             drawRoute(route!!)
+            tomTomMap.zoomToRoutes(ZOOM_TO_ROUTE_PADDING)
         }
 
         override fun onFailure(failure: RoutingFailure) {
@@ -283,7 +279,6 @@ class BasicNavigationActivity : AppCompatActivity() {
             routeOffset = route.routePoints.map { it.routeOffset }
         )
         tomTomMap.addRoute(routeOptions)
-        tomTomMap.zoomToRoutes(ZOOM_TO_ROUTE_PADDING)
     }
 
     /**
@@ -316,6 +311,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         navigationFragment.startNavigation(routePlan)
         navigationFragment.addNavigationListener(navigationListener)
         tomTomNavigation.addProgressUpdatedListener(progressUpdatedListener)
+        tomTomNavigation.addRouteUpdatedListener(routeUpdatedListener)
     }
 
     /**
@@ -362,6 +358,18 @@ class BasicNavigationActivity : AppCompatActivity() {
         tomTomMap.routes.first().progress = it.distanceAlongRoute
     }
 
+    private val routeUpdatedListener by lazy {
+        RouteUpdatedListener { route, updateReason ->
+            if (updateReason != RouteUpdateReason.Refresh &&
+                updateReason != RouteUpdateReason.Increment &&
+                updateReason != RouteUpdateReason.LanguageChange
+            ) {
+                tomTomMap.removeRoutes()
+                drawRoute(route)
+            }
+        }
+    }
+
     /**
      * Use the SimulationLocationProvider for testing purposes.
      */
@@ -388,6 +396,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         resetMapPadding()
         navigationFragment.removeNavigationListener(navigationListener)
         tomTomNavigation.removeProgressUpdatedListener(progressUpdatedListener)
+        tomTomNavigation.removeRouteUpdatedListener(routeUpdatedListener)
         clearMap()
         initLocationProvider()
         enableUserLocation()
@@ -480,8 +489,9 @@ class BasicNavigationActivity : AppCompatActivity() {
     ) == PackageManager.PERMISSION_GRANTED
 
     override fun onDestroy() {
-        locationProvider.close()
+        tomTomMap.setLocationProvider(null)
         tomTomNavigation.close()
+        locationProvider.close()
         super.onDestroy()
     }
 
