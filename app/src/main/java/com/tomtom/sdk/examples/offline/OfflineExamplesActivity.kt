@@ -10,13 +10,16 @@
  */
 package com.tomtom.sdk.examples.offline
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.tomtom.sdk.examples.R
+import androidx.appcompat.app.AppCompatActivity
+import com.tomtom.sdk.examples.databinding.ActivityOfflineExamplesBinding
 
 class OfflineExamplesActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityOfflineExamplesBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_offline_examples)
+
+        binding = ActivityOfflineExamplesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }
