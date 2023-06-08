@@ -24,7 +24,6 @@ import com.tomtom.sdk.map.display.ui.MapView
 
 /**
  * This activity is responsible for displaying the TomTom Vector Map, both with location and without.
- *
  */
 
 class ConfigurableMapActivity : AppCompatActivity() {
@@ -68,7 +67,6 @@ class ConfigurableMapActivity : AppCompatActivity() {
         mapView = mapFragment.view as MapView
         mapView.contentDescription = "MAP NOT READY"
     }
-
 
     /**
      * All functions needed to load the activity_map_view layout page
