@@ -10,6 +10,7 @@ import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.Until
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,6 +18,8 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MapLoadingTest {
+
+    private lateinit var uiDevice: UiDevice
 
     companion object {
         const val SDK_VERSION_23 = 23
@@ -34,10 +37,13 @@ class MapLoadingTest {
     @get: Rule
     val activityRule : ActivityScenarioRule<ConfigurableMapActivity> = ActivityScenarioRule(ConfigurableMapActivity::class.java)
 
+    @Before
+    fun setUp() {
+        uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    }
 
     @Test
     fun testMapShowing() {
-        val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val mapReadySelector = By.descContains("MAP READY") //specify criteria for matching UI elements
         val mapReadyObject = uiDevice.wait(Until.hasObject(mapReadySelector), 10000L)
 
@@ -52,7 +58,6 @@ class MapLoadingTest {
 
     @Test
     fun testMapDefaultLocation_onPermissionDeny() {
-        val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val denyPermissions = uiDevice.wait(Until.findObject(By.text(
             when (Build.VERSION.SDK_INT) {
                 in 24..28 -> DENY_TEXT_SDK_24_TO_28
@@ -78,7 +83,6 @@ class MapLoadingTest {
 
     @Test
     fun testMapUserLocation_onPermissionAllow() {
-        val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val allowPermissions = uiDevice.wait(Until.findObject(By.text(
             when {
                 Build.VERSION.SDK_INT == SDK_VERSION_23 -> ALLOW_TEXT_SDK_23
