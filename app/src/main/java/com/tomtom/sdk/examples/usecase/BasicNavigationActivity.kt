@@ -61,6 +61,7 @@ import com.tomtom.sdk.routing.options.guidance.InstructionType
 import com.tomtom.sdk.routing.options.guidance.ProgressPoints
 import com.tomtom.sdk.routing.online.OnlineRoutePlanner
 import com.tomtom.sdk.routing.route.Route
+import com.tomtom.sdk.vehicle.DefaultVehicleProvider
 import com.tomtom.sdk.vehicle.Vehicle
 
 /**
@@ -153,6 +154,7 @@ class BasicNavigationActivity : AppCompatActivity() {
             locationProvider = locationProvider,
             routeReplanner = routeReplanner
         )
+        (navigationConfiguration.vehicleProvider as DefaultVehicleProvider).setVehicle(Vehicle.Car())
         tomTomNavigation = TomTomNavigationFactory.create(navigationConfiguration)
     }
 
@@ -382,9 +384,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         val routeGeoLocations = route.geometry.map { GeoLocation(it) }
         val simulationStrategy = InterpolationStrategy(routeGeoLocations)
         locationProvider = SimulationLocationProvider.create(strategy = simulationStrategy)
-        tomTomNavigation.navigationEngineRegistry.updateEngines(
-            locationProvider = locationProvider
-        )
+        tomTomNavigation.locationProvider = locationProvider
         locationProvider.enable()
     }
 
