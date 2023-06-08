@@ -11,8 +11,8 @@
         style="@style/MainMenuTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="@dimen/main_menu_title_margin_top"
+        android:layout_marginBottom="@dimen/main_menu_title_margin_bottom"
         app:layout_constraintBottom_toTopOf="@+id/main_menu_scrollview"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,7 +101,7 @@
         android:id="@+id/tomtom_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="@dimen/main_menu_logo_margin_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

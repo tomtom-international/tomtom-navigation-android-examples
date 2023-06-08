@@ -3,6 +3,8 @@
     <!-- Main Menu -->
     <dimen name="main_menu_title_text_size">20sp</dimen>
     <dimen name="main_menu_title_line_height">24dp</dimen>
+    <dimen name="main_menu_title_margin_top">60dp</dimen>
+    <dimen name="main_menu_title_margin_bottom">32dp</dimen>
     <dimen name="main_menu_navigation_button_margin_horizontal">16dp</dimen>
     <dimen name="main_menu_navigation_button_margin_vertical">24dp</dimen>
     <dimen name="main_menu_navigation_button_padding">16dp</dimen>
@@ -17,4 +19,6 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="container_margin">8dp</dimen>
     <dimen name="container_horizontal_margin">16dp</dimen>
+    <dimen name="main_menu_logo_margin_bottom">48dp</dimen>
+
 </resources>
