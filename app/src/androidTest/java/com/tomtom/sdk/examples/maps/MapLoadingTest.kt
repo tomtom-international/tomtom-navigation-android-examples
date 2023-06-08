@@ -18,6 +18,19 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class MapLoadingTest {
 
+    companion object {
+        const val SDK_VERSION_23 = 23
+        const val SDK_VERSION_28 = 28
+        const val SDK_VERSION_29 = 29
+        const val ALLOW_TEXT_SDK_23 = "Allow"
+        const val ALLOW_TEXT_SDK_28 = "ALLOW"
+        const val ALLOW_TEXT_SDK_29 = "Allow only while using the app"
+        const val ALLOW_TEXT_DEFAULT = "While using the app"
+        const val DENY_TEXT_DEFAULT = "Deny"
+        const val DENY_TEXT_SDK_24_TO_28 = "DENY"
+        const val TIMEOUT = 10000L
+    }
+
     @get: Rule
     val activityRule : ActivityScenarioRule<ConfigurableMapActivity> = ActivityScenarioRule(ConfigurableMapActivity::class.java)
 
@@ -42,10 +55,10 @@ class MapLoadingTest {
         val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val denyPermissions = uiDevice.wait(Until.findObject(By.text(
             when (Build.VERSION.SDK_INT) {
-                in 24..28 -> "DENY"
-                else -> "Deny"
+                in 24..28 -> DENY_TEXT_SDK_24_TO_28
+                else -> DENY_TEXT_DEFAULT
             }
-        )), 10000L)
+        )), TIMEOUT)
         try {
             denyPermissions.click()
             val mapLocationSelector = By.descContains("MAP WITH LOCATION")
@@ -68,12 +81,12 @@ class MapLoadingTest {
         val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val allowPermissions = uiDevice.wait(Until.findObject(By.text(
             when {
-                Build.VERSION.SDK_INT == 23 -> "Allow"
-                Build.VERSION.SDK_INT <= 28 -> "ALLOW"
-                Build.VERSION.SDK_INT == 29 -> "Allow only while using the app"
-                else -> "While using the app"
+                Build.VERSION.SDK_INT == SDK_VERSION_23 -> ALLOW_TEXT_SDK_23
+                Build.VERSION.SDK_INT <= SDK_VERSION_28 -> ALLOW_TEXT_SDK_28
+                Build.VERSION.SDK_INT == SDK_VERSION_29 -> ALLOW_TEXT_SDK_29
+                else -> ALLOW_TEXT_DEFAULT
             }
-        )), 10000L)
+        )), TIMEOUT)
         try {
             allowPermissions.click()
             val mapLocationSelector = By.descContains("MAP WITH LOCATION")

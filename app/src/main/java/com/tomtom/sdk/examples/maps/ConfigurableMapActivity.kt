@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.tomtom.sdk.examples.BuildConfig
 import com.tomtom.sdk.examples.R
+import com.tomtom.sdk.examples.databinding.ActivityMapViewBinding
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
@@ -28,12 +29,18 @@ import com.tomtom.sdk.map.display.ui.MapView
 
 class ConfigurableMapActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMapViewBinding
     private lateinit var mapView: MapView
     private lateinit var mapFragment: MapFragment
     private lateinit var tomTomMap: TomTomMap
     private lateinit var locationProvider: LocationProvider
     private lateinit var onLocationUpdateListener: OnLocationUpdateListener
-    private lateinit var goBackIV: ImageView
+    private lateinit var goBackImageButtonView: ImageView
+
+    companion object {
+        const val AMSTERDAM_GEO_POINT_LATITUDE = 52.379189
+        const val AMSTERDAM_GEO_POINT_LONGITUDE = 4.899431
+    }
 
     /**
      * Navigation SDK is only available upon request.
@@ -43,12 +50,15 @@ class ConfigurableMapActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMapViewBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         loadMapViewPage()
 
         /**
          * Triggered on button go back click to return to the main view with the map styles
          */
-        goBackIV.setOnClickListener {
+        goBackImageButtonView.setOnClickListener {
             onBackPressed()
         }
     }
@@ -64,28 +74,20 @@ class ConfigurableMapActivity : AppCompatActivity() {
      * All functions needed to load the activity_map_view layout page
      */
     private fun loadMapViewPage() {
-        setContentView(R.layout.activity_map_view)
-        displayMap()
-        initViews()
+        initMap()
+        initializeUIElements()
         setTagsToViewsWithDrawable()
     }
 
-    /**
-     * Initialize UI elements
-     */
-    private fun initViews() {
-        goBackIV = findViewById(R.id.go_back_iv)
+    private fun initializeUIElements() {
+        goBackImageButtonView = binding.goBackImageButton
     }
 
     /**
      * Set tags to UI elements with drawable icons (needed for testing)
      */
     private fun setTagsToViewsWithDrawable() {
-        goBackIV.tag = R.drawable.ic_tomtom_arrow_left
-    }
-
-    private fun displayMap() {
-        initMap()
+        goBackImageButtonView.tag = R.drawable.ic_tomtom_arrow_left
     }
 
     /**
@@ -153,7 +155,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
     }
 
     private fun showDefaultLocation() {
-        val amsterdam = GeoPoint(52.379189, 4.899431)
+        val amsterdam = GeoPoint(AMSTERDAM_GEO_POINT_LATITUDE, AMSTERDAM_GEO_POINT_LONGITUDE)
         val cameraOptions = CameraOptions(
             position = amsterdam,
             zoom = 8.0

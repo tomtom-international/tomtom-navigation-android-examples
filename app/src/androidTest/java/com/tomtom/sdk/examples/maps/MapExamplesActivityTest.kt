@@ -33,8 +33,7 @@ class MapExamplesActivityTest {
     fun test_onGoBackClick_isNavigatedToMapExamples() {
         onView(withId(R.id.try_it_layout_button)).perform(scrollTo(), click())
         onView(withId(R.id.configurable_map_view)).check(matches(isDisplayed()))
-//        onView(withId(R.id.go_back_iv)).perform(click()) //method 1
-        pressBack() //method 2
+        pressBack()
         onView(withId(R.id.map_examples))
             .check(matches(isDisplayed()))
     }

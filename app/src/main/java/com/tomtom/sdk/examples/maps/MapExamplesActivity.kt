@@ -24,6 +24,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.tomtom.sdk.examples.R
+import com.tomtom.sdk.examples.databinding.ActivityMapExamplesBinding
 
 
 /**
@@ -32,6 +33,7 @@ import com.tomtom.sdk.examples.R
  */
 
 class MapExamplesActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMapExamplesBinding
     private lateinit var vectorMapImageView: ImageView
     private lateinit var detailsText: TextView
     private lateinit var tryItIcon: ImageView
@@ -64,6 +66,9 @@ class MapExamplesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMapExamplesBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         loadMapExamplesPage()
 
         tryItLayoutButton.setOnClickListener {
@@ -79,12 +84,12 @@ class MapExamplesActivity : AppCompatActivity() {
      * Initialize UI elements
      */
     private fun initViews() {
-        vectorMapImageView = findViewById(R.id.vector_map_iv)
-        detailsText = findViewById(R.id.details)
-        tryItIcon = findViewById(R.id.try_it_icon)
-        tryItLayoutButton = findViewById(R.id.try_it_layout_button)
-        dropdownLayout = findViewById(R.id.dropdown_layout)
-        dropdown = findViewById(R.id.dropdown)
+        vectorMapImageView = binding.vectorMapIv
+        detailsText = binding.details
+        tryItIcon = binding.tryItIcon
+        tryItLayoutButton = binding.tryItLayoutButton
+        dropdownLayout = binding.dropdownLayout
+        dropdown = binding.dropdown
     }
 
     /**
@@ -117,7 +122,6 @@ class MapExamplesActivity : AppCompatActivity() {
      * All functions needed to load the activity_map_examples layout page
      */
     private fun loadMapExamplesPage() {
-        setContentView(R.layout.activity_map_examples)
         initViews()
         setTagsToViewsWithDrawable()
         enableTransitionOnMapDescription()

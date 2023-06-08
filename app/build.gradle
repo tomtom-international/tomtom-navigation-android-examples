@@ -48,6 +48,10 @@ android {
     buildTypes.each {
         it.buildConfigField 'String', 'TOMTOM_API_KEY', "\"$tomtomApiKey\""
     }
+
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -68,7 +72,7 @@ dependencies {
     implementation libraries.androidXNavigationUi
     implementation libraries.androidXConstraintLayout
     implementation libraries.material
-    implementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+    implementation libraries.uiAnimator
     testImplementation libraries.junit
     androidTestImplementation libraries.androidXJunit
     androidTestImplementation libraries.androidXEspresso

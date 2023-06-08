@@ -21,6 +21,18 @@ import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
 class ConfigurableMapActivityTest {
+
+    companion object {
+        const val SDK_VERSION_23 = 23
+        const val SDK_VERSION_28 = 28
+        const val SDK_VERSION_29 = 29
+        const val ALLOW_TEXT_SDK_23 = "Allow"
+        const val ALLOW_TEXT_SDK_28 = "ALLOW"
+        const val ALLOW_TEXT_SDK_29 = "Allow only while using the app"
+        const val ALLOW_TEXT_DEFAULT = "While using the app"
+        const val TIMEOUT = 10000L
+    }
+
     @get: Rule
     val activityRule : ActivityScenarioRule<ConfigurableMapActivity> = ActivityScenarioRule(ConfigurableMapActivity::class.java)
 
@@ -31,18 +43,19 @@ class ConfigurableMapActivityTest {
             Until.findObject(
                 By.text(
                     when {
-                        Build.VERSION.SDK_INT == 23 -> "Allow"
-                        Build.VERSION.SDK_INT <= 28 -> "ALLOW"
-                        Build.VERSION.SDK_INT == 29 -> "Allow only while using the app"
-                        else -> "While using the app"
+                        Build.VERSION.SDK_INT == SDK_VERSION_23 -> ALLOW_TEXT_SDK_23
+                        Build.VERSION.SDK_INT <= SDK_VERSION_28 -> ALLOW_TEXT_SDK_28
+                        Build.VERSION.SDK_INT == SDK_VERSION_29 -> ALLOW_TEXT_SDK_29
+                        else -> ALLOW_TEXT_DEFAULT
                     }
-                )), 10000L)
+                )), TIMEOUT)
         try {
             allowPermissions.click()
         } catch (e: UiObjectNotFoundException) {
             println("$e There is no permissions dialog to interact with ")
         }
     }
+
     @Test
     fun test_isActivityInView() {
         Espresso.onView(ViewMatchers.withId(R.id.configurable_map_view))
@@ -57,7 +70,7 @@ class ConfigurableMapActivityTest {
 
     @Test
     fun test_onGoBackIV_isDisplayed() {
-        Espresso.onView(ViewMatchers.withId(R.id.go_back_iv))
+        Espresso.onView(ViewMatchers.withId(R.id.go_back_image_button))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
@@ -65,7 +78,7 @@ class ConfigurableMapActivityTest {
     fun test_onGoBackIV_isBackgroundDrawableDisplayed() {
         Espresso.onView(
             CoreMatchers.allOf(
-                ViewMatchers.withId(R.id.go_back_iv),
+                ViewMatchers.withId(R.id.go_back_image_button),
                 ViewMatchers.hasBackground(R.drawable.circle), ViewMatchers.isDisplayed()
             )
         )
@@ -73,7 +86,7 @@ class ConfigurableMapActivityTest {
 
     @Test
     fun test_onGoBackIV_hasDrawable() {
-        Espresso.onView(ViewMatchers.withId(R.id.go_back_iv))
+        Espresso.onView(ViewMatchers.withId(R.id.go_back_image_button))
             .check(ViewAssertions.matches(ImageViewHasDrawableMatcher.hasDrawableSrc(R.drawable.ic_tomtom_arrow_left)))
     }
 }

@@ -17,7 +17,7 @@
             android:layout_height="match_parent" />
 
         <ImageButton
-            android:id="@+id/go_back_iv"
+            android:id="@+id/go_back_image_button"
             android:layout_width="@dimen/btn_circular_size"
             android:layout_height="@dimen/btn_circular_size"
             android:layout_margin="@dimen/view_margin_common_20"

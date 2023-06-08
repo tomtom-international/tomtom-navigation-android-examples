@@ -68,7 +68,6 @@
                         android:text="@string/conf_map_description"
                         android:textSize="@dimen/text_size"
                         android:lineSpacingExtra="@dimen/map_descr_line_spacing"/>
-        <!--            android:lineSpacingMultiplier="1.2"-->
 
                 </LinearLayout>
 
