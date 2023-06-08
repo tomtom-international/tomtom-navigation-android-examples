@@ -176,7 +176,6 @@ class BasicNavigationActivity : AppCompatActivity() {
      * Read more about user location on the map in the Showing User Location guide.
      */
     private fun showUserLocation() {
-        locationProvider.enable()
         // zoom to current location at city level
         onLocationUpdateListener = OnLocationUpdateListener { location ->
             tomTomMap.moveCamera(CameraOptions(location.position, zoom = 8.0))
@@ -186,6 +185,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         tomTomMap.setLocationProvider(locationProvider)
         val locationMarker = LocationMarkerOptions(type = LocationMarkerOptions.Type.Pointer)
         tomTomMap.enableLocationMarker(locationMarker)
+        locationProvider.enable()
     }
 
     /**
