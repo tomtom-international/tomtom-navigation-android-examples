@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.tomtom.sdk.examples.BuildConfig
 import com.tomtom.sdk.examples.R
+import com.tomtom.sdk.examples.databinding.ActivityBasicNavigationBinding
 import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
@@ -41,12 +42,7 @@ import com.tomtom.sdk.map.display.route.RouteClickListener
 import com.tomtom.sdk.map.display.route.RouteOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.currentlocation.CurrentLocationButton.VisibilityPolicy
-import com.tomtom.sdk.navigation.NavigationConfiguration
-import com.tomtom.sdk.navigation.NavigationFailure
-import com.tomtom.sdk.navigation.ProgressUpdatedListener
-import com.tomtom.sdk.navigation.RoutePlan
-import com.tomtom.sdk.navigation.TomTomNavigation
-import com.tomtom.sdk.navigation.TomTomNavigationFactory
+import com.tomtom.sdk.navigation.*
 import com.tomtom.sdk.navigation.routereplanner.RouteReplanner
 import com.tomtom.sdk.navigation.routereplanner.online.OnlineRouteReplannerFactory
 import com.tomtom.sdk.navigation.ui.NavigationFragment
@@ -78,6 +74,7 @@ import com.tomtom.sdk.vehicle.Vehicle
  **/
 
 class BasicNavigationActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityBasicNavigationBinding
     private lateinit var mapFragment: MapFragment
     private lateinit var tomTomMap: TomTomMap
     private lateinit var locationProvider: LocationProvider
@@ -97,7 +94,10 @@ class BasicNavigationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_basic_navigation)
+
+        binding = ActivityBasicNavigationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         initMap()
         initLocationProvider()
         initRouting()
@@ -260,6 +260,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         override fun onSuccess(result: RoutePlanningResponse) {
             route = result.routes.first()
             drawRoute(route!!)
+            tomTomMap.zoomToRoutes(ZOOM_TO_ROUTE_PADDING)
         }
 
         override fun onFailure(failure: RoutingFailure) {
@@ -283,7 +284,6 @@ class BasicNavigationActivity : AppCompatActivity() {
             routeOffset = route.routePoints.map { it.routeOffset }
         )
         tomTomMap.addRoute(routeOptions)
-        tomTomMap.zoomToRoutes(ZOOM_TO_ROUTE_PADDING)
     }
 
     /**
@@ -316,6 +316,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         navigationFragment.startNavigation(routePlan)
         navigationFragment.addNavigationListener(navigationListener)
         tomTomNavigation.addProgressUpdatedListener(progressUpdatedListener)
+        tomTomNavigation.addRouteUpdatedListener(routeUpdatedListener)
     }
 
     /**
@@ -362,6 +363,18 @@ class BasicNavigationActivity : AppCompatActivity() {
         tomTomMap.routes.first().progress = it.distanceAlongRoute
     }
 
+    private val routeUpdatedListener by lazy {
+        RouteUpdatedListener { route, updateReason ->
+            if (updateReason != RouteUpdateReason.Refresh &&
+                updateReason != RouteUpdateReason.Increment &&
+                updateReason != RouteUpdateReason.LanguageChange
+            ) {
+                tomTomMap.removeRoutes()
+                drawRoute(route)
+            }
+        }
+    }
+
     /**
      * Use the SimulationLocationProvider for testing purposes.
      */
@@ -382,12 +395,14 @@ class BasicNavigationActivity : AppCompatActivity() {
      */
     private fun stopNavigation() {
         navigationFragment.stopNavigation()
-        mapFragment.currentLocationButton.visibilityPolicy = VisibilityPolicy.InvisibleWhenRecentered
+        mapFragment.currentLocationButton.visibilityPolicy =
+            VisibilityPolicy.InvisibleWhenRecentered
         tomTomMap.cameraTrackingMode = CameraTrackingMode.None
         tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Pointer))
         resetMapPadding()
         navigationFragment.removeNavigationListener(navigationListener)
         tomTomNavigation.removeProgressUpdatedListener(progressUpdatedListener)
+        tomTomNavigation.removeRouteUpdatedListener(routeUpdatedListener)
         clearMap()
         initLocationProvider()
         enableUserLocation()

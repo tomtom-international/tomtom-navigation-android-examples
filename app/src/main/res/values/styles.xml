@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="CustomDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:windowBackground">@drawable/dialog_background_rounded</item>
+    </style>
+  
+    <style name="ToolbarTitleTextAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:gravity">center</item>
+    </style>
+  
     <style name="MainMenuTitle">
         <item name="android:textColor">@color/tt_color_title_light</item>
         <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
@@ -23,5 +31,5 @@
         <item name="iconSize">32dp</item>
         <item name="android:shadowDy">0</item>
         <item name="android:includeFontPadding">false</item>
-    </style>
+    </style>    
 </resources>

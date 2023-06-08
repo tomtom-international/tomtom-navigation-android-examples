@@ -1,13 +1,12 @@
 package com.tomtom.sdk.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
 import android.view.ViewGroup
-import android.widget.Button
-import com.tomtom.sdk.examples.R
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import com.tomtom.sdk.examples.databinding.FragmentRouteProcessBinding
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.Place
 
@@ -19,8 +18,10 @@ private const val ARG_ADDRESS = "address"
  * Use the [RouteProcessFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class RouteProcessFragment(place: Place, navigationInterface: NavigateOptionsInterface) : Fragment() {
+class RouteProcessFragment(place: Place, navigationInterface: NavigateOptionsInterface) :
+    Fragment() {
     private var address: String? = null
+    private lateinit var binding: FragmentRouteProcessBinding
     private var listener: NavigateOptionsInterface = navigationInterface
     private var destination: Place = place
 
@@ -41,37 +42,33 @@ class RouteProcessFragment(place: Place, navigationInterface: NavigateOptionsInt
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val view: ViewGroup = inflater.inflate(R.layout.fragment_route_process, container, false) as ViewGroup
-        val addressField: TextView = view.findViewById(R.id.address)
-        addressField.setText(address)
+        binding = FragmentRouteProcessBinding.inflate(layoutInflater)
 
-        val navigateButton = view.findViewById<Button>(R.id.navigateButton)
-        navigateButton.setOnClickListener {
+        binding.address.text = address
+
+        binding.navigateButton.setOnClickListener {
             listener.onNavigate(destination.coordinate)
         }
 
-        val routeButton = view.findViewById<Button>(R.id.routeButton)
-        routeButton.setOnClickListener {
-            navigateButton.visibility = View.VISIBLE
-            routeButton.visibility = View.GONE
+        binding.routeButton.setOnClickListener {
+            binding.navigateButton.isVisible = true
+            binding.routeButton.isVisible = false
             listener.onRoute(destination.coordinate)
         }
 
-        val cancelButton = view.findViewById<Button>(R.id.cancelButton)
-        cancelButton.setOnClickListener {
-            if (navigateButton.visibility == View.VISIBLE ) {
-                navigateButton.visibility = View.GONE
-                routeButton.visibility = View.VISIBLE
+        binding.cancelButton.setOnClickListener {
+            if (binding.navigateButton.isVisible) {
+                binding.navigateButton.isVisible = false
+                binding.routeButton.isVisible = true
                 listener.removeRoute()
-            }
-            else {
+            } else {
                 listener.onCancel()
             }
         }
 
-        return view
+        return binding.root
     }
 
     companion object {

@@ -12,47 +12,53 @@ package com.tomtom.sdk.examples
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.tomtom.sdk.examples.databinding.ActivityMainMenuBinding
 import com.tomtom.sdk.examples.maps.MapExamplesActivity
 import com.tomtom.sdk.examples.navigation.NavigationExamplesActivity
 import com.tomtom.sdk.examples.offline.OfflineExamplesActivity
 import com.tomtom.sdk.examples.routing.RoutingExamplesActivity
 import com.tomtom.sdk.examples.search.SearchExamplesActivity
-import com.tomtom.sdk.examples.usecase.BasicNavigationActivity
+import com.tomtom.sdk.examples.usecase.MapModeSelectionActivity
 
 
 class MainMenu : AppCompatActivity() {
+    private lateinit var binding: ActivityMainMenuBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_menu)
+
+        binding = ActivityMainMenuBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 
-    fun launchBasicDriving(button : android.view.View) {
-        val myIntent = Intent(this@MainMenu, BasicNavigationActivity::class.java)
+    fun launchBasicDriving(button: View) {
+        val myIntent = Intent(this@MainMenu, MapModeSelectionActivity::class.java)
         this@MainMenu.startActivity(myIntent)
     }
 
-    fun launchMapDemo(button : android.view.View) {
+    fun launchMapDemo(button: View) {
         val myIntent = Intent(this@MainMenu, MapExamplesActivity::class.java)
         this@MainMenu.startActivity(myIntent)
     }
 
-    fun launchNavigationDemo(button : android.view.View) {
+    fun launchNavigationDemo(button: View) {
         val myIntent = Intent(this@MainMenu, NavigationExamplesActivity::class.java)
         this@MainMenu.startActivity(myIntent)
     }
 
-    fun launchOfflineMapsDemo(button : android.view.View) {
+    fun launchOfflineMapsDemo(button: View) {
         val myIntent = Intent(this@MainMenu, OfflineExamplesActivity::class.java)
         this@MainMenu.startActivity(myIntent)
     }
 
-    fun launchRoutingDemo(button : android.view.View) {
+    fun launchRoutingDemo(button: View) {
         val myIntent = Intent(this@MainMenu, RoutingExamplesActivity::class.java)
         this@MainMenu.startActivity(myIntent)
     }
 
-    fun launchSearchDemo(button : android.view.View) {
+    fun launchSearchDemo(button: View) {
         val myIntent = Intent(this@MainMenu, SearchExamplesActivity::class.java)
         this@MainMenu.startActivity(myIntent)
     }
