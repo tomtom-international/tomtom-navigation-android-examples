@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Main Menu -->
+    <dimen name="main_menu_title_text_size">20sp</dimen>
+    <dimen name="main_menu_title_line_height">24dp</dimen>
+    <dimen name="main_menu_title_margin_top">60dp</dimen>
+    <dimen name="main_menu_title_margin_bottom">32dp</dimen>
+    <dimen name="main_menu_navigation_button_margin_horizontal">16dp</dimen>
+    <dimen name="main_menu_navigation_button_margin_vertical">24dp</dimen>
+    <dimen name="main_menu_navigation_button_padding">16dp</dimen>
+    <dimen name="main_menu_navigation_button_corner_radius">16dp</dimen>
+    <dimen name="main_menu_navigation_button_text_size">20sp</dimen>
+    <dimen name="main_menu_divider_margin">32dp</dimen>
+    <dimen name="main_menu_logo_margin_bottom">48dp</dimen>
+
     <dimen name="map_padding_bottom">90dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="item_width">200dp</dimen>
