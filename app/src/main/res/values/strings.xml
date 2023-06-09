@@ -27,6 +27,8 @@ Road Network, 3D Buildings, Traffic Incidents, Hill Shading, House Numbers,  Tra
     <string name="descr_play_icon_for_try_vector_map">Play Icon for Try Vector Map</string>
     <string name="map_ready">MAP READY</string>
     <string name="map_not_ready">MAP NOT READY</string>
+    <string name="map_with_location">MAP WITH LOCATION</string>
+    <string name="map_default_location">MAP DEFAULT LOCATION</string>
     <string name="map_mode_selection_title">Options</string>
     <string name="info">Info</string>
     <string name="offline">Offline</string>

@@ -39,6 +39,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
     companion object {
         const val AMSTERDAM_GEO_POINT_LATITUDE = 52.379189
         const val AMSTERDAM_GEO_POINT_LONGITUDE = 4.899431
+        const val CAMERA_ZOOM_VALUE = 8.0
     }
 
     /**
@@ -65,7 +66,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         mapView = mapFragment.view as MapView
-        mapView.contentDescription = "MAP NOT READY"
+        mapView.contentDescription = applicationContext.resources.getString(R.string.map_not_ready)
     }
 
     /**
@@ -104,7 +105,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
             .commit()
         mapFragment.getMapAsync { map ->
             tomTomMap = map
-            mapView.contentDescription = "MAP READY"
+            mapView.contentDescription = applicationContext.resources.getString(R.string.map_ready)
             enableUserLocation()
         }
     }
@@ -142,23 +143,24 @@ class ConfigurableMapActivity : AppCompatActivity() {
         locationProvider.enable()
         // zoom to current location at city level
         onLocationUpdateListener = OnLocationUpdateListener { location ->
-            tomTomMap.moveCamera(CameraOptions(location.position, zoom = 8.0))
+            tomTomMap.moveCamera(CameraOptions(location.position, zoom = CAMERA_ZOOM_VALUE))
             locationProvider.removeOnLocationUpdateListener(onLocationUpdateListener)
         }
         locationProvider.addOnLocationUpdateListener(onLocationUpdateListener)
         tomTomMap.setLocationProvider(locationProvider)
         val locationMarker = LocationMarkerOptions(type = LocationMarkerOptions.Type.Pointer)
         tomTomMap.enableLocationMarker(locationMarker)
-        mapView.contentDescription = "MAP WITH LOCATION"
+        mapView.contentDescription = applicationContext.resources.getString(R.string.map_with_location)
     }
 
     private fun showDefaultLocation() {
         val amsterdam = GeoPoint(AMSTERDAM_GEO_POINT_LATITUDE, AMSTERDAM_GEO_POINT_LONGITUDE)
         val cameraOptions = CameraOptions(
             position = amsterdam,
-            zoom = 8.0
+            zoom = CAMERA_ZOOM_VALUE
         )
         tomTomMap.moveCamera(cameraOptions)
+        mapView.contentDescription = applicationContext.resources.getString(R.string.map_default_location)
     }
 
     private fun requestLocationPermission() {

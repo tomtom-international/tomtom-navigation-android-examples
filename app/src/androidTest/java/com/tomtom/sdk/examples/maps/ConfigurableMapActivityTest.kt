@@ -69,13 +69,13 @@ class ConfigurableMapActivityTest {
     }
 
     @Test
-    fun test_onGoBackIV_isDisplayed() {
+    fun test_onGoBackImageButton_isDisplayed() {
         Espresso.onView(ViewMatchers.withId(R.id.go_back_image_button))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @Test
-    fun test_onGoBackIV_isBackgroundDrawableDisplayed() {
+    fun test_onGoBackImageButton_isBackgroundDrawableDisplayed() {
         Espresso.onView(
             CoreMatchers.allOf(
                 ViewMatchers.withId(R.id.go_back_image_button),
@@ -85,7 +85,7 @@ class ConfigurableMapActivityTest {
     }
 
     @Test
-    fun test_onGoBackIV_hasDrawable() {
+    fun test_onGoBackImageButton_hasDrawable() {
         Espresso.onView(ViewMatchers.withId(R.id.go_back_image_button))
             .check(ViewAssertions.matches(ImageViewHasDrawableMatcher.hasDrawableSrc(R.drawable.ic_tomtom_arrow_left)))
     }

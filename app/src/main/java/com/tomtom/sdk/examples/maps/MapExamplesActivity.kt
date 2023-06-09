@@ -26,7 +26,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.tomtom.sdk.examples.R
 import com.tomtom.sdk.examples.databinding.ActivityMapExamplesBinding
 
-
 /**
  * This example shows the appearance of the TomTom Vector Map, lists its features and implements its display mechanism.
  *
