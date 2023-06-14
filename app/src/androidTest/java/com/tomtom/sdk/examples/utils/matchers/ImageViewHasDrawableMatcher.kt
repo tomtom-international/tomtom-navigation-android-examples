@@ -12,8 +12,8 @@ object ImageViewHasDrawableMatcher {
                 description?.appendText("has drawable")
             }
 
-            override fun matchesSafely(item: ImageView?): Boolean { //the logic that the test requires to pass
-                return (item?.drawable != null &&       //if there is a drawable in fact set to the ImageView --> the test will pass
+            override fun matchesSafely(item: ImageView?): Boolean {
+                return (item?.drawable != null &&
                         item.tag == expectedDrawableId)
             }
 

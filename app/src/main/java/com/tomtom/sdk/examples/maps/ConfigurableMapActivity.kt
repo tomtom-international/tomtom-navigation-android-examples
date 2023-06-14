@@ -25,7 +25,6 @@ import com.tomtom.sdk.map.display.ui.MapView
 /**
  * This activity is responsible for displaying the TomTom Vector Map, both with location and without.
  */
-
 class ConfigurableMapActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMapViewBinding

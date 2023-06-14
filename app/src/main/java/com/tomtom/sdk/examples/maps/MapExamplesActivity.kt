@@ -157,10 +157,9 @@ class MapExamplesActivity : AppCompatActivity() {
      */
     private var isArrowUp: Boolean = true
     private fun animateRotation() {
-        // Rotate the drawable by 180 degrees from its previous direction
         rotateDrawable.fromDegrees = rotateDrawable.toDegrees
         rotateDrawable.toDegrees = if (isArrowUp) TARGET_ROTATION_ANGLE_DRAWABLE else INITIAL_ROTATION_ANGLE_DRAWABLE
-        isArrowUp = !isArrowUp // Toggle the arrow's direction
+        isArrowUp = !isArrowUp
 
         // Create a new animator with the updated rotation angles
         val animator = ObjectAnimator.ofInt(layerDrawable.getDrawable(0), "level", DRAWABLE_INVISIBILITY, FULL_DRAWABLE_VISIBILITY)
