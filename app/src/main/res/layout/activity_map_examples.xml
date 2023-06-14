@@ -5,11 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/map_examples"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/view_margin_common_20"
+        android:paddingBottom="@dimen/view_margin_common_20"
         android:orientation="vertical"
         tools:context=".maps.MapExamplesActivity">
 
@@ -19,7 +20,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/map_image_margin"
                 android:orientation="vertical"
-                app:cardCornerRadius="@dimen/map_image_radius">
+                app:cardCornerRadius="@dimen/map_image_radius"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <ImageView
                     android:id="@+id/vector_map_iv"
@@ -39,7 +43,10 @@
                 android:layout_marginEnd="@dimen/view_margin_common_5"
                 android:layout_marginTop="@dimen/view_margin_common_10"
                 android:layout_marginBottom="@dimen/view_margin_common_20"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/vector_map_card"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <LinearLayout
                     android:id="@+id/dropdown_layout"
@@ -83,7 +90,10 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/dropdown_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
 
                     <ImageView
                         android:id="@+id/try_it_icon"
@@ -107,5 +117,5 @@
                 </LinearLayout>
 
             </LinearLayout>
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
