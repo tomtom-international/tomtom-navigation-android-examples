@@ -16,7 +16,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/vector_map_card"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/map_image_height"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/map_image_margin"
                 android:orientation="vertical"
                 app:cardCornerRadius="@dimen/map_image_radius">
@@ -24,7 +24,8 @@
                 <ImageView
                     android:id="@+id/vector_map_iv"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_tomtom_vector_map"
                     android:contentDescription="@string/descr_vector_map_image" />
