@@ -1,4 +1,3 @@
-
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -46,16 +45,16 @@ android {
 }
 
 dependencies {
-    implementation tomTomLibraries.routePlannerOnline
-    implementation tomTomLibraries.locationAndroid
-    implementation tomTomLibraries.locationSimulation
-    implementation tomTomLibraries.locationMapmatched
-    implementation tomTomLibraries.mapsDisplay
-    implementation tomTomLibraries.navigation
-    implementation tomTomLibraries.navigationUi
-    implementation tomTomLibraries.navigationRouteReplannerOnline
-    implementation tomTomLibraries.searchOnline
-    implementation tomTomLibraries.searchUi
+    implementation tomTomSdkLibraries.routePlannerOnline
+    implementation tomTomSdkLibraries.locationAndroid
+    implementation tomTomSdkLibraries.locationSimulation
+    implementation tomTomSdkLibraries.locationMapmatched
+    implementation tomTomSdkLibraries.mapsDisplay
+    implementation tomTomSdkLibraries.navigation
+    implementation tomTomSdkLibraries.navigationUi
+    implementation tomTomSdkLibraries.navigationRouteReplannerOnline
+    implementation tomTomSdkLibraries.searchOnline
+    implementation tomTomSdkLibraries.searchUi
 
     implementation libraries.androidXCore
     implementation libraries.androidXCompat

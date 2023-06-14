@@ -17,7 +17,7 @@ Once you have obtained access, do the following:
 Make sure that the minimum SDK API level is set to at least 21 (Android 5.0 "Lollipop") and that the compile SDK API level is set to 31.
 
 ### Cloning the repository
-Clone the repository `https://github.com/tomtom-international/navigation-android-examples.git`
+Clone the repository `https://github.com/tomtom-international/tomtom-navigation-android-examples.git`
 
 ### Add gradle.properties file
 Add the entries below to the global `~/.gradle/gradle.properties` file at `$HOME/.gradle/gradle.properties`.
