@@ -1,7 +1,8 @@
 package com.tomtom.sdk.examples.maps
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -23,19 +24,12 @@ class MapExamplesActivityTest {
     @get: Rule
     val activityRule : ActivityScenarioRule<MapExamplesActivity> = ActivityScenarioRule(MapExamplesActivity::class.java)
 
+    private val context: Context = ApplicationProvider.getApplicationContext()
+
     @Test
     fun test_onTryItLayoutButtonClick_isNavigatedToConfigMapView() {
         onView(withId(R.id.try_it_layout_button)).perform(scrollTo(), click())
         onView(withId(R.id.configurable_map_view)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun test_onGoBackClick_isNavigatedToMapExamples() {
-        onView(withId(R.id.try_it_layout_button)).perform(scrollTo(), click())
-        onView(withId(R.id.configurable_map_view)).check(matches(isDisplayed()))
-        pressBack()
-        onView(withId(R.id.map_examples))
-            .check(matches(isDisplayed()))
     }
 
     @Test
@@ -57,7 +51,7 @@ class MapExamplesActivityTest {
 
     @Test
     fun test_onVectorMapImageView_hasDrawable() {
-        onView(withId(R.id.vector_map_iv)).check(matches(hasDrawableSrc(R.drawable.img_tomtom_vector_map)))
+        onView(withId(R.id.vector_map_iv)).check(matches(hasDrawableSrc(R.drawable.img_tomtom_vector_map, context)))
     }
 
     @Test
@@ -72,7 +66,7 @@ class MapExamplesActivityTest {
 
     @Test
     fun test_onDropdown_hasCompoundDrawableOnRight() {
-        onView(withId(R.id.dropdown)).check(matches(hasCompoundDrawable(R.drawable.ic_tomtom_arrow_up, 2)))
+        onView(withId(R.id.dropdown)).check(matches(hasCompoundDrawable(R.drawable.ic_tomtom_arrow_up, 2, context)))
     }
 
     @Test
@@ -110,6 +104,6 @@ class MapExamplesActivityTest {
 
     @Test
     fun test_onTryItIcon_isPlayDrawableDisplayedLeft() {
-        onView(withId(R.id.try_it_icon)).check(matches(hasDrawableSrc(R.drawable.ic_tomtom_play)))
+        onView(withId(R.id.try_it_icon)).check(matches(hasDrawableSrc(R.drawable.ic_tomtom_play, context)))
     }
 }

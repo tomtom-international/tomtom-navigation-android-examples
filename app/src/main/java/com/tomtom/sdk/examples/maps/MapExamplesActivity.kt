@@ -23,7 +23,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.tomtom.sdk.examples.R
 import com.tomtom.sdk.examples.databinding.ActivityMapExamplesBinding
 
 /**
@@ -91,15 +90,6 @@ class MapExamplesActivity : AppCompatActivity() {
         dropdown = binding.dropdown
     }
 
-    /**
-     * Set tags to UI elements with drawable icons (needed for testing)
-     */
-    private fun setTagsToViewsWithDrawable() {
-        vectorMapImageView.tag = R.drawable.img_tomtom_vector_map
-        dropdown.tag = R.drawable.ic_tomtom_arrow_up
-        tryItIcon.tag = R.drawable.ic_tomtom_play
-    }
-
 
     /**
      * Enable the 'changing' transition type on the layout object, which means that any changes
@@ -122,7 +112,6 @@ class MapExamplesActivity : AppCompatActivity() {
      */
     private fun loadMapExamplesPage() {
         initViews()
-        setTagsToViewsWithDrawable()
         enableTransitionOnMapDescription()
         initRotationElements()
     }

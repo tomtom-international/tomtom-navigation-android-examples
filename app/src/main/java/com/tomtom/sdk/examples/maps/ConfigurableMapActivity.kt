@@ -74,18 +74,10 @@ class ConfigurableMapActivity : AppCompatActivity() {
     private fun loadMapViewPage() {
         initMap()
         initializeUIElements()
-        setTagsToViewsWithDrawable()
     }
 
     private fun initializeUIElements() {
         goBackImageButtonView = binding.goBackImageButton
-    }
-
-    /**
-     * Set tags to UI elements with drawable icons (needed for testing)
-     */
-    private fun setTagsToViewsWithDrawable() {
-        goBackImageButtonView.tag = R.drawable.ic_tomtom_arrow_left
     }
 
     /**

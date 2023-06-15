@@ -1,9 +1,14 @@
 package com.tomtom.sdk.examples.maps
 
+import android.content.Context
 import android.os.Build
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
@@ -36,6 +41,8 @@ class ConfigurableMapActivityTest {
     @get: Rule
     val activityRule : ActivityScenarioRule<ConfigurableMapActivity> = ActivityScenarioRule(ConfigurableMapActivity::class.java)
 
+    private val context: Context = ApplicationProvider.getApplicationContext()
+
     @Before
     fun setUp() {
         val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -58,35 +65,34 @@ class ConfigurableMapActivityTest {
 
     @Test
     fun test_isActivityInView() {
-        Espresso.onView(ViewMatchers.withId(R.id.configurable_map_view))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.configurable_map_view))
+            .check(matches(isDisplayed()))
     }
 
     @Test
     fun test_onMapContainer_isDisplayed() { //check if it is displayed on screen
-        Espresso.onView(ViewMatchers.withId(R.id.map_container))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.map_container))
+            .check(matches(isDisplayed()))
     }
 
     @Test
     fun test_onGoBackImageButton_isDisplayed() {
-        Espresso.onView(ViewMatchers.withId(R.id.go_back_image_button))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.go_back_image_button))
+            .check(matches(isDisplayed()))
     }
 
     @Test
     fun test_onGoBackImageButton_isBackgroundDrawableDisplayed() {
         Espresso.onView(
-            CoreMatchers.allOf(
-                ViewMatchers.withId(R.id.go_back_image_button),
-                ViewMatchers.hasBackground(R.drawable.circle), ViewMatchers.isDisplayed()
+            CoreMatchers.allOf(withId(R.id.go_back_image_button),
+                ViewMatchers.hasBackground(R.drawable.circle), isDisplayed()
             )
         )
     }
 
     @Test
     fun test_onGoBackImageButton_hasDrawable() {
-        Espresso.onView(ViewMatchers.withId(R.id.go_back_image_button))
-            .check(ViewAssertions.matches(ImageViewHasDrawableMatcher.hasDrawableSrc(R.drawable.ic_tomtom_arrow_left)))
+        Espresso.onView(withId(R.id.go_back_image_button))
+            .check(matches(ImageViewHasDrawableMatcher.hasDrawableSrc(R.drawable.ic_tomtom_arrow_left, context)))
     }
 }
