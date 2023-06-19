@@ -3,7 +3,6 @@ package com.tomtom.sdk.examples.maps
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -33,12 +32,11 @@ class ConfigurableMapActivity : AppCompatActivity() {
     private lateinit var tomTomMap: TomTomMap
     private lateinit var locationProvider: LocationProvider
     private lateinit var onLocationUpdateListener: OnLocationUpdateListener
-    private lateinit var goBackImageButtonView: ImageView
 
     companion object {
         const val AMSTERDAM_GEO_POINT_LATITUDE = 52.379189
         const val AMSTERDAM_GEO_POINT_LONGITUDE = 4.899431
-        const val CAMERA_ZOOM_VALUE = 8.0
+        const val CAMERA_ZOOM_CITY_LEVEL = 8.0
     }
 
     /**
@@ -52,12 +50,12 @@ class ConfigurableMapActivity : AppCompatActivity() {
         binding = ActivityMapViewBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        loadMapViewPage()
+        initMap()
 
         /**
          * Triggered on button go back click to return to the main view with the map styles
          */
-        goBackImageButtonView.setOnClickListener {
+        binding.goBackImageButton.setOnClickListener {
             onBackPressed()
         }
     }
@@ -66,18 +64,6 @@ class ConfigurableMapActivity : AppCompatActivity() {
         super.onStart()
         mapView = mapFragment.view as MapView
         mapView.contentDescription = applicationContext.resources.getString(R.string.map_not_ready)
-    }
-
-    /**
-     * All functions needed to load the activity_map_view layout page
-     */
-    private fun loadMapViewPage() {
-        initMap()
-        initializeUIElements()
-    }
-
-    private fun initializeUIElements() {
-        goBackImageButtonView = binding.goBackImageButton
     }
 
     /**
@@ -132,9 +118,8 @@ class ConfigurableMapActivity : AppCompatActivity() {
     private fun showUserLocation() {
         initLocationProvider()
         locationProvider.enable()
-        // zoom to current location at city level
         onLocationUpdateListener = OnLocationUpdateListener { location ->
-            tomTomMap.moveCamera(CameraOptions(location.position, zoom = CAMERA_ZOOM_VALUE))
+            tomTomMap.moveCamera(CameraOptions(location.position, zoom = CAMERA_ZOOM_CITY_LEVEL))
             locationProvider.removeOnLocationUpdateListener(onLocationUpdateListener)
         }
         locationProvider.addOnLocationUpdateListener(onLocationUpdateListener)
@@ -148,7 +133,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
         val amsterdam = GeoPoint(AMSTERDAM_GEO_POINT_LATITUDE, AMSTERDAM_GEO_POINT_LONGITUDE)
         val cameraOptions = CameraOptions(
             position = amsterdam,
-            zoom = CAMERA_ZOOM_VALUE
+            zoom = CAMERA_ZOOM_CITY_LEVEL
         )
         tomTomMap.moveCamera(cameraOptions)
         mapView.contentDescription = applicationContext.resources.getString(R.string.map_default_location)

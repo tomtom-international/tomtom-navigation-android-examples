@@ -19,9 +19,6 @@ import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.tomtom.sdk.examples.databinding.ActivityMapExamplesBinding
 
@@ -32,12 +29,6 @@ import com.tomtom.sdk.examples.databinding.ActivityMapExamplesBinding
 
 class MapExamplesActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapExamplesBinding
-    private lateinit var vectorMapImageView: ImageView
-    private lateinit var detailsText: TextView
-    private lateinit var tryItIcon: ImageView
-    private lateinit var tryItLayoutButton: LinearLayout
-    private lateinit var dropdownLayout: LinearLayout
-    private lateinit var dropdown: TextView
     private lateinit var rotateDrawable: RotateDrawable
     private lateinit var layerDrawable: LayerDrawable
 
@@ -50,6 +41,8 @@ class MapExamplesActivity : AppCompatActivity() {
 
         // The value that stands for invisibility level of a drawable icon in ObjectAnimator
         const val DRAWABLE_INVISIBILITY = 0
+
+        const val DRAWABLE_PROPERTY_LEVEL = "level"
 
         // The value that sets the degrees of the initial rotation angle on a drawable icon
         const val INITIAL_ROTATION_ANGLE_DRAWABLE = 0f
@@ -69,25 +62,13 @@ class MapExamplesActivity : AppCompatActivity() {
         setContentView(view)
         loadMapExamplesPage()
 
-        tryItLayoutButton.setOnClickListener {
+        binding.tryItLayoutButton.setOnClickListener {
             tryMapView()
         }
 
-        dropdownLayout.setOnClickListener {
+        binding.dropdownLayout.setOnClickListener {
             expand()
         }
-    }
-
-    /**
-     * Initialize UI elements
-     */
-    private fun initViews() {
-        vectorMapImageView = binding.vectorMapIv
-        detailsText = binding.details
-        tryItIcon = binding.tryItIcon
-        tryItLayoutButton = binding.tryItLayoutButton
-        dropdownLayout = binding.dropdownLayout
-        dropdown = binding.dropdown
     }
 
 
@@ -96,7 +77,7 @@ class MapExamplesActivity : AppCompatActivity() {
      * made to the layout will trigger the transition animation specified in the layoutTransition object.
      */
     private fun enableTransitionOnMapDescription() {
-        dropdownLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        binding.dropdownLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
     }
 
     /**
@@ -111,7 +92,6 @@ class MapExamplesActivity : AppCompatActivity() {
      * All functions needed to load the activity_map_examples layout page
      */
     private fun loadMapExamplesPage() {
-        initViews()
         enableTransitionOnMapDescription()
         initRotationElements()
     }
@@ -121,9 +101,9 @@ class MapExamplesActivity : AppCompatActivity() {
      * and AutoTransition() to apply a visual transition animation effect when views are shown or hidden.
      */
     private fun expand() {
-        TransitionManager.beginDelayedTransition(dropdownLayout, AutoTransition())
-        TransitionManager.beginDelayedTransition(tryItLayoutButton, AutoTransition())
-        detailsText.visibility = if (detailsText.visibility == View.GONE) View.VISIBLE else View.GONE
+        TransitionManager.beginDelayedTransition(binding.dropdownLayout, AutoTransition())
+        TransitionManager.beginDelayedTransition(binding.tryItLayoutButton, AutoTransition())
+        binding.details.visibility = if (binding.details.visibility == View.GONE) View.VISIBLE else View.GONE
         animateRotation()
     }
 
@@ -131,7 +111,7 @@ class MapExamplesActivity : AppCompatActivity() {
      * Set up the elements for animated rotation
      */
     private fun initRotationElements() {
-        val drawable = dropdown.compoundDrawables[DRAWABLE_TO_RIGHT_SIDE_INDEX] // Get the right-end drawable
+        val drawable = binding.dropdown.compoundDrawables[DRAWABLE_TO_RIGHT_SIDE_INDEX] // Get the right-end drawable
 
         rotateDrawable = RotateDrawable()
         rotateDrawable.drawable = drawable
@@ -139,7 +119,7 @@ class MapExamplesActivity : AppCompatActivity() {
         rotateDrawable.toDegrees = INITIAL_ROTATION_ANGLE_DRAWABLE
 
         layerDrawable = LayerDrawable(arrayOf(rotateDrawable)) // Create a LayerDrawable and add the RotateDrawable to it
-        dropdown.setCompoundDrawablesWithIntrinsicBounds(null, null, layerDrawable, null)
+        binding.dropdown.setCompoundDrawablesWithIntrinsicBounds(null, null, layerDrawable, null)
     }
     /**
      * Rotate with animation the arrow icon by 180 degrees relative to its current rotation.
@@ -151,7 +131,7 @@ class MapExamplesActivity : AppCompatActivity() {
         isArrowUp = !isArrowUp
 
         // Create a new animator with the updated rotation angles
-        val animator = ObjectAnimator.ofInt(layerDrawable.getDrawable(0), "level", DRAWABLE_INVISIBILITY, FULL_DRAWABLE_VISIBILITY)
+        val animator = ObjectAnimator.ofInt(layerDrawable.getDrawable(0), DRAWABLE_PROPERTY_LEVEL, DRAWABLE_INVISIBILITY, FULL_DRAWABLE_VISIBILITY)
         animator.duration = ROTATION_ANIMATION_DURATION
 
         animator.start()

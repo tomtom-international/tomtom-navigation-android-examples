@@ -9,6 +9,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.Until
 import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -68,7 +69,7 @@ class MapLoadingTest {
 
             assertTrue(mapLocationObject == true)
         } catch (e: UiObjectNotFoundException) {
-            println("$e There is no permissions dialog to interact with ")
+            fail("$e There is no permissions dialog to interact with")
         }
     }
 
