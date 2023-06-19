@@ -1,5 +1,5 @@
 ext {
-    tomTomSdkVersion = "0.22.4"
+    tomTomSdkVersion = "0.23.0"
     androidXNavigation = "2.5.3"
     androidXCoreVersion = "1.7.0"
     androidXCompatVersion = "1.4.2"
