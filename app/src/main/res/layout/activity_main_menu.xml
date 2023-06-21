@@ -136,25 +136,6 @@
                 android:textColor="@android:color/darker_gray"
                 app:cornerRadius="20dp" />
 
-<!--            <Button-->
-<!--                android:id="@+id/button17"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:onClick="launchOfflineMapsDemo"-->
-<!--                android:layout_marginStart="20dp"-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                android:layout_marginEnd="20dp"-->
-<!--                android:layout_marginBottom="5dp"-->
-<!--                android:height="90dp"-->
-<!--                android:backgroundTint="#FFFFFF"-->
-<!--                android:drawableLeft="@android:drawable/ic_menu_mylocation"-->
-<!--                android:drawableTint="#000000"-->
-<!--                android:foregroundTint="#00000000"-->
-<!--                android:text="@string/offline_maps"-->
-<!--                android:textAlignment="textStart"-->
-<!--                android:textColor="@android:color/darker_gray"-->
-<!--                app:cornerRadius="20dp" />-->
-
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"

@@ -6,7 +6,6 @@ import androidx.test.espresso.matcher.BoundedMatcher
 import org.hamcrest.Description
 
 object CardViewHasRadiusMatcher {
-
     fun hasCardCornerRadius(cornerRadius: Float): BoundedMatcher<View, CardView> {
         return object : BoundedMatcher<View, CardView>(CardView::class.java) {
 
@@ -20,5 +19,4 @@ object CardViewHasRadiusMatcher {
             }
         }
     }
-
 }

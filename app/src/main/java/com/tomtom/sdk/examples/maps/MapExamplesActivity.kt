@@ -24,7 +24,6 @@ import com.tomtom.sdk.examples.databinding.ActivityMapExamplesBinding
 
 /**
  * This example shows the appearance of the TomTom Vector Map, lists its features and implements its display mechanism.
- *
  */
 
 class MapExamplesActivity : AppCompatActivity() {
@@ -54,7 +53,6 @@ class MapExamplesActivity : AppCompatActivity() {
         const val ROTATION_ANIMATION_DURATION: Long = 500
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapExamplesBinding.inflate(layoutInflater)
@@ -67,10 +65,9 @@ class MapExamplesActivity : AppCompatActivity() {
         }
 
         binding.dropdownLayout.setOnClickListener {
-            expand()
+            toggleDescriptionDropdownVisibility()
         }
     }
-
 
     /**
      * Enable the 'changing' transition type on the layout object, which means that any changes
@@ -100,7 +97,7 @@ class MapExamplesActivity : AppCompatActivity() {
      * Toggle the visibility of the detailsText and tryItButton views by using the TransitionManager
      * and AutoTransition() to apply a visual transition animation effect when views are shown or hidden.
      */
-    private fun expand() {
+    private fun toggleDescriptionDropdownVisibility() {
         TransitionManager.beginDelayedTransition(binding.dropdownLayout, AutoTransition())
         TransitionManager.beginDelayedTransition(binding.tryItLayoutButton, AutoTransition())
         binding.details.visibility = if (binding.details.visibility == View.GONE) View.VISIBLE else View.GONE

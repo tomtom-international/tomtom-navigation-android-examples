@@ -12,7 +12,6 @@ import android.widget.TextView
 import androidx.test.espresso.matcher.BoundedMatcher
 import org.hamcrest.Description
 
-
 object TextViewHasCompoundDrawableMatcher {
     fun hasCompoundDrawable(expectedDrawableId: Int, expectedDrawablePosition: Int, context: Context): BoundedMatcher<View, TextView> {
         return object: BoundedMatcher<View, TextView>(TextView::class.java) {

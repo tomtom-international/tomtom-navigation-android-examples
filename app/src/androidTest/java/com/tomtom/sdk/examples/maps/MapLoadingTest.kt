@@ -93,5 +93,4 @@ class MapLoadingTest {
             println("$e There is no permissions dialog to interact with ")
         }
     }
-
 }
