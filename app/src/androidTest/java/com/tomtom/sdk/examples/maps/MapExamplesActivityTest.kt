@@ -27,83 +27,83 @@ class MapExamplesActivityTest {
     private val context: Context = ApplicationProvider.getApplicationContext()
 
     @Test
-    fun test_onTryItLayoutButtonClick_isNavigatedToConfigMapView() {
+    fun test_on_try_it_click_is_navigated_to_config_map_view() {
         onView(withId(R.id.try_it_layout_button)).perform(scrollTo(), click())
         onView(withId(R.id.configurable_map_view)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_isActivityInView() {
+    fun test_is_activity_in_view() {
         onView(withId(R.id.map_examples)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_onVectorMapCardView_isDisplayedWithCornerRadius() {
+    fun test_on_vector_map_card_view_is_displayed_with_corner_radius() {
         onView(withId(R.id.vector_map_card))
             .check(matches(isDisplayed()))
             .check(matches(hasCardCornerRadius(7f)))
     }
 
     @Test
-    fun test_onVectorMapImageView_isDisplayed() {
+    fun test_on_vector_map_image_view_is_displayed() {
         onView(withId(R.id.vector_map_iv)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_onVectorMapImageView_hasDrawable() {
+    fun test_on_vector_map_image_view_has_drawable() {
         onView(withId(R.id.vector_map_iv)).check(matches(hasDrawableSrc(R.drawable.img_tomtom_vector_map, context)))
     }
 
     @Test
-    fun test_onDropdown_isDisplayed() {
+    fun test_on_dropdown_is_displayed() {
         onView(withId(R.id.dropdown)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_onDropdown_isTitleDisplayed() {
+    fun test_on_dropdown_is_title_displayed() {
         onView(withId(R.id.dropdown)).check(matches(withText(R.string.conf_map_title)))
     }
 
     @Test
-    fun test_onDropdown_hasCompoundDrawableOnRight() {
+    fun test_on_dropdown_has_compound_drawable_on_right() {
         onView(withId(R.id.dropdown)).check(matches(hasCompoundDrawable(R.drawable.ic_tomtom_arrow_up, 2, context)))
     }
 
     @Test
-    fun test_onDetails_isDisplayed() {
+    fun test_on_details_is_displayed() {
         onView(withId(R.id.details)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_onDetails_isTextDisplayed() {
+    fun test_on_details_is_text_displayed() {
         onView(withId(R.id.details)).check(matches(withText(R.string.conf_map_description)))
     }
 
     @Test
-    fun test_onDetails_isVisible() {
+    fun test_on_details_is_visible() {
         onView(withId(R.id.details)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
     }
 
     @Test
-    fun test_onTryItLayoutButton_isDisplayed() {
+    fun test_on_try_it_layout_button_is_displayed() {
         onView(withId(R.id.try_it_layout_button))
             .perform(scrollTo())
             .check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_onTryItLayoutButton_isBackgroundDrawableDisplayed() {
+    fun test_on_try_it_layout_button_is_background_drawable_displayed() {
         onView(allOf(withId(R.id.try_it_layout_button),
             hasBackground(R.drawable.button_primary), isDisplayed()))
     }
 
     @Test
-    fun test_onTryItText_isTextDisplayed() {
+    fun test_on_try_it_text_is_text_displayed() {
         onView(withId(R.id.try_it_text)).check(matches(withText(R.string.try_it_mapdemo)))
     }
 
     @Test
-    fun test_onTryItIcon_isPlayDrawableDisplayedLeft() {
+    fun test_on_try_it_icon_is_drawable_displayed_left() {
         onView(withId(R.id.try_it_icon)).check(matches(hasDrawableSrc(R.drawable.ic_tomtom_play, context)))
     }
 }

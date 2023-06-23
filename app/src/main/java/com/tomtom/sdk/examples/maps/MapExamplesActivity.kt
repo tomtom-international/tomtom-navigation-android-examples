@@ -31,28 +31,6 @@ class MapExamplesActivity : AppCompatActivity() {
     private lateinit var rotateDrawable: RotateDrawable
     private lateinit var layerDrawable: LayerDrawable
 
-    companion object {
-        // The index value that stands for right as drawable icon position relative to the text in TextView
-        const val DRAWABLE_TO_RIGHT_SIDE_INDEX = 2
-
-        // The value that stands for the maximum state or full visibility level of a drawable icon in ObjectAnimator
-        const val FULL_DRAWABLE_VISIBILITY = 10000
-
-        // The value that stands for invisibility level of a drawable icon in ObjectAnimator
-        const val DRAWABLE_INVISIBILITY = 0
-
-        const val DRAWABLE_PROPERTY_LEVEL = "level"
-
-        // The value that sets the degrees of the initial rotation angle on a drawable icon
-        const val INITIAL_ROTATION_ANGLE_DRAWABLE = 0f
-
-        // The value that sets the degrees of the target rotation angle on a drawable icon
-        const val TARGET_ROTATION_ANGLE_DRAWABLE = 180f
-
-        // The value that sets the duration of the animated rotation on a drawable icon
-        const val ROTATION_ANIMATION_DURATION: Long = 500
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapExamplesBinding.inflate(layoutInflater)
@@ -132,5 +110,27 @@ class MapExamplesActivity : AppCompatActivity() {
         animator.duration = ROTATION_ANIMATION_DURATION
 
         animator.start()
+    }
+
+    companion object {
+        // The index value that stands for right as drawable icon position relative to the text in TextView
+        const val DRAWABLE_TO_RIGHT_SIDE_INDEX = 2
+
+        // The value that stands for the maximum state or full visibility level of a drawable icon in ObjectAnimator
+        const val FULL_DRAWABLE_VISIBILITY = 10000
+
+        // The value that stands for invisibility level of a drawable icon in ObjectAnimator
+        const val DRAWABLE_INVISIBILITY = 0
+
+        const val DRAWABLE_PROPERTY_LEVEL = "level"
+
+        // The value that sets the degrees of the initial rotation angle on a drawable icon
+        const val INITIAL_ROTATION_ANGLE_DRAWABLE = 0f
+
+        // The value that sets the degrees of the target rotation angle on a drawable icon
+        const val TARGET_ROTATION_ANGLE_DRAWABLE = 180f
+
+        // The value that sets the duration of the animated rotation on a drawable icon
+        const val ROTATION_ANIMATION_DURATION: Long = 500
     }
 }

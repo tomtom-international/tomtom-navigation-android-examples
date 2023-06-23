@@ -18,36 +18,18 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class MapLoadingTest {
 
-    private lateinit var uiDevice: UiDevice
-
-    companion object {
-        const val SDK_VERSION_23 = 23
-        const val SDK_VERSION_24 = 24
-        const val SDK_VERSION_28 = 28
-        const val SDK_VERSION_29 = 29
-        const val ALLOW_TEXT_SDK_23 = "Allow"
-        const val ALLOW_TEXT_SDK_28 = "ALLOW"
-        const val ALLOW_TEXT_SDK_29 = "Allow only while using the app"
-        const val ALLOW_TEXT_DEFAULT = "While using the app"
-        const val DENY_TEXT_DEFAULT = "Deny"
-        const val DENY_TEXT_SDK_24_TO_28 = "DENY"
-        const val TIMEOUT_10 = 10000L
-        const val TIMEOUT_5 = 5000L
-        const val MAP_READY_DESC_TEXT = "MAP READY"
-        const val MAP_WITH_LOCATION_DESC_TEXT = "MAP WITH LOCATION"
-        const val MAP_DEFAULT_LOCATION_DESC_TEXT = "MAP DEFAULT LOCATION"
-    }
-
     @get: Rule
     val activityRule : ActivityScenarioRule<ConfigurableMapActivity> = ActivityScenarioRule(ConfigurableMapActivity::class.java)
 
+    private lateinit var uiDevice: UiDevice
+
     @Before
-    fun setUp() {
+    fun set_up() {
         uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
     }
 
     @Test
-    fun testMapShowing() {
+    fun test_map_showing() {
         val mapReadySelector = By.descContains(MAP_READY_DESC_TEXT) //specify criteria for matching UI elements
         val mapReadyObject = uiDevice.wait(Until.hasObject(mapReadySelector), TIMEOUT_10)
         // Assert if object with the description "MAP READY" is found on the screen
@@ -55,7 +37,7 @@ class MapLoadingTest {
     }
 
     @Test
-    fun testMapDefaultLocation_onPermissionDeny() {
+    fun test_map_default_location_on_permission_deny() {
         val denyPermissions = uiDevice.wait(Until.findObject(By.text(
             when (Build.VERSION.SDK_INT) {
                 in SDK_VERSION_24..SDK_VERSION_28 -> DENY_TEXT_SDK_24_TO_28
@@ -74,7 +56,7 @@ class MapLoadingTest {
     }
 
     @Test
-    fun testMapUserLocation_onPermissionAllow() {
+    fun test_map_user_location_on_permission_allow() {
         val allowPermissions = uiDevice.wait(Until.findObject(By.text(
             when {
                 Build.VERSION.SDK_INT == SDK_VERSION_23 -> ALLOW_TEXT_SDK_23
@@ -92,5 +74,23 @@ class MapLoadingTest {
         } catch (e: UiObjectNotFoundException) {
             println("$e There is no permissions dialog to interact with ")
         }
+    }
+
+    companion object {
+        const val SDK_VERSION_23 = 23
+        const val SDK_VERSION_24 = 24
+        const val SDK_VERSION_28 = 28
+        const val SDK_VERSION_29 = 29
+        const val ALLOW_TEXT_SDK_23 = "Allow"
+        const val ALLOW_TEXT_SDK_28 = "ALLOW"
+        const val ALLOW_TEXT_SDK_29 = "Allow only while using the app"
+        const val ALLOW_TEXT_DEFAULT = "While using the app"
+        const val DENY_TEXT_DEFAULT = "Deny"
+        const val DENY_TEXT_SDK_24_TO_28 = "DENY"
+        const val TIMEOUT_10 = 10000L
+        const val TIMEOUT_5 = 5000L
+        const val MAP_READY_DESC_TEXT = "MAP READY"
+        const val MAP_WITH_LOCATION_DESC_TEXT = "MAP WITH LOCATION"
+        const val MAP_DEFAULT_LOCATION_DESC_TEXT = "MAP DEFAULT LOCATION"
     }
 }

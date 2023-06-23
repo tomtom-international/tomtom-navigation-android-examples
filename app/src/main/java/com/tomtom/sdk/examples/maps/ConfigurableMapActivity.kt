@@ -33,12 +33,6 @@ class ConfigurableMapActivity : AppCompatActivity() {
     private lateinit var locationProvider: LocationProvider
     private lateinit var onLocationUpdateListener: OnLocationUpdateListener
 
-    companion object {
-        const val AMSTERDAM_GEO_POINT_LATITUDE = 52.379189
-        const val AMSTERDAM_GEO_POINT_LONGITUDE = 4.899431
-        const val CAMERA_ZOOM_CITY_LEVEL = 8.0
-    }
-
     /**
      * Navigation SDK is only available upon request.
      * Use the API key provided by TomTom to start using the SDK.
@@ -172,4 +166,10 @@ class ConfigurableMapActivity : AppCompatActivity() {
         this,
         Manifest.permission.ACCESS_COARSE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
+
+    companion object {
+        const val AMSTERDAM_GEO_POINT_LATITUDE = 52.379189
+        const val AMSTERDAM_GEO_POINT_LONGITUDE = 4.899431
+        const val CAMERA_ZOOM_CITY_LEVEL = 8.0
+    }
 }

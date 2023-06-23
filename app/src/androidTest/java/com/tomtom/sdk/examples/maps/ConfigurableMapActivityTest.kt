@@ -27,24 +27,13 @@ import org.junit.runners.JUnit4
 @RunWith(JUnit4::class)
 class ConfigurableMapActivityTest {
 
-    companion object {
-        const val SDK_VERSION_23 = 23
-        const val SDK_VERSION_28 = 28
-        const val SDK_VERSION_29 = 29
-        const val ALLOW_TEXT_SDK_23 = "Allow"
-        const val ALLOW_TEXT_SDK_28 = "ALLOW"
-        const val ALLOW_TEXT_SDK_29 = "Allow only while using the app"
-        const val ALLOW_TEXT_DEFAULT = "While using the app"
-        const val TIMEOUT = 10000L
-    }
-
     @get: Rule
     val activityRule : ActivityScenarioRule<ConfigurableMapActivity> = ActivityScenarioRule(ConfigurableMapActivity::class.java)
 
     private val context: Context = ApplicationProvider.getApplicationContext()
 
     @Before
-    fun setUp() {
+    fun set_up() {
         val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val allowPermissions = uiDevice.wait(
             Until.findObject(
@@ -64,25 +53,25 @@ class ConfigurableMapActivityTest {
     }
 
     @Test
-    fun test_isActivityInView() {
+    fun test_is_activity_in_view() {
         Espresso.onView(withId(R.id.configurable_map_view))
             .check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_onMapContainer_isDisplayed() { //check if it is displayed on screen
+    fun test_on_map_container_is_displayed() { //check if it is displayed on screen
         Espresso.onView(withId(R.id.map_container))
             .check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_onGoBackImageButton_isDisplayed() {
+    fun test_on_go_back_image_button_is_displayed() {
         Espresso.onView(withId(R.id.go_back_image_button))
             .check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_onGoBackImageButton_isBackgroundDrawableDisplayed() {
+    fun test_on_go_back_image_button_is_background_drawable_displayed() {
         Espresso.onView(
             CoreMatchers.allOf(withId(R.id.go_back_image_button),
                 ViewMatchers.hasBackground(R.drawable.circle), isDisplayed()
@@ -91,8 +80,19 @@ class ConfigurableMapActivityTest {
     }
 
     @Test
-    fun test_onGoBackImageButton_hasDrawable() {
+    fun test_on_go_back_image_button_has_drawable() {
         Espresso.onView(withId(R.id.go_back_image_button))
             .check(matches(ImageViewHasDrawableMatcher.hasDrawableSrc(R.drawable.ic_tomtom_arrow_left, context)))
+    }
+
+    companion object {
+        const val SDK_VERSION_23 = 23
+        const val SDK_VERSION_28 = 28
+        const val SDK_VERSION_29 = 29
+        const val ALLOW_TEXT_SDK_23 = "Allow"
+        const val ALLOW_TEXT_SDK_28 = "ALLOW"
+        const val ALLOW_TEXT_SDK_29 = "Allow only while using the app"
+        const val ALLOW_TEXT_DEFAULT = "While using the app"
+        const val TIMEOUT = 10000L
     }
 }

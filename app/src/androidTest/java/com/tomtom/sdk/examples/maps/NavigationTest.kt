@@ -20,7 +20,7 @@ import org.junit.runner.RunWith
 class NavigationTest {
 
     @Test
-    fun test_onMapDisplayClick_isNavigatedToMapExamplesView() {
+    fun test_on_map_display_click_is_navigated_to_map_examples_view() {
         ActivityScenario.launch(MainMenu::class.java).use {
             Espresso.onView(ViewMatchers.withId(R.id.button7))
                 .perform(ViewActions.scrollTo(), ViewActions.click())
@@ -30,7 +30,7 @@ class NavigationTest {
     }
 
     @Test
-    fun test_onTryItButtonClick_isNavigatedToConfigurableMapView() {
+    fun test_on_try_it_click_is_navigated_to_configurable_map_view() {
         ActivityScenario.launch(MapExamplesActivity::class.java).use {
             Espresso.onView(ViewMatchers.withId(R.id.try_it_layout_button))
                 .perform(ViewActions.scrollTo(), ViewActions.click())
@@ -40,11 +40,11 @@ class NavigationTest {
     }
 
     @Test
-    fun test_onGoBackButtonClickInConfigurableMapView_isNavigatedToMapExamplesView() {
+    fun test_on_go_back_click_in_configurable_map_view_is_navigated_to_map_examples_view() {
         ActivityScenario.launch(MapExamplesActivity::class.java).use {
             Espresso.onView(ViewMatchers.withId(R.id.try_it_layout_button))
                 .perform(ViewActions.scrollTo(), ViewActions.click())
-            denyPermissionInPopUp()
+            deny_permission_in_pop_up()
             Espresso.onView(ViewMatchers.withId(R.id.go_back_image_button))
                 .perform(ViewActions.click())
             Espresso.onView(ViewMatchers.withId(R.id.map_examples))
@@ -52,7 +52,7 @@ class NavigationTest {
         }
     }
 
-    private fun denyPermissionInPopUp() {
+    private fun deny_permission_in_pop_up() {
         val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val denyPermissions = uiDevice.wait(Until.findObject(By.text(
             when (Build.VERSION.SDK_INT) {
