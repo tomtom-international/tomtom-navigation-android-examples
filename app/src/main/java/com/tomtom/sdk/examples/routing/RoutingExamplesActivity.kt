@@ -10,13 +10,16 @@
  */
 package com.tomtom.sdk.examples.routing
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.tomtom.sdk.examples.R
+import androidx.appcompat.app.AppCompatActivity
+import com.tomtom.sdk.examples.databinding.ActivityRoutingExamplesBinding
 
 class RoutingExamplesActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityRoutingExamplesBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_routing_examples)
+
+        binding = ActivityRoutingExamplesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }

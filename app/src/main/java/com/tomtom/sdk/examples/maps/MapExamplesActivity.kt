@@ -34,8 +34,7 @@ class MapExamplesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapExamplesBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
         loadMapExamplesPage()
 
         binding.tryItLayoutButton.setOnClickListener {
