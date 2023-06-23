@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/configurable_map_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".maps.ConfigurableMapActivity"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/map_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/go_back_image_button"
+            android:layout_width="@dimen/btn_circular_size"
+            android:layout_height="@dimen/btn_circular_size"
+            android:layout_margin="@dimen/view_margin_common_20"
+            android:layout_gravity="end|start"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_tomtom_arrow_left"
+            android:contentDescription="@string/go_back"/>
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

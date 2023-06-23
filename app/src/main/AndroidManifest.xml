@@ -39,6 +39,9 @@
             android:name="com.tomtom.sdk.examples.maps.MapExamplesActivity"
             android:exported="false" />
         <activity
+            android:name="com.tomtom.sdk.examples.maps.ConfigurableMapActivity"
+            android:exported="false" />
+        <activity
             android:name="com.tomtom.sdk.examples.MainMenu"
             android:exported="true">
             <intent-filter>

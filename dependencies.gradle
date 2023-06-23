@@ -8,6 +8,9 @@ ext {
     androidXEspresso = "3.4.0"
     materialVersion = "1.6.1"
     junitVersion = "4.13.2"
+    truthVersion = "1.0.1"
+    testOrchestratorVersion = "1.4.2"
+    uiAnimatorVersion = "2.2.0"
 
     tomTomSdkLibraries = [
             mapsDisplay                     : "com.tomtom.sdk.maps:map-display:$tomTomSdkVersion",
@@ -30,6 +33,9 @@ ext {
             androidXJunit                   : "androidx.test.ext:junit:$androidXJunit",
             androidXEspresso                : "androidx.test.espresso:espresso-core:$androidXEspresso",
             material                        : "com.google.android.material:material:$materialVersion",
-            junit                           : "junit:junit:$junitVersion"
+            junit                           : "junit:junit:$junitVersion",
+            truth                           : "com.google.truth:truth:$truthVersion",
+            testOrchestrator                : "androidx.test:orchestrator:$testOrchestratorVersion",
+            uiAnimator                      : "androidx.test.uiautomator:uiautomator:$uiAnimatorVersion"
     ]
 }
