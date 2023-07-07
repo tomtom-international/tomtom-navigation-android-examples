@@ -1,5 +1,5 @@
 ext {
-    tomTomSdkVersion = "0.22.4"
+    tomTomSdkVersion = "0.24.0"
     androidXNavigation = "2.5.3"
     androidXCoreVersion = "1.7.0"
     androidXCompatVersion = "1.4.2"
@@ -18,7 +18,7 @@ ext {
             locationAndroid                 : "com.tomtom.sdk.location:provider-android:$tomTomSdkVersion",
             locationSimulation              : "com.tomtom.sdk.location:provider-simulation:$tomTomSdkVersion",
             locationMapmatched              : "com.tomtom.sdk.location:provider-map-matched:$tomTomSdkVersion",
-            navigation                      : "com.tomtom.sdk.navigation:navigation:$tomTomSdkVersion",
+            navigationOnline                : "com.tomtom.sdk.navigation:navigation-online:$tomTomSdkVersion",
             navigationUi                    : "com.tomtom.sdk.navigation:ui:$tomTomSdkVersion",
             navigationRouteReplannerOnline  : "com.tomtom.sdk.navigation:route-replanner-online:$tomTomSdkVersion",
             searchOnline                    : "com.tomtom.sdk.search:search-online:$tomTomSdkVersion",
