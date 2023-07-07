@@ -15,6 +15,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+    }
+
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
     buildTypes {
@@ -42,6 +47,10 @@ android {
     buildTypes.each {
         it.buildConfigField 'String', 'TOMTOM_API_KEY', "\"$tomtomApiKey\""
     }
+
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -62,7 +71,14 @@ dependencies {
     implementation libraries.androidXNavigationUi
     implementation libraries.androidXConstraintLayout
     implementation libraries.material
+    implementation libraries.uiAnimator
     testImplementation libraries.junit
     androidTestImplementation libraries.androidXJunit
     androidTestImplementation libraries.androidXEspresso
+
+    // Tests
+    testImplementation libraries.truth
+    androidTestImplementation libraries.truth
+
+    androidTestUtil libraries.testOrchestrator
 }
