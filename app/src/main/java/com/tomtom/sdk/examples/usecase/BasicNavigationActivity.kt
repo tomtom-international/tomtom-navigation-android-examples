@@ -496,9 +496,9 @@ class BasicNavigationActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         tomTomMap.setLocationProvider(null)
+        super.onDestroy()
         tomTomNavigation.close()
         locationProvider.close()
-        super.onDestroy()
     }
 
     companion object {
