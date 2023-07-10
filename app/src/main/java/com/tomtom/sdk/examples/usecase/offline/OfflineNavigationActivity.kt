@@ -46,11 +46,10 @@ import com.tomtom.sdk.navigation.NavigationFailure
 import com.tomtom.sdk.navigation.ProgressUpdatedListener
 import com.tomtom.sdk.navigation.RoutePlan
 import com.tomtom.sdk.navigation.TomTomNavigation
-import com.tomtom.sdk.navigation.TomTomNavigationFactory
 import com.tomtom.sdk.navigation.featuretoggle.ExperimentalStandaloneNavigationOrchestrationApi
 import com.tomtom.sdk.navigation.featuretoggle.StandaloneNavigationOrchestrationFeature
-import com.tomtom.sdk.navigation.offline.ExperimentalOfflineNavigationFactory
-import com.tomtom.sdk.navigation.offline.createOfflineNavigation
+import com.tomtom.sdk.navigation.offline.Configuration
+import com.tomtom.sdk.navigation.offline.OfflineTomTomNavigationFactory
 import com.tomtom.sdk.navigation.ui.NavigationFragment
 import com.tomtom.sdk.navigation.ui.NavigationUiOptions
 import com.tomtom.sdk.routing.RoutePlanner
@@ -176,13 +175,14 @@ class OfflineNavigationActivity : AppCompatActivity() {
         routePlanner = OfflineRoutePlanner.create(context = this, ndsStore = ndsStore)
     }
 
-    @OptIn(InternalTomTomSdkApi::class, ExperimentalOfflineNavigationFactory::class)
     private fun initNavigation() {
-        tomTomNavigation = TomTomNavigationFactory.createOfflineNavigation(
-            context = this,
-            locationProvider = locationProvider,
-            ndsStore = ndsStore,
-            routePlanner = routePlanner
+        tomTomNavigation = OfflineTomTomNavigationFactory.create(
+            Configuration(
+                context = this,
+                locationProvider = locationProvider,
+                ndsStore = ndsStore,
+                routePlanner = routePlanner
+            )
         )
     }
 
@@ -308,9 +308,7 @@ class OfflineNavigationActivity : AppCompatActivity() {
 
     private fun setSimulationLocationProviderToNavigation() {
         locationProvider = createSimulationLocationProvider(route!!)
-        tomTomNavigation.navigationEngineRegistry.updateEngines(
-            locationProvider = locationProvider
-        )
+        tomTomNavigation.locationProvider = locationProvider
         locationProvider.enable()
     }
 
@@ -426,7 +424,7 @@ class OfflineNavigationActivity : AppCompatActivity() {
     }
 
     private fun setNdsStorePosition(currentPosition: GeoPoint) {
-        ndsStore.setPosition(currentPosition)
+        ndsStore.updatePosition(currentPosition)
     }
 
     override fun onDestroy() {

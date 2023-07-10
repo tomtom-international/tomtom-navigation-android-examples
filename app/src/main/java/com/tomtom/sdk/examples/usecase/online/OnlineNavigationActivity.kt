@@ -369,9 +369,7 @@ class OnlineNavigationActivity : AppCompatActivity() {
         val routeGeoLocations = route.geometry.map { GeoLocation(it) }
         val simulationStrategy = InterpolationStrategy(routeGeoLocations)
         locationProvider = SimulationLocationProvider.create(strategy = simulationStrategy)
-        tomTomNavigation.navigationEngineRegistry.updateEngines(
-            locationProvider = locationProvider
-        )
+        tomTomNavigation.locationProvider = locationProvider
         locationProvider.enable()
     }
 
