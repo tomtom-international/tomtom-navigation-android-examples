@@ -85,6 +85,27 @@ class ConfigurableMapActivityTest {
             .check(matches(ImageViewHasDrawableMatcher.hasDrawableSrc(R.drawable.ic_tomtom_arrow_left, context)))
     }
 
+    @Test
+    fun test_on_map_options_button_is_displayed() {
+        Espresso.onView(withId(R.id.map_options_image_button))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun test_on_map_options_button_is_background_drawable_displayed() {
+        Espresso.onView(
+            CoreMatchers.allOf(withId(R.id.map_options_image_button),
+                ViewMatchers.hasBackground(R.drawable.circle), isDisplayed()
+            )
+        )
+    }
+
+    @Test
+    fun test_on_map_options_button_has_drawable() {
+        Espresso.onView(withId(R.id.map_options_image_button))
+            .check(matches(ImageViewHasDrawableMatcher.hasDrawableSrc(R.drawable.ic_tomtom_line_preferences_32, context)))
+    }
+
     companion object {
         const val SDK_VERSION_23 = 23
         const val SDK_VERSION_28 = 28

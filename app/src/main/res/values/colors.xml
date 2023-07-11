@@ -17,4 +17,6 @@
     <color name="icon_white">#FFFEFE</color>
     <color name="icon_primary">#1988CF</color>
     <color name="active_color">#2196F3</color>
+    <color name="medium_gray">#ABAFB3</color>
+    <color name="light_gray">#F4F5F6</color>
 </resources>

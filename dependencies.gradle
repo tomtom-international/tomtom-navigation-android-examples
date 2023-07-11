@@ -11,6 +11,7 @@ ext {
     truthVersion = "1.0.1"
     testOrchestratorVersion = "1.4.2"
     uiAnimatorVersion = "2.2.0"
+    testInstrumentationRunnerVersion = "1.4.0"
 
     tomTomSdkLibraries = [
             mapsDisplay                     : "com.tomtom.sdk.maps:map-display:$tomTomSdkVersion",
@@ -36,6 +37,7 @@ ext {
             junit                           : "junit:junit:$junitVersion",
             truth                           : "com.google.truth:truth:$truthVersion",
             testOrchestrator                : "androidx.test:orchestrator:$testOrchestratorVersion",
-            uiAnimator                      : "androidx.test.uiautomator:uiautomator:$uiAnimatorVersion"
+            uiAnimator                      : "androidx.test.uiautomator:uiautomator:$uiAnimatorVersion",
+            testInstrumentationRunner       : "androidx.test:runner:$testInstrumentationRunnerVersion"
     ]
 }

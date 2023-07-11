@@ -40,4 +40,9 @@ Road Network, 3D Buildings, Traffic Incidents, Hill Shading, House Numbers,  Tra
     <string name="online_description">You can browse any location and see live traffic and road incidents.</string>
     <string name="hybrid_description"><![CDATA[A combination of live & downloaded map data, which can be useful in locations that have intermittent internet access.]]></string>
     <string name="offline_description">Allows you to browse regions you’ve downloaded and view fixed road incidents, like speed cameras.</string>
+    <string name="base_map_style_item_image_view_description">Base Map Style Item Image View</string>
+    <string name="map_options">Map Options</string>
+    <string name="bottom_dialog_title_options">Options</string>
+    <string name="base_map_style_section_header">Base Map Style</string>
+    <string name="map_details_section_header">Map Details</string>
 </resources>

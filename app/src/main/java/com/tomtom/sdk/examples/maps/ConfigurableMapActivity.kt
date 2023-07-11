@@ -7,9 +7,14 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.tomtom.sdk.examples.BuildConfig
 import com.tomtom.sdk.examples.R
+import com.tomtom.sdk.examples.databinding.ActivityMapOptionsListBinding
 import com.tomtom.sdk.examples.databinding.ActivityMapViewBinding
+import com.tomtom.sdk.examples.maps.mapdetails.*
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
@@ -18,6 +23,7 @@ import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
+import com.tomtom.sdk.map.display.style.*
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.MapView
 
@@ -27,11 +33,24 @@ import com.tomtom.sdk.map.display.ui.MapView
 class ConfigurableMapActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMapViewBinding
+    private lateinit var mapOptionsDialogBinding: ActivityMapOptionsListBinding
     private lateinit var mapView: MapView
     private lateinit var mapFragment: MapFragment
     private lateinit var tomTomMap: TomTomMap
     private lateinit var locationProvider: LocationProvider
     private lateinit var onLocationUpdateListener: OnLocationUpdateListener
+    private lateinit var bottomOptionsDialog: BottomSheetDialog
+    private var baseMapStyleList: MutableList<BaseMapStyleItem>? = null
+    private var currentBaseMapStyle: StyleMode = StyleMode.MAIN
+    private var currentMapStyleDescriptor: StyleDescriptor = StandardStyles.BROWSING
+    private var isMapChanged: Boolean = false
+    private var areMapPreferencesChanged = false
+    private lateinit var mapBaseStyleToUpgrade: StyleMode
+    private lateinit var mapStyleDescriptorToUpgrade: StyleDescriptor
+
+    private var mapPreferencesList: MutableList<MapPreferenceItem>? = null
+    private var currentMapPreferences = mutableMapOf<String, MapPreference>()
+    private var mapPreferencesToUpgrade = mutableMapOf<String, MapPreference>()
 
     /**
      * Navigation SDK is only available upon request.
@@ -42,8 +61,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapViewBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
         initMap()
 
         /**
@@ -51,6 +69,10 @@ class ConfigurableMapActivity : AppCompatActivity() {
          */
         binding.goBackImageButton.setOnClickListener {
             onBackPressed()
+        }
+
+        binding.mapOptionsImageButton.setOnClickListener {
+            showBottomOptionsDialog()
         }
     }
 
@@ -76,6 +98,8 @@ class ConfigurableMapActivity : AppCompatActivity() {
             .commit()
         mapFragment.getMapAsync { map ->
             tomTomMap = map
+//            val method = tomTomMap.javaClass.getMethod("showTrafficFlow")
+//            method.invoke(tomTomMap)
             mapView.contentDescription = applicationContext.resources.getString(R.string.map_ready)
             enableUserLocation()
         }
@@ -167,9 +191,136 @@ class ConfigurableMapActivity : AppCompatActivity() {
         Manifest.permission.ACCESS_COARSE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
 
+    private fun showBottomOptionsDialog() {
+        bottomOptionsDialog = BottomSheetDialog(this)
+        mapOptionsDialogBinding = ActivityMapOptionsListBinding.inflate(layoutInflater)
+        bottomOptionsDialog.setContentView(mapOptionsDialogBinding.root)
+        bottomOptionsDialog.show()
+
+        mapOptionsDialogBinding.optionsTitleTextView.setOnClickListener {
+            bottomOptionsDialog.dismiss()
+        }
+
+        bottomOptionsDialog.setOnDismissListener {
+            if(isMapChanged) {
+                upgradeMap()
+            }
+            if(areMapPreferencesChanged) {
+                upgradeMapPreferences()
+            }
+            isMapChanged = false
+            areMapPreferencesChanged = false
+        }
+
+        initBaseMapStyleList()
+        initMapPreferencesList()
+        initCurrentMapPreferences()
+
+        val baseMapStyleRecyclerList: RecyclerView = mapOptionsDialogBinding.baseMapStylesRecyclerList
+        val mapPreferenceRecyclerList: RecyclerView = mapOptionsDialogBinding.mapPreferencesRecyclerList
+
+        setUpRecyclerListForBaseMapStyle(baseMapStyleRecyclerList)
+        setUpRecyclerListForMapPreferences(mapPreferenceRecyclerList)
+    }
+
+    private val listener: OnRecyclerViewItemClickListener = object : OnRecyclerViewItemClickListener {
+        override fun onBaseMapStyleItemClick(baseMapStyleItem: BaseMapStyleItem) {
+            if(currentBaseMapStyle != baseMapStyleItem.styleMode || currentMapStyleDescriptor != baseMapStyleItem.styleDescriptor) {
+                mapBaseStyleToUpgrade = baseMapStyleItem.styleMode
+                mapStyleDescriptorToUpgrade = baseMapStyleItem.styleDescriptor
+                isMapChanged = true
+            } else {
+                isMapChanged = false
+            }
+        }
+
+        override fun onMapPreferenceItemClick(title: String, mapPreferenceItemMethod: MapPreference) {
+            areMapPreferencesChanged = if(!currentMapPreferences.containsValue(mapPreferenceItemMethod)) {
+                mapPreferencesToUpgrade[title] = mapPreferenceItemMethod
+                true
+            } else {
+                if(mapPreferencesToUpgrade.containsKey(title)) {
+                    mapPreferencesToUpgrade.remove(title)
+                }
+                false
+            }
+        }
+    }
+
+    private fun upgradeMap() {
+        val onStyleLoadedCallback = object: StyleLoadingCallback {
+            override fun onSuccess() {
+                currentMapStyleDescriptor = mapStyleDescriptorToUpgrade
+            }
+
+            override fun onFailure(failure: LoadingStyleFailure) {
+                //Log.d() a message
+            }
+        }
+        tomTomMap.setStyleMode(mapBaseStyleToUpgrade)
+        tomTomMap.loadStyle(mapStyleDescriptorToUpgrade, onStyleLoadedCallback)
+        currentBaseMapStyle = mapBaseStyleToUpgrade
+    }
+
+    private fun upgradeMapPreferences() {
+        mapPreferencesToUpgrade.forEach { (key, value) ->
+            val method = tomTomMap.javaClass.getMethod(value.methodName)
+            method.invoke(tomTomMap)
+            currentMapPreferences[key] = value
+        }
+
+        mapPreferencesToUpgrade.clear()
+    }
+
+    private fun setUpRecyclerListForBaseMapStyle(baseMapStyleRecyclerList: RecyclerView) {
+        createGridLayout(baseMapStyleRecyclerList, LAYOUT_SPAN_2_RECYCLER_VIEW)
+        createAdapterForBaseMapStyleData(baseMapStyleRecyclerList)
+    }
+
+    private fun setUpRecyclerListForMapPreferences(mapPreferenceRecyclerList: RecyclerView) {
+        createGridLayout(mapPreferenceRecyclerList, LAYOUT_SPAN_1_RECYCLER_VIEW)
+        createAdapterForMapPreferencesData(mapPreferenceRecyclerList)
+    }
+
+    private fun createGridLayout(recyclerList: RecyclerView, layoutSpanCount: Int) {
+        val gridLayoutManager = GridLayoutManager(this, layoutSpanCount)
+        recyclerList.layoutManager = gridLayoutManager
+    }
+
+    private fun createAdapterForBaseMapStyleData(baseMapStyleRecyclerList: RecyclerView) {
+        val baseMapStyleDataAdapter = BaseMapStyleDataAdapter(baseMapStyleRecyclerList, baseMapStyleList!!, listener, currentBaseMapStyle, currentMapStyleDescriptor)
+        baseMapStyleRecyclerList.adapter = baseMapStyleDataAdapter
+    }
+
+    private fun createAdapterForMapPreferencesData(mapPreferenceRecyclerList: RecyclerView) {
+        val mapPreferenceDataAdapter = MapPreferenceDataAdapter(mapPreferencesList!!, listener, currentMapPreferences)
+        mapPreferenceRecyclerList.adapter = mapPreferenceDataAdapter
+    }
+
+    private fun initBaseMapStyleList() {
+        if(baseMapStyleList == null) {
+            baseMapStyleList = DataLoader.initBaseMapStyleList()
+        }
+    }
+
+    private fun initMapPreferencesList() {
+        if(mapPreferencesList == null)
+            mapPreferencesList = DataLoader.initMapPreferencesList()
+    }
+
+    private fun initCurrentMapPreferences() {
+        if(currentMapPreferences.isEmpty()) {
+            for (item in mapPreferencesList!!) {
+                currentMapPreferences[item.title] = item.methodHide
+            }
+        }
+    }
+
     companion object {
         const val AMSTERDAM_GEO_POINT_LATITUDE = 52.379189
         const val AMSTERDAM_GEO_POINT_LONGITUDE = 4.899431
         const val CAMERA_ZOOM_CITY_LEVEL = 8.0
+        const val LAYOUT_SPAN_1_RECYCLER_VIEW = 1
+        const val LAYOUT_SPAN_2_RECYCLER_VIEW = 2
     }
 }

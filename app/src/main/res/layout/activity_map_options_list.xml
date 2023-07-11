@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/map_options_dialog_background">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_tomtom_long_arrow_down"
+        android:layout_gravity="center|top"
+        android:scaleType="centerCrop" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/view_margin_common_15"
+            android:paddingTop="@dimen/view_padding_common_30">
+
+            <TextView
+                android:id="@+id/options_title_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|top"
+                android:paddingBottom="@dimen/view_padding_common_40"
+                android:text="@string/bottom_dialog_title_options"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold"
+                android:textColor="@color/text"
+                android:lineSpacingExtra="@dimen/line_spacing_negative_3"
+                app:drawableLeftCompat="@drawable/ic_tomtom_arrow_left"
+                android:drawablePadding="@dimen/view_padding_negative_20"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/view_margin_common_10">
+
+                <TextView
+                    android:id="@+id/base_map_styles_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="@dimen/view_margin_common_10"
+                    android:layout_marginRight="@dimen/view_margin_common_10"
+                    android:text="@string/base_map_style_section_header"
+                    android:textColor="@color/medium_gray"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line_height"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/view_margin_common_15"
+                    android:layout_toStartOf="@id/base_map_styles_text_view"
+                    android:background="@color/light_gray"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line_height"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/view_margin_common_15"
+                    android:layout_toEndOf="@id/base_map_styles_text_view"
+                    android:background="@color/light_gray"
+                    />
+
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/base_map_styles_recycler_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/view_margin_common_10"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/view_margin_common_10">
+
+                <TextView
+                    android:id="@+id/map_details_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="@dimen/view_margin_common_10"
+                    android:layout_marginRight="@dimen/view_margin_common_10"
+                    android:text="@string/map_details_section_header"
+                    android:textColor="@color/medium_gray" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line_height"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/view_margin_common_15"
+                    android:layout_toStartOf="@id/map_details_text_view"
+                    android:background="@color/light_gray"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line_height"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/view_margin_common_15"
+                    android:layout_toEndOf="@id/map_details_text_view"
+                    android:background="@color/light_gray"
+                    />
+
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/map_preferences_recycler_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/view_margin_common_10"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line_height"
+                android:layout_marginEnd="@dimen/view_margin_common_15"
+                android:background="@android:color/transparent"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
