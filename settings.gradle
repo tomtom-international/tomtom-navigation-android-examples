@@ -12,8 +12,8 @@ dependencyResolutionManagement {
         mavenCentral()
         maven {
             credentials {
-                username = repositoryUsername
-                password = repositoryIdentityToken
+                username = artifactoryUsername
+                password = artifactoryPassword
             }
             url = uri("https://repositories.tomtom.com/artifactory/maven")
 
