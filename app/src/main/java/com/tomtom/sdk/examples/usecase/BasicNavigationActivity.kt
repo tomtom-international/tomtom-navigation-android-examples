@@ -42,7 +42,14 @@ import com.tomtom.sdk.map.display.route.RouteClickListener
 import com.tomtom.sdk.map.display.route.RouteOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.currentlocation.CurrentLocationButton.VisibilityPolicy
-import com.tomtom.sdk.navigation.*
+import com.tomtom.sdk.navigation.NavigationFailure
+import com.tomtom.sdk.navigation.ProgressUpdatedListener
+import com.tomtom.sdk.navigation.RoutePlan
+import com.tomtom.sdk.navigation.RouteUpdateReason
+import com.tomtom.sdk.navigation.RouteUpdatedListener
+import com.tomtom.sdk.navigation.TomTomNavigation
+import com.tomtom.sdk.navigation.online.Configuration
+import com.tomtom.sdk.navigation.online.OnlineTomTomNavigationFactory
 import com.tomtom.sdk.navigation.routereplanner.RouteReplanner
 import com.tomtom.sdk.navigation.routereplanner.online.OnlineRouteReplannerFactory
 import com.tomtom.sdk.navigation.ui.NavigationFragment
@@ -148,14 +155,14 @@ class BasicNavigationActivity : AppCompatActivity() {
      * To use navigation in the application, start by by initialising the navigation configuration.
      */
     private fun initNavigation() {
-        val navigationConfiguration = NavigationConfiguration(
+        val configuration = Configuration(
             context = this,
             apiKey = apiKey,
             locationProvider = locationProvider,
-            routeReplanner = routeReplanner
+            routeReplanner = routeReplanner,
+            vehicleProvider = DefaultVehicleProvider(vehicle = Vehicle.Car())
         )
-        (navigationConfiguration.vehicleProvider as DefaultVehicleProvider).setVehicle(Vehicle.Car())
-        tomTomNavigation = TomTomNavigationFactory.create(navigationConfiguration)
+        tomTomNavigation = OnlineTomTomNavigationFactory.create(configuration)
     }
 
     /**
@@ -496,9 +503,9 @@ class BasicNavigationActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         tomTomMap.setLocationProvider(null)
+        super.onDestroy()
         tomTomNavigation.close()
         locationProvider.close()
-        super.onDestroy()
     }
 
     companion object {

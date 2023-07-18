@@ -21,4 +21,4 @@ jobs:
       - name: Wrapper permissions
         run: chmod +x ./gradlew
       - name: Build
-        run: ./gradlew assemble -PrepositoryUsername=${{secrets.ARTIFACTORY_USERNAME}} -PrepositoryIdentityToken=${{secrets.ARTIFACTORY_PASSWORD}} -PtomtomApiKey=${{secrets.TOMTOM_API_KEY}}
+        run: ./gradlew assemble -PartifactoryUsername=${{secrets.ARTIFACTORY_USERNAME}} -PartifactoryPassword=${{secrets.ARTIFACTORY_PASSWORD}} -PtomtomApiKey=${{secrets.TOMTOM_API_KEY}}

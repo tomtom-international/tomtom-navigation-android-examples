@@ -59,7 +59,7 @@ dependencies {
     implementation tomTomSdkLibraries.locationSimulation
     implementation tomTomSdkLibraries.locationMapmatched
     implementation tomTomSdkLibraries.mapsDisplay
-    implementation tomTomSdkLibraries.navigation
+    implementation tomTomSdkLibraries.navigationOnline
     implementation tomTomSdkLibraries.navigationUi
     implementation tomTomSdkLibraries.navigationRouteReplannerOnline
     implementation tomTomSdkLibraries.searchOnline
