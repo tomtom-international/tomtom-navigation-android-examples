@@ -263,7 +263,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
             }
 
             override fun onFailure(failure: LoadingStyleFailure) {
-                Log.d("ConfigurableMapActivity.kt: Error on Upgrade Map with Style Descriptor", failure.message)
+                Log.d("ConfigurableMapActivity.kt: Could not upgrade map with style descriptor", failure.message)
             }
         }
         tomTomMap.setStyleMode(mapBaseStyleToUpgrade)
@@ -273,8 +273,14 @@ class ConfigurableMapActivity : AppCompatActivity() {
 
     private fun upgradeMapPreferences() {
         mapPreferencesToUpgrade.forEach { (key, value) ->
-            val method = tomTomMap.javaClass.getMethod(value.methodName)
-            method.invoke(tomTomMap)
+            when(value) {
+                MapPreference.SHOW_TRAFFIC_FLOW -> tomTomMap.showTrafficFlow()
+                MapPreference.HIDE_TRAFFIC_FLOW -> tomTomMap.hideTrafficFlow()
+                MapPreference.SHOW_HILL_SHADING -> tomTomMap.hideHillShading()
+                MapPreference.HIDE_HILL_SHADING -> tomTomMap.hideHillShading()
+                MapPreference.SHOW_VEHICLE_RESTRICTIONS -> tomTomMap.showVehicleRestrictions()
+                MapPreference.HIDE_VEHICLE_RESTRICTIONS -> tomTomMap.hideVehicleRestrictions()
+            }
             currentMapPreferences[key] = value
         }
 
