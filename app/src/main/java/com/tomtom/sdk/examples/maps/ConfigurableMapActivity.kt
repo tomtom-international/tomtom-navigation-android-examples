@@ -3,6 +3,7 @@ package com.tomtom.sdk.examples.maps
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +15,13 @@ import com.tomtom.sdk.examples.BuildConfig
 import com.tomtom.sdk.examples.R
 import com.tomtom.sdk.examples.databinding.ActivityMapOptionsListBinding
 import com.tomtom.sdk.examples.databinding.ActivityMapViewBinding
-import com.tomtom.sdk.examples.maps.mapdetails.*
+import com.tomtom.sdk.examples.maps.mapdetails.BaseMapStyleDataAdapter
+import com.tomtom.sdk.examples.maps.mapdetails.BaseMapStyleItem
+import com.tomtom.sdk.examples.maps.mapdetails.DataLoader
+import com.tomtom.sdk.examples.maps.mapdetails.MapPreference
+import com.tomtom.sdk.examples.maps.mapdetails.MapPreferenceDataAdapter
+import com.tomtom.sdk.examples.maps.mapdetails.MapPreferenceItem
+import com.tomtom.sdk.examples.maps.mapdetails.OnRecyclerViewItemClickListener
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
@@ -23,7 +30,11 @@ import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
-import com.tomtom.sdk.map.display.style.*
+import com.tomtom.sdk.map.display.style.LoadingStyleFailure
+import com.tomtom.sdk.map.display.style.StandardStyles
+import com.tomtom.sdk.map.display.style.StyleDescriptor
+import com.tomtom.sdk.map.display.style.StyleLoadingCallback
+import com.tomtom.sdk.map.display.style.StyleMode
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.MapView
 
@@ -98,8 +109,6 @@ class ConfigurableMapActivity : AppCompatActivity() {
             .commit()
         mapFragment.getMapAsync { map ->
             tomTomMap = map
-//            val method = tomTomMap.javaClass.getMethod("showTrafficFlow")
-//            method.invoke(tomTomMap)
             mapView.contentDescription = applicationContext.resources.getString(R.string.map_ready)
             enableUserLocation()
         }
@@ -254,7 +263,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
             }
 
             override fun onFailure(failure: LoadingStyleFailure) {
-                //Log.d() a message
+                Log.d("ConfigurableMapActivity.kt: Error on Upgrade Map with Style Descriptor", failure.message)
             }
         }
         tomTomMap.setStyleMode(mapBaseStyleToUpgrade)

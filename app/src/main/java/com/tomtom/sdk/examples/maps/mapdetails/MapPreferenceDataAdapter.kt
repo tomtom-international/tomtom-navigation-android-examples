@@ -6,14 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tomtom.sdk.examples.R
 
 class MapPreferenceDataAdapter(private val mapPreferenceItemList: List<MapPreferenceItem>, private val clickListener: OnRecyclerViewItemClickListener, private val currentMethods: MutableMap<String, MapPreference>): RecyclerView.Adapter<MapPreferenceItemHolder>() {
-    // Create an empty map
     private val mapOfSelectedItems = mutableMapOf<Int, MapPreference>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MapPreferenceItemHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val mapPreferenceItemView = layoutInflater.inflate(R.layout.activity_map_preference_item, parent, false)
 
-        // Create and return our custom BaseMapStyleItemHolder object.
         return MapPreferenceItemHolder(mapPreferenceItemView)
     }
 

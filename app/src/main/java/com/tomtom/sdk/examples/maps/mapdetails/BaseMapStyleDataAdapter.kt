@@ -4,7 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.tomtom.sdk.examples.R
-import com.tomtom.sdk.map.display.style.*
+import com.tomtom.sdk.map.display.style.StyleDescriptor
+import com.tomtom.sdk.map.display.style.StyleMode
 
 class BaseMapStyleDataAdapter(private val recyclerView: RecyclerView, private val baseMapStyleItemList: List<BaseMapStyleItem>, private val clickListener: OnRecyclerViewItemClickListener, private val currentStyleMode: StyleMode, private val currentStandardStyle: StyleDescriptor): RecyclerView.Adapter<BaseMapStyleItemHolder>() {
     private var selectedItem = RecyclerView.NO_POSITION
@@ -13,7 +14,6 @@ class BaseMapStyleDataAdapter(private val recyclerView: RecyclerView, private va
         val layoutInflater = LayoutInflater.from(parent.context)
         val baseMapStyleItemView = layoutInflater.inflate(R.layout.activity_base_map_style_item, parent, false)
 
-        // Create and return our custom BaseMapStyleItemHolder object.
         return BaseMapStyleItemHolder(baseMapStyleItemView)
     }
 
