@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.tomtom.sdk.examples.R
 
-class MapPreferenceDataAdapter(private val mapPreferenceItemList: List<MapPreferenceItem>, private val clickListener: OnRecyclerViewItemClickListener, private val currentMethods: MutableMap<String, MapPreference>): RecyclerView.Adapter<MapPreferenceItemHolder>() {
+class MapPreferenceDataAdapter(private val mapPreferenceItemList: List<MapPreferenceItem>, private val clickListener: OnMapPreferenceRecyclerViewListener, private val currentMethods: MutableMap<String, MapPreference>): RecyclerView.Adapter<MapPreferenceItemHolder>() {
     private val mapOfSelectedItems = mutableMapOf<Int, MapPreference>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MapPreferenceItemHolder {
@@ -18,45 +18,43 @@ class MapPreferenceDataAdapter(private val mapPreferenceItemList: List<MapPrefer
     override fun onBindViewHolder(holder: MapPreferenceItemHolder, position: Int) {
         val mapPreferenceItem = mapPreferenceItemList[position]
 
-        holder.getTitleText()?.text = mapPreferenceItem.title
-        holder.getImageView()?.setImageResource(mapPreferenceItem.imageId)
-        holder.getImageView2()?.setImageResource(mapPreferenceItem.imageIdHide)
+        holder.getTitleText().text = mapPreferenceItem.title
+        holder.getImageViewPreferenceOn().setImageResource(mapPreferenceItem.imageId)
+        holder.getImageViewPreferenceOff().setImageResource(mapPreferenceItem.imageIdHide)
 
         //Set blue background border for currently displayed map preferences
         if(currentMethods.containsValue(mapPreferenceItem.methodShow)) {
-            holder.getImageView()?.setBackgroundResource(R.drawable.map_detail_card_view_item_border_selected)
+            holder.getImageViewPreferenceOn().setBackgroundResource(R.drawable.map_detail_card_view_item_border_selected)
             mapOfSelectedItems[holder.bindingAdapterPosition] = mapPreferenceItem.methodShow
         } else if(currentMethods.containsValue(mapPreferenceItem.methodHide)) {
-            holder.getImageView2()?.setBackgroundResource(R.drawable.map_detail_card_view_item_border_selected)
+            holder.getImageViewPreferenceOff().setBackgroundResource(R.drawable.map_detail_card_view_item_border_selected)
             mapOfSelectedItems[holder.bindingAdapterPosition] = mapPreferenceItem.methodHide
         }
 
-        holder.getImageView()?.setOnClickListener {
+        holder.getImageViewPreferenceOn().setOnClickListener {
             clickListener.onMapPreferenceItemClick(mapPreferenceItem.title, mapPreferenceItem.methodShow)
 
             if(!mapOfSelectedItems.containsValue(mapPreferenceItem.methodShow)) {
                 if(mapOfSelectedItems.containsKey(holder.bindingAdapterPosition)) {
-                    holder.getImageView2()?.setBackgroundResource(R.drawable.map_detail_card_view_item_border)
+                    holder.getImageViewPreferenceOff().setBackgroundResource(R.drawable.map_detail_card_view_item_border)
                 }
                 mapOfSelectedItems[holder.bindingAdapterPosition] = mapPreferenceItem.methodShow
-                holder.getImageView()?.setBackgroundResource(R.drawable.map_detail_card_view_item_border_selected)
+                holder.getImageViewPreferenceOn().setBackgroundResource(R.drawable.map_detail_card_view_item_border_selected)
             }
         }
 
-        holder.getImageView2()?.setOnClickListener {
+        holder.getImageViewPreferenceOff().setOnClickListener {
             clickListener.onMapPreferenceItemClick(mapPreferenceItem.title, mapPreferenceItem.methodHide)
 
             if(!mapOfSelectedItems.containsValue(mapPreferenceItem.methodHide)) {
                 if(mapOfSelectedItems.containsKey(holder.bindingAdapterPosition)) {
-                    holder.getImageView()?.setBackgroundResource(R.drawable.map_detail_card_view_item_border)
+                    holder.getImageViewPreferenceOn().setBackgroundResource(R.drawable.map_detail_card_view_item_border)
                 }
                 mapOfSelectedItems[holder.bindingAdapterPosition] = mapPreferenceItem.methodHide
-                holder.getImageView2()?.setBackgroundResource(R.drawable.map_detail_card_view_item_border_selected)
+                holder.getImageViewPreferenceOff().setBackgroundResource(R.drawable.map_detail_card_view_item_border_selected)
             }
         }
     }
 
-    override fun getItemCount(): Int {
-        return mapPreferenceItemList.size
-    }
+    override fun getItemCount() =  mapPreferenceItemList.size
 }

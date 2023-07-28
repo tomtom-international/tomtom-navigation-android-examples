@@ -8,24 +8,24 @@ import com.tomtom.sdk.examples.R
 
 class MapPreferenceItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
     private var itemTitleTextView: TextView
-    private var itemImageView: ImageView
-    private var itemImageView2: ImageView
+    private var itemImageViewPreferenceOn: ImageView
+    private var itemImageViewPreferenceOff: ImageView
 
     init {
         itemTitleTextView = itemView.findViewById(R.id.map_preference_text_view_title)
-        itemImageView = itemView.findViewById(R.id.map_preference_card_view_image)
-        itemImageView2 = itemView.findViewById(R.id.card_view_image_2)
+        itemImageViewPreferenceOn = itemView.findViewById(R.id.map_preference_card_view_image)
+        itemImageViewPreferenceOff = itemView.findViewById(R.id.card_view_image_2)
     }
 
     fun getTitleText(): TextView {
         return itemTitleTextView
     }
 
-    fun getImageView(): ImageView {
-        return itemImageView
+    fun getImageViewPreferenceOn(): ImageView {
+        return itemImageViewPreferenceOn
     }
 
-    fun getImageView2(): ImageView {
-        return itemImageView2
+    fun getImageViewPreferenceOff(): ImageView {
+        return itemImageViewPreferenceOff
     }
 }

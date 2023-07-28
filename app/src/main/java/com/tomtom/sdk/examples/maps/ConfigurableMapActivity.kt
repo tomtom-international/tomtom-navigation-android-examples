@@ -21,7 +21,8 @@ import com.tomtom.sdk.examples.maps.mapdetails.DataLoader
 import com.tomtom.sdk.examples.maps.mapdetails.MapPreference
 import com.tomtom.sdk.examples.maps.mapdetails.MapPreferenceDataAdapter
 import com.tomtom.sdk.examples.maps.mapdetails.MapPreferenceItem
-import com.tomtom.sdk.examples.maps.mapdetails.OnRecyclerViewItemClickListener
+import com.tomtom.sdk.examples.maps.mapdetails.OnBaseMapStyleRecyclerViewListener
+import com.tomtom.sdk.examples.maps.mapdetails.OnMapPreferenceRecyclerViewListener
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
@@ -56,12 +57,12 @@ class ConfigurableMapActivity : AppCompatActivity() {
     private var currentMapStyleDescriptor: StyleDescriptor = StandardStyles.BROWSING
     private var isMapChanged: Boolean = false
     private var areMapPreferencesChanged = false
-    private lateinit var mapBaseStyleToUpgrade: StyleMode
-    private lateinit var mapStyleDescriptorToUpgrade: StyleDescriptor
+    private lateinit var mapBaseStyleToUpdate: StyleMode
+    private lateinit var mapStyleDescriptorToUpdate: StyleDescriptor
 
     private var mapPreferencesList: MutableList<MapPreferenceItem>? = null
-    private var currentMapPreferences = mutableMapOf<String, MapPreference>()
-    private var mapPreferencesToUpgrade = mutableMapOf<String, MapPreference>()
+    private val currentMapPreferences = mutableMapOf<String, MapPreference>()
+    private val mapPreferencesToUpdate = mutableMapOf<String, MapPreference>()
 
     /**
      * Navigation SDK is only available upon request.
@@ -212,10 +213,10 @@ class ConfigurableMapActivity : AppCompatActivity() {
 
         bottomOptionsDialog.setOnDismissListener {
             if(isMapChanged) {
-                upgradeMap()
+                updateMap()
             }
             if(areMapPreferencesChanged) {
-                upgradeMapPreferences()
+                updateMapPreferences()
             }
             isMapChanged = false
             areMapPreferencesChanged = false
@@ -232,47 +233,49 @@ class ConfigurableMapActivity : AppCompatActivity() {
         setUpRecyclerListForMapPreferences(mapPreferenceRecyclerList)
     }
 
-    private val listener: OnRecyclerViewItemClickListener = object : OnRecyclerViewItemClickListener {
+    private val listenerBaseMapStyle: OnBaseMapStyleRecyclerViewListener = object : OnBaseMapStyleRecyclerViewListener {
         override fun onBaseMapStyleItemClick(baseMapStyleItem: BaseMapStyleItem) {
             if(currentBaseMapStyle != baseMapStyleItem.styleMode || currentMapStyleDescriptor != baseMapStyleItem.styleDescriptor) {
-                mapBaseStyleToUpgrade = baseMapStyleItem.styleMode
-                mapStyleDescriptorToUpgrade = baseMapStyleItem.styleDescriptor
+                mapBaseStyleToUpdate = baseMapStyleItem.styleMode
+                mapStyleDescriptorToUpdate = baseMapStyleItem.styleDescriptor
                 isMapChanged = true
             } else {
                 isMapChanged = false
             }
         }
+    }
 
+    private val listenerMapPreference: OnMapPreferenceRecyclerViewListener = object : OnMapPreferenceRecyclerViewListener {
         override fun onMapPreferenceItemClick(title: String, mapPreferenceItemMethod: MapPreference) {
             areMapPreferencesChanged = if(!currentMapPreferences.containsValue(mapPreferenceItemMethod)) {
-                mapPreferencesToUpgrade[title] = mapPreferenceItemMethod
+                mapPreferencesToUpdate[title] = mapPreferenceItemMethod
                 true
             } else {
-                if(mapPreferencesToUpgrade.containsKey(title)) {
-                    mapPreferencesToUpgrade.remove(title)
+                if(mapPreferencesToUpdate.containsKey(title)) {
+                    mapPreferencesToUpdate.remove(title)
                 }
-                false
+                true
             }
         }
     }
 
-    private fun upgradeMap() {
+    private fun updateMap() {
         val onStyleLoadedCallback = object: StyleLoadingCallback {
             override fun onSuccess() {
-                currentMapStyleDescriptor = mapStyleDescriptorToUpgrade
+                currentMapStyleDescriptor = mapStyleDescriptorToUpdate
             }
 
             override fun onFailure(failure: LoadingStyleFailure) {
-                Log.d("ConfigurableMapActivity.kt: Could not upgrade map with style descriptor", failure.message)
+                Log.w("ConfigurableMapActivity: Could not update map with style descriptor", failure.message)
             }
         }
-        tomTomMap.setStyleMode(mapBaseStyleToUpgrade)
-        tomTomMap.loadStyle(mapStyleDescriptorToUpgrade, onStyleLoadedCallback)
-        currentBaseMapStyle = mapBaseStyleToUpgrade
+        tomTomMap.setStyleMode(mapBaseStyleToUpdate)
+        tomTomMap.loadStyle(mapStyleDescriptorToUpdate, onStyleLoadedCallback)
+        currentBaseMapStyle = mapBaseStyleToUpdate
     }
 
-    private fun upgradeMapPreferences() {
-        mapPreferencesToUpgrade.forEach { (key, value) ->
+    private fun updateMapPreferences() {
+        mapPreferencesToUpdate.forEach { (key, value) ->
             when(value) {
                 MapPreference.SHOW_TRAFFIC_FLOW -> tomTomMap.showTrafficFlow()
                 MapPreference.HIDE_TRAFFIC_FLOW -> tomTomMap.hideTrafficFlow()
@@ -284,32 +287,22 @@ class ConfigurableMapActivity : AppCompatActivity() {
             currentMapPreferences[key] = value
         }
 
-        mapPreferencesToUpgrade.clear()
+        mapPreferencesToUpdate.clear()
     }
 
     private fun setUpRecyclerListForBaseMapStyle(baseMapStyleRecyclerList: RecyclerView) {
         createGridLayout(baseMapStyleRecyclerList, LAYOUT_SPAN_2_RECYCLER_VIEW)
-        createAdapterForBaseMapStyleData(baseMapStyleRecyclerList)
+        baseMapStyleRecyclerList.adapter = BaseMapStyleDataAdapter(baseMapStyleRecyclerList, baseMapStyleList!!, listenerBaseMapStyle, currentBaseMapStyle, currentMapStyleDescriptor)
     }
 
     private fun setUpRecyclerListForMapPreferences(mapPreferenceRecyclerList: RecyclerView) {
         createGridLayout(mapPreferenceRecyclerList, LAYOUT_SPAN_1_RECYCLER_VIEW)
-        createAdapterForMapPreferencesData(mapPreferenceRecyclerList)
+        mapPreferenceRecyclerList.adapter = MapPreferenceDataAdapter(mapPreferencesList!!, listenerMapPreference, currentMapPreferences)
     }
 
     private fun createGridLayout(recyclerList: RecyclerView, layoutSpanCount: Int) {
         val gridLayoutManager = GridLayoutManager(this, layoutSpanCount)
         recyclerList.layoutManager = gridLayoutManager
-    }
-
-    private fun createAdapterForBaseMapStyleData(baseMapStyleRecyclerList: RecyclerView) {
-        val baseMapStyleDataAdapter = BaseMapStyleDataAdapter(baseMapStyleRecyclerList, baseMapStyleList!!, listener, currentBaseMapStyle, currentMapStyleDescriptor)
-        baseMapStyleRecyclerList.adapter = baseMapStyleDataAdapter
-    }
-
-    private fun createAdapterForMapPreferencesData(mapPreferenceRecyclerList: RecyclerView) {
-        val mapPreferenceDataAdapter = MapPreferenceDataAdapter(mapPreferencesList!!, listener, currentMapPreferences)
-        mapPreferenceRecyclerList.adapter = mapPreferenceDataAdapter
     }
 
     private fun initBaseMapStyleList() {
