@@ -5,6 +5,7 @@ plugins {
 apply from: '../dependencies.gradle'
 
 android {
+    namespace = "com.tomtom.sdk.examples"
     compileSdk 33
 
     defaultConfig {
@@ -42,6 +43,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 
     buildTypes.each {
