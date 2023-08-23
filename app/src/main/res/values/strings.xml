@@ -45,4 +45,15 @@ Road Network, 3D Buildings, Traffic Incidents, Hill Shading, House Numbers,  Tra
     <string name="bottom_dialog_title_options">Options</string>
     <string name="base_map_style_section_header">Base Map Style</string>
     <string name="map_details_section_header">Map Details</string>
+    <string name="light_driving">Light Driving</string>
+    <string name="light_browsing">Light Browsing</string>
+    <string name="dark_browsing">Dark Browsing</string>
+    <string name="satellite">Satellite</string>
+    <string name="dark_driving">Dark Driving</string>
+    <string name="hill_shading">Hill Shading</string>
+    <string name="traffic_flow">Traffic Flow</string>
+    <string name="vehicle_restriction">Vehicle Restriction</string>
+    <string name="house_numbers">House Numbers</string>
+    <string name="lane_highlighting">Lane Highlighting</string>
+    <string name="monochrome">Monochrome</string>
 </resources>

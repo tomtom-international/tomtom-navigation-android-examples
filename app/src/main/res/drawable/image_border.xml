@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/white"/>
-    <stroke android:width="@dimen/map_detail_img_border_stroke_width" android:color="@color/icon_white"/>
+    <solid android:color="?attr/surfaceColor"/>
+    <stroke android:width="@dimen/map_detail_img_border_stroke_width" android:color="?attr/surfaceColor"/>
     <padding android:left="@dimen/map_detail_img_border_padding"
         android:top="@dimen/map_detail_img_border_padding"
         android:right="@dimen/map_detail_img_border_padding"

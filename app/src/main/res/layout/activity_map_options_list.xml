@@ -1,131 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/map_options_dialog_background">
+    android:orientation="vertical"
+    tools:background="?attr/surfaceColor">
+
     <ImageView
+        android:id="@+id/pinImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_tomtom_long_arrow_down"
         android:layout_gravity="center|top"
-        android:scaleType="centerCrop" />
+        android:src="@drawable/ic_tomtom_long_arrow_down"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/dialogButtonTint"
+        tools:tint="@null" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pinImage">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="@dimen/view_margin_common_15"
-            android:paddingTop="@dimen/view_padding_common_30">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/options_title_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal|top"
-                android:paddingBottom="@dimen/view_padding_common_40"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:gravity="center"
                 android:text="@string/bottom_dialog_title_options"
-                android:textSize="@dimen/text_size"
+                android:textColor="?attr/headerTextColor"
+                android:textSize="@dimen/options_header_text_size"
                 android:textStyle="bold"
-                android:textColor="@color/text"
-                android:lineSpacingExtra="@dimen/line_spacing_negative_3"
-                app:drawableLeftCompat="@drawable/ic_tomtom_arrow_left"
-                android:drawablePadding="@dimen/view_padding_negative_20"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <FrameLayout
+                android:id="@+id/back_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:layout_constraintBottom_toBottomOf="@id/options_title_text_view"
+                app:layout_constraintStart_toStartOf="@id/options_title_text_view"
+                app:layout_constraintTop_toTopOf="@id/options_title_text_view">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_tomtom_arrow_left"
+                    app:tint="?attr/dialogButtonTint"
+                    tools:tint="@null" />
+            </FrameLayout>
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/view_margin_common_10">
+                android:id="@+id/base_map_style_header"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="@dimen/one_and_half_padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/back_button">
 
                 <TextView
                     android:id="@+id/base_map_styles_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_marginLeft="@dimen/view_margin_common_10"
-                    android:layout_marginRight="@dimen/view_margin_common_10"
+                    android:layout_marginHorizontal="@dimen/full_padding"
                     android:text="@string/base_map_style_section_header"
-                    android:textColor="@color/medium_gray"/>
+                    android:textColor="?attr/subheaderTextColor"
+                    android:textSize="@dimen/dialog_text_size" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/line_height"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/view_margin_common_15"
                     android:layout_toStartOf="@id/base_map_styles_text_view"
-                    android:background="@color/light_gray"
-                    />
+                    android:background="@color/light_gray" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/line_height"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/view_margin_common_15"
                     android:layout_toEndOf="@id/base_map_styles_text_view"
-                    android:background="@color/light_gray"
-                    />
-
+                    android:background="@color/light_gray" />
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/base_map_styles_recycler_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/view_margin_common_10"/>
+                android:layout_marginTop="@dimen/one_and_half_padding"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/base_map_style_header" />
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/view_margin_common_10">
+                android:id="@+id/map_details_header"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="@dimen/one_and_half_padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/base_map_styles_recycler_list">
 
                 <TextView
                     android:id="@+id/map_details_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_marginLeft="@dimen/view_margin_common_10"
-                    android:layout_marginRight="@dimen/view_margin_common_10"
+                    android:layout_marginHorizontal="@dimen/full_padding"
                     android:text="@string/map_details_section_header"
-                    android:textColor="@color/medium_gray" />
+                    android:textColor="?attr/subheaderTextColor"
+                    android:textSize="@dimen/dialog_text_size" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/line_height"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/view_margin_common_15"
                     android:layout_toStartOf="@id/map_details_text_view"
-                    android:background="@color/light_gray"
-                    />
+                    android:background="@color/light_gray" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/line_height"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/view_margin_common_15"
                     android:layout_toEndOf="@id/map_details_text_view"
-                    android:background="@color/light_gray"
-                    />
-
+                    android:background="@color/light_gray" />
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/map_preferences_recycler_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/view_margin_common_10"/>
+                android:layout_marginTop="@dimen/one_and_half_padding"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/map_details_header" />
 
             <View
+                android:id="@+id/footer"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/line_height"
-                android:layout_marginEnd="@dimen/view_margin_common_15"
-                android:background="@android:color/transparent"
-                />
+                android:layout_height="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/map_preferences_recycler_list" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

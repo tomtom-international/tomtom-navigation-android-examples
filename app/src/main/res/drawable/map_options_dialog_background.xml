@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <solid
-        android:color="@color/white" />
+    <solid android:color="?attr/surfaceColor" />
+
     <corners
         android:topLeftRadius="@dimen/bottom_dialog_radius"
         android:topRightRadius="@dimen/bottom_dialog_radius" />
-    <padding
-        android:left="@dimen/view_padding_common_10"
-        android:right="@dimen/view_padding_common_10"
-        android:top="@dimen/view_padding_common_10"
-        android:bottom="@dimen/view_padding_common_10" />
-    <stroke
-        android:width="@dimen/stroke_width_2"
-        android:color="@color/white" />
 </shape>

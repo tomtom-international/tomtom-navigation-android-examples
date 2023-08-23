@@ -21,6 +21,7 @@
     <dimen name="container_margin">8dp</dimen>
     <dimen name="container_horizontal_margin">16dp</dimen>
     <dimen name="text_size">20sp</dimen>
+    <dimen name="options_header_text_size">24sp</dimen>
     <dimen name="view_margin_common_5">5dp</dimen>
     <dimen name="view_margin_common_10">10dp</dimen>
     <dimen name="view_margin_common_15">15dp</dimen>
@@ -50,8 +51,8 @@
     <dimen name="custom_radio_button_selected_stroke_width">4dp</dimen>
     <dimen name="map_detail_img_card_view_radius">8dp</dimen>
     <dimen name="map_detail_img_card_view_elevation">10dp</dimen>
-    <dimen name="map_detail_title_text_size">16sp</dimen>
-    <dimen name="map_detail_img_card_view_padding">7dp</dimen>
+    <dimen name="map_detail_title_text_size">20sp</dimen>
+    <dimen name="map_detail_img_card_view_padding">8dp</dimen>
     <dimen name="map_detail_img_border_stroke_width">5dp</dimen>
     <dimen name="map_detail_img_border_padding">1dp</dimen>
     <dimen name="view_padding_common_10">10dp</dimen>
@@ -60,7 +61,7 @@
     <dimen name="view_padding_negative_20">-20dp</dimen>
     <dimen name="line_spacing_negative_3">-3sp</dimen>
     <dimen name="line_height">1dp</dimen>
-    <dimen name="bottom_dialog_radius">40dp</dimen>
+    <dimen name="bottom_dialog_radius">16dp</dimen>
     <dimen name="stroke_width_2">2dp</dimen>
     <dimen name="stroke_width_4">4dp</dimen>
     <dimen name="layer_inset_4">4dp</dimen>

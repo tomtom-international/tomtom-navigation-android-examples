@@ -8,21 +8,22 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.tomtom.sdk.examples.BuildConfig
 import com.tomtom.sdk.examples.R
 import com.tomtom.sdk.examples.databinding.ActivityMapOptionsListBinding
 import com.tomtom.sdk.examples.databinding.ActivityMapViewBinding
-import com.tomtom.sdk.examples.maps.mapdetails.BaseMapStyleDataAdapter
-import com.tomtom.sdk.examples.maps.mapdetails.BaseMapStyleItem
-import com.tomtom.sdk.examples.maps.mapdetails.DataLoader
-import com.tomtom.sdk.examples.maps.mapdetails.MapPreference
-import com.tomtom.sdk.examples.maps.mapdetails.MapPreferenceDataAdapter
-import com.tomtom.sdk.examples.maps.mapdetails.MapPreferenceItem
-import com.tomtom.sdk.examples.maps.mapdetails.OnBaseMapStyleRecyclerViewListener
-import com.tomtom.sdk.examples.maps.mapdetails.OnMapPreferenceRecyclerViewListener
+import com.tomtom.sdk.examples.maps.mapdetails.preference.MapPreference
+import com.tomtom.sdk.examples.maps.mapdetails.preference.MapPreferenceAdapter
+import com.tomtom.sdk.examples.maps.mapdetails.preference.MapPreferenceChangeListener
+import com.tomtom.sdk.examples.maps.mapdetails.preference.MapPreferenceType
+import com.tomtom.sdk.examples.maps.mapdetails.style.MapStyle
+import com.tomtom.sdk.examples.maps.mapdetails.style.MapStyleAdapter
+import com.tomtom.sdk.examples.maps.mapdetails.style.MapStyleChangeListener
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
@@ -32,10 +33,7 @@ import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
 import com.tomtom.sdk.map.display.style.LoadingStyleFailure
-import com.tomtom.sdk.map.display.style.StandardStyles
-import com.tomtom.sdk.map.display.style.StyleDescriptor
 import com.tomtom.sdk.map.display.style.StyleLoadingCallback
-import com.tomtom.sdk.map.display.style.StyleMode
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.MapView
 
@@ -44,25 +42,44 @@ import com.tomtom.sdk.map.display.ui.MapView
  */
 class ConfigurableMapActivity : AppCompatActivity() {
 
+    private val viewModel: ConfigurableMapViewModel by lazy {
+        ViewModelProvider(this)[ConfigurableMapViewModel::class.java]
+    }
+
+    private val mapStyleAdapter: MapStyleAdapter by lazy {
+        val mapStyleItemClickListener: MapStyleChangeListener = object : MapStyleChangeListener {
+            override fun onMapStyleChange(mapStyle: MapStyle) {
+                updateMapStyle(mapStyle)
+            }
+        }
+
+        MapStyleAdapter(
+            viewModel.baseMapStyles,
+            viewModel.currentStyleItem,
+            mapStyleItemClickListener,
+        )
+    }
+
+    private val mapPreferencesAdapter: MapPreferenceAdapter by lazy {
+        val mapPreferenceClickListener: MapPreferenceChangeListener =
+            object : MapPreferenceChangeListener {
+                override fun onMapPreferenceChange(mapPreference: MapPreference, isEnabled: Boolean) {
+                    viewModel.changeMapPreference(mapPreference, isEnabled)
+                }
+            }
+
+        MapPreferenceAdapter(
+            viewModel.mapPreferences,
+            mapPreferenceClickListener,
+        )
+    }
+
     private lateinit var binding: ActivityMapViewBinding
-    private lateinit var mapOptionsDialogBinding: ActivityMapOptionsListBinding
     private lateinit var mapView: MapView
     private lateinit var mapFragment: MapFragment
     private lateinit var tomTomMap: TomTomMap
     private lateinit var locationProvider: LocationProvider
     private lateinit var onLocationUpdateListener: OnLocationUpdateListener
-    private lateinit var bottomOptionsDialog: BottomSheetDialog
-    private var baseMapStyleList: MutableList<BaseMapStyleItem>? = null
-    private var currentBaseMapStyle: StyleMode = StyleMode.MAIN
-    private var currentMapStyleDescriptor: StyleDescriptor = StandardStyles.BROWSING
-    private var isMapChanged: Boolean = false
-    private var areMapPreferencesChanged = false
-    private lateinit var mapBaseStyleToUpdate: StyleMode
-    private lateinit var mapStyleDescriptorToUpdate: StyleDescriptor
-
-    private var mapPreferencesList: MutableList<MapPreferenceItem>? = null
-    private val currentMapPreferences = mutableMapOf<String, MapPreference>()
-    private val mapPreferencesToUpdate = mutableMapOf<String, MapPreference>()
 
     /**
      * Navigation SDK is only available upon request.
@@ -85,6 +102,10 @@ class ConfigurableMapActivity : AppCompatActivity() {
 
         binding.mapOptionsImageButton.setOnClickListener {
             showBottomOptionsDialog()
+        }
+
+        viewModel.mapPreferenceChanged.observe(this) { entry ->
+            updateMapPreference(entry.first, entry.second)
         }
     }
 
@@ -184,11 +205,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
         ) {
             showUserLocation()
         } else {
-            Toast.makeText(
-                this,
-                getString(R.string.location_permission_denied),
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, getString(R.string.location_permission_denied), Toast.LENGTH_SHORT).show()
             showDefaultLocation()
         }
     }
@@ -202,133 +219,79 @@ class ConfigurableMapActivity : AppCompatActivity() {
     ) == PackageManager.PERMISSION_GRANTED
 
     private fun showBottomOptionsDialog() {
-        bottomOptionsDialog = BottomSheetDialog(this)
-        mapOptionsDialogBinding = ActivityMapOptionsListBinding.inflate(layoutInflater)
-        bottomOptionsDialog.setContentView(mapOptionsDialogBinding.root)
-        bottomOptionsDialog.show()
-
-        mapOptionsDialogBinding.optionsTitleTextView.setOnClickListener {
-            bottomOptionsDialog.dismiss()
+        val dialogBinding = ActivityMapOptionsListBinding.inflate(layoutInflater)
+        val bottomDialog = BottomSheetDialog(this).apply {
+            setContentView(dialogBinding.root)
+            window?.attributes?.windowAnimations = R.style.BottomSheetDialogAnimation
+            show()
         }
 
-        bottomOptionsDialog.setOnDismissListener {
-            if(isMapChanged) {
-                updateMap()
-            }
-            if(areMapPreferencesChanged) {
-                updateMapPreferences()
-            }
-            isMapChanged = false
-            areMapPreferencesChanged = false
+        dialogBinding.backButton.setOnClickListener {
+            bottomDialog.dismiss()
         }
 
-        initBaseMapStyleList()
-        initMapPreferencesList()
-        initCurrentMapPreferences()
-
-        val baseMapStyleRecyclerList: RecyclerView = mapOptionsDialogBinding.baseMapStylesRecyclerList
-        val mapPreferenceRecyclerList: RecyclerView = mapOptionsDialogBinding.mapPreferencesRecyclerList
-
-        setUpRecyclerListForBaseMapStyle(baseMapStyleRecyclerList)
-        setUpRecyclerListForMapPreferences(mapPreferenceRecyclerList)
+        setUpMapStyleRecycler(dialogBinding.baseMapStylesRecyclerList)
+        setUpMapPreferencesRecycler(dialogBinding.mapPreferencesRecyclerList)
     }
 
-    private val listenerBaseMapStyle: OnBaseMapStyleRecyclerViewListener = object : OnBaseMapStyleRecyclerViewListener {
-        override fun onBaseMapStyleItemClick(baseMapStyleItem: BaseMapStyleItem) {
-            if(currentBaseMapStyle != baseMapStyleItem.styleMode || currentMapStyleDescriptor != baseMapStyleItem.styleDescriptor) {
-                mapBaseStyleToUpdate = baseMapStyleItem.styleMode
-                mapStyleDescriptorToUpdate = baseMapStyleItem.styleDescriptor
-                isMapChanged = true
-            } else {
-                isMapChanged = false
-            }
-        }
-    }
-
-    private val listenerMapPreference: OnMapPreferenceRecyclerViewListener = object : OnMapPreferenceRecyclerViewListener {
-        override fun onMapPreferenceItemClick(title: String, mapPreferenceItemMethod: MapPreference) {
-            areMapPreferencesChanged = if(!currentMapPreferences.containsValue(mapPreferenceItemMethod)) {
-                mapPreferencesToUpdate[title] = mapPreferenceItemMethod
-                true
-            } else {
-                if(mapPreferencesToUpdate.containsKey(title)) {
-                    mapPreferencesToUpdate.remove(title)
-                }
-                true
-            }
-        }
-    }
-
-    private fun updateMap() {
-        val onStyleLoadedCallback = object: StyleLoadingCallback {
+    private fun updateMapStyle(mapStyle: MapStyle) {
+        val onStyleLoadedCallback = object : StyleLoadingCallback {
             override fun onSuccess() {
-                currentMapStyleDescriptor = mapStyleDescriptorToUpdate
+                viewModel.changeMapStyle(mapStyle)
             }
 
             override fun onFailure(failure: LoadingStyleFailure) {
+                updateMapStyle(viewModel.currentStyleItem)
+                Toast.makeText(this@ConfigurableMapActivity, "Can't set style", Toast.LENGTH_SHORT).show()
                 Log.w("ConfigurableMapActivity: Could not update map with style descriptor", failure.message)
             }
         }
-        tomTomMap.setStyleMode(mapBaseStyleToUpdate)
-        tomTomMap.loadStyle(mapStyleDescriptorToUpdate, onStyleLoadedCallback)
-        currentBaseMapStyle = mapBaseStyleToUpdate
+        mapStyleAdapter.updateCurrentStyle(mapStyle)
+        tomTomMap.setStyleMode(mapStyle.styleMode)
+        tomTomMap.loadStyle(mapStyle.styleDescriptor, onStyleLoadedCallback)
     }
 
-    private fun updateMapPreferences() {
-        mapPreferencesToUpdate.forEach { (key, value) ->
-            when(value) {
-                MapPreference.SHOW_TRAFFIC_FLOW -> tomTomMap.showTrafficFlow()
-                MapPreference.HIDE_TRAFFIC_FLOW -> tomTomMap.hideTrafficFlow()
-                MapPreference.SHOW_HILL_SHADING -> tomTomMap.hideHillShading()
-                MapPreference.HIDE_HILL_SHADING -> tomTomMap.hideHillShading()
-                MapPreference.SHOW_VEHICLE_RESTRICTIONS -> tomTomMap.showVehicleRestrictions()
-                MapPreference.HIDE_VEHICLE_RESTRICTIONS -> tomTomMap.hideVehicleRestrictions()
-            }
-            currentMapPreferences[key] = value
-        }
+    private fun updateMapPreference(mapPreference: MapPreference, isEnabled: Boolean) {
+        when (mapPreference.preferenceType) {
+            MapPreferenceType.SHOW_TRAFFIC_FLOW ->
+                if (isEnabled) tomTomMap.showTrafficFlow() else tomTomMap.hideTrafficFlow()
 
-        mapPreferencesToUpdate.clear()
-    }
+            MapPreferenceType.SHOW_HILL_SHADING ->
+                if (isEnabled) tomTomMap.showHillShading() else tomTomMap.hideHillShading()
 
-    private fun setUpRecyclerListForBaseMapStyle(baseMapStyleRecyclerList: RecyclerView) {
-        createGridLayout(baseMapStyleRecyclerList, LAYOUT_SPAN_2_RECYCLER_VIEW)
-        baseMapStyleRecyclerList.adapter = BaseMapStyleDataAdapter(baseMapStyleRecyclerList, baseMapStyleList!!, listenerBaseMapStyle, currentBaseMapStyle, currentMapStyleDescriptor)
-    }
+            MapPreferenceType.SHOW_VEHICLE_RESTRICTIONS ->
+                if (isEnabled) tomTomMap.showVehicleRestrictions() else tomTomMap.hideVehicleRestrictions()
 
-    private fun setUpRecyclerListForMapPreferences(mapPreferenceRecyclerList: RecyclerView) {
-        createGridLayout(mapPreferenceRecyclerList, LAYOUT_SPAN_1_RECYCLER_VIEW)
-        mapPreferenceRecyclerList.adapter = MapPreferenceDataAdapter(mapPreferencesList!!, listenerMapPreference, currentMapPreferences)
-    }
+            MapPreferenceType.SHOW_HOUSE_NUMBERS -> toggleHouseNumbers(isEnabled)
 
-    private fun createGridLayout(recyclerList: RecyclerView, layoutSpanCount: Int) {
-        val gridLayoutManager = GridLayoutManager(this, layoutSpanCount)
-        recyclerList.layoutManager = gridLayoutManager
-    }
-
-    private fun initBaseMapStyleList() {
-        if(baseMapStyleList == null) {
-            baseMapStyleList = DataLoader.initBaseMapStyleList()
-        }
-    }
-
-    private fun initMapPreferencesList() {
-        if(mapPreferencesList == null)
-            mapPreferencesList = DataLoader.initMapPreferencesList()
-    }
-
-    private fun initCurrentMapPreferences() {
-        if(currentMapPreferences.isEmpty()) {
-            for (item in mapPreferencesList!!) {
-                currentMapPreferences[item.title] = item.methodHide
+            MapPreferenceType.SHOW_LANE_HIGHLIGHTING -> {
+                //TODO("add show lane highlighting")
             }
         }
+
+        mapPreferencesAdapter.updatePreference(mapPreference, isEnabled)
+    }
+
+    private fun toggleHouseNumbers(enabled: Boolean) {
+        tomTomMap.layers.filter { it.metadata.contains(HOUSE_NUMBERS_LAYER_ID) }
+            .forEach { if (enabled) it.show() else it.hide() }
+    }
+
+    private fun setUpMapStyleRecycler(baseMapStyleRecyclerList: RecyclerView) {
+        baseMapStyleRecyclerList.layoutManager = GridLayoutManager(this, LAYOUT_SPAN_2_RECYCLER_VIEW)
+        baseMapStyleRecyclerList.adapter = mapStyleAdapter
+    }
+
+    private fun setUpMapPreferencesRecycler(mapPreferenceRecyclerList: RecyclerView) {
+        mapPreferenceRecyclerList.layoutManager = LinearLayoutManager(this)
+        mapPreferenceRecyclerList.adapter = mapPreferencesAdapter
     }
 
     companion object {
         const val AMSTERDAM_GEO_POINT_LATITUDE = 52.379189
         const val AMSTERDAM_GEO_POINT_LONGITUDE = 4.899431
         const val CAMERA_ZOOM_CITY_LEVEL = 8.0
-        const val LAYOUT_SPAN_1_RECYCLER_VIEW = 1
         const val LAYOUT_SPAN_2_RECYCLER_VIEW = 2
+        const val HOUSE_NUMBERS_LAYER_ID = "\"group\":\"address_point_label\""
     }
 }

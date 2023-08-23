@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="surfaceColor" format="color" />
+    <attr name="dialogButtonTint" format="color" />
+    <attr name="headerTextColor" format="color" />
+    <attr name="subheaderTextColor" format="color" />
+    <attr name="dividerColor" format="color" />
+</resources>

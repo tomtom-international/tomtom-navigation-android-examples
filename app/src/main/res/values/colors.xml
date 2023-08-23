@@ -5,6 +5,14 @@
     <color name="tt_color_primary_light">#FF1988CF</color>
     <color name="tt_color_secondary_content_light">#FF727C85</color>
 
+    <color name="tt_colour_card_surface_dark">#FF3C4956</color>
+    <color name="tt_colour_body_light">#FFABAFB3</color>
+    <color name="tt_colour_body_dark">#FFD8DADD</color>
+    <color name="tt_colour_title_light">#FF727C85</color>
+    <color name="tt_colour_title_dark">#FFF4F5F6</color>
+    <color name="tt_colour_input_field_light">#FFF4F5F6</color>
+    <color name="tt_colour_input_field_dark">#FF3C4956</color>
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -14,7 +22,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primary">#2196F3</color>
     <color name="text">#727C85</color>
-    <color name="icon_white">#FFFEFE</color>
     <color name="icon_primary">#1988CF</color>
     <color name="active_color">#2196F3</color>
     <color name="medium_gray">#ABAFB3</color>
