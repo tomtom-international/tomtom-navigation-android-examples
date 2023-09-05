@@ -25,8 +25,8 @@ Add the entries below to the global `~/.gradle/gradle.properties` file at `$HOME
 ```bash
 
 # required for accessing to artifactory
-artifactoryUsername=###
-artifactoryPassword=###
+repositoryUsername=###
+repositoryIdentityToken=###
 
 # required in order to use TomTom's APIs
 tomtomApiKey = YOUR_API_KEY
