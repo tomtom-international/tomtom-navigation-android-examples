@@ -56,4 +56,5 @@ Road Network, 3D Buildings, Traffic Incidents, Hill Shading, House Numbers,  Tra
     <string name="house_numbers">House Numbers</string>
     <string name="lane_highlighting">Lane Highlighting</string>
     <string name="monochrome">Monochrome</string>
+    <string name="can_t_set_style">Can\'t set style</string>
 </resources>

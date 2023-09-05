@@ -222,7 +222,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
 
             override fun onFailure(failure: LoadingStyleFailure) {
                 updateMapStyle(viewModel.currentStyleItem)
-                Toast.makeText(this@ConfigurableMapActivity, "Can't set style", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ConfigurableMapActivity, getString(R.string.can_t_set_style), Toast.LENGTH_SHORT).show()
                 Log.w("ConfigurableMapActivity: Could not update map with style descriptor", failure.message)
             }
         }
