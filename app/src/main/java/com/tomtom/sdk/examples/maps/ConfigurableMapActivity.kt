@@ -245,7 +245,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
             MapPreferenceType.SHOW_HOUSE_NUMBERS -> toggleHouseNumbers(isEnabled)
 
             MapPreferenceType.SHOW_LANE_HIGHLIGHTING -> {
-                //TODO("add show lane highlighting")
+                //disabled for now, as it would make no sense to add lane highlighting without ability simulate a route
             }
         }
 
