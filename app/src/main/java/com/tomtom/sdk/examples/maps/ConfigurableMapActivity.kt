@@ -19,11 +19,9 @@ import com.tomtom.sdk.examples.databinding.ActivityMapOptionsListBinding
 import com.tomtom.sdk.examples.databinding.ActivityMapViewBinding
 import com.tomtom.sdk.examples.maps.mapdetails.preference.MapPreference
 import com.tomtom.sdk.examples.maps.mapdetails.preference.MapPreferenceAdapter
-import com.tomtom.sdk.examples.maps.mapdetails.preference.MapPreferenceChangeListener
 import com.tomtom.sdk.examples.maps.mapdetails.preference.MapPreferenceType
 import com.tomtom.sdk.examples.maps.mapdetails.style.MapStyle
 import com.tomtom.sdk.examples.maps.mapdetails.style.MapStyleAdapter
-import com.tomtom.sdk.examples.maps.mapdetails.style.MapStyleChangeListener
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
@@ -47,31 +45,13 @@ class ConfigurableMapActivity : AppCompatActivity() {
     }
 
     private val mapStyleAdapter: MapStyleAdapter by lazy {
-        val mapStyleItemClickListener: MapStyleChangeListener = object : MapStyleChangeListener {
-            override fun onMapStyleChange(mapStyle: MapStyle) {
-                updateMapStyle(mapStyle)
-            }
-        }
-
-        MapStyleAdapter(
-            viewModel.baseMapStyles,
-            viewModel.currentStyleItem,
-            mapStyleItemClickListener,
-        )
+        MapStyleAdapter(viewModel.baseMapStyles, viewModel.currentStyleItem) { mapStyle -> updateMapStyle(mapStyle) }
     }
 
     private val mapPreferencesAdapter: MapPreferenceAdapter by lazy {
-        val mapPreferenceClickListener: MapPreferenceChangeListener =
-            object : MapPreferenceChangeListener {
-                override fun onMapPreferenceChange(mapPreference: MapPreference, isEnabled: Boolean) {
-                    viewModel.changeMapPreference(mapPreference, isEnabled)
-                }
-            }
-
-        MapPreferenceAdapter(
-            viewModel.mapPreferences,
-            mapPreferenceClickListener,
-        )
+        MapPreferenceAdapter(viewModel.mapPreferences) { mapPreference, isEnabled ->
+            viewModel.changeMapPreference(mapPreference, isEnabled)
+        }
     }
 
     private lateinit var binding: ActivityMapViewBinding
