@@ -5,12 +5,13 @@ plugins {
 apply from: '../dependencies.gradle'
 
 android {
-    compileSdk 32
+    namespace = "com.tomtom.sdk.examples"
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.tomtom.sdk.examples"
         minSdk 24
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -42,6 +43,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 
     buildTypes.each {
@@ -59,7 +61,7 @@ dependencies {
     implementation tomTomSdkLibraries.locationSimulation
     implementation tomTomSdkLibraries.locationMapmatched
     implementation tomTomSdkLibraries.mapsDisplay
-    implementation tomTomSdkLibraries.navigation
+    implementation tomTomSdkLibraries.navigationOnline
     implementation tomTomSdkLibraries.navigationUi
     implementation tomTomSdkLibraries.navigationRouteReplannerOnline
     implementation tomTomSdkLibraries.searchOnline

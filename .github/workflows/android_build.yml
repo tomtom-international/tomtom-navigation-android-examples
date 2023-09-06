@@ -12,10 +12,11 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v2
-      - name: SETUP JVM 11
-        uses: actions/setup-java@v1
+      - name: SETUP JVM 17
+        uses: actions/setup-java@v2
         with:
-          java-version: 11
+          distribution: zulu
+          java-version: 17
       - name: Print JVM version
         run: javac -version
       - name: Wrapper permissions
