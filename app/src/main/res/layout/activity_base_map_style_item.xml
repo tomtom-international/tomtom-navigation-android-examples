@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="@dimen/view_margin_common_15">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/view_margin_common_5"
+        app:cardCornerRadius="@dimen/map_detail_img_card_view_radius"
+        android:elevation="@dimen/map_detail_img_card_view_elevation">
+        <ImageView
+            android:id="@+id/card_view_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/base_map_style_item_image_view_description"
+            android:layout_gravity="center"
+            android:padding="@dimen/map_detail_img_card_view_padding"
+            android:cropToPadding="true"
+            android:scaleType="centerCrop"
+            android:background="@drawable/image_border"/>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/text_view_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/view_margin_common_5"
+        android:gravity="center"
+        android:textSize="@dimen/map_detail_title_text_size"/>
+
+</LinearLayout>

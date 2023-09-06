@@ -22,7 +22,7 @@ class NavigationTest {
     @Test
     fun test_on_map_display_click_is_navigated_to_map_examples_view() {
         ActivityScenario.launch(MainMenu::class.java).use {
-            Espresso.onView(ViewMatchers.withId(R.id.button7))
+            Espresso.onView(ViewMatchers.withId(R.id.main_menu_navigation_map_display))
                 .perform(ViewActions.scrollTo(), ViewActions.click())
             Espresso.onView(ViewMatchers.withId(R.id.map_examples))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))

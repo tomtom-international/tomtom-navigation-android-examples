@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/configurable_map_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".maps.ConfigurableMapActivity"
-    >
+    tools:context=".maps.ConfigurableMapActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -23,9 +23,21 @@
             android:layout_margin="@dimen/view_margin_common_20"
             android:layout_gravity="end|start"
             android:background="@drawable/circle"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/tt_color_white"
             android:src="@drawable/ic_tomtom_arrow_left"
             android:contentDescription="@string/go_back"/>
+
+        <ImageButton
+            android:id="@+id/map_options_image_button"
+            android:layout_width="@dimen/btn_circular_size"
+            android:layout_height="@dimen/btn_circular_size"
+            android:layout_margin="@dimen/view_margin_common_20"
+            android:layout_gravity="top|end"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/icon_primary"
+            app:tint="@color/tt_color_white"
+            android:src="@drawable/ic_tomtom_line_preferences_32"
+            android:contentDescription="@string/map_options"/>
 
     </FrameLayout>
 

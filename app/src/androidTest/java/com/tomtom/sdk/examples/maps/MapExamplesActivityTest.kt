@@ -6,7 +6,12 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.hasBackground
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.tomtom.sdk.examples.R
 import com.tomtom.sdk.examples.utils.matchers.CardViewHasRadiusMatcher.hasCardCornerRadius
@@ -81,7 +86,7 @@ class MapExamplesActivityTest {
 
     @Test
     fun test_on_details_is_visible() {
-        onView(withId(R.id.details)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.details)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 
     @Test

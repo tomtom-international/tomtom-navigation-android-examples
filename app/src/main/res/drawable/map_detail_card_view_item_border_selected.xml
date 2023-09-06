@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent"/>
+            <stroke
+                android:width="@dimen/stroke_width_4"
+                android:color="@color/primary"/>
+            <corners android:radius="@dimen/map_detail_img_card_view_radius"/>
+        </shape>
+    </item>
+    <item
+        android:left="@dimen/layer_inset_4"
+        android:top="@dimen/layer_inset_4"
+        android:right="@dimen/layer_inset_4"
+        android:bottom="@dimen/layer_inset_4">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent"/>
+            <corners android:radius="@dimen/map_detail_img_card_view_radius"/>
+        </shape>
+    </item>
+</layer-list>

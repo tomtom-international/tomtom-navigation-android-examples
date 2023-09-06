@@ -12,5 +12,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="bottomSheetDialogTheme">@style/TomTomBottomSheetDialogTheme</item>
+
+        <!-- Colors -->
+        <item name="surfaceColor">@color/tt_colour_card_surface_dark</item>
+        <item name="dialogButtonTint">@color/tt_colour_body_dark</item>
+        <item name="headerTextColor">@color/tt_colour_title_dark</item>
+        <item name="subheaderTextColor">@color/tt_colour_body_dark</item>
+        <item name="dividerColor">@color/tt_colour_input_field_dark</item>
     </style>
 </resources>

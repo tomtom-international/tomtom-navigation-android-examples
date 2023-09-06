@@ -3,13 +3,25 @@ package com.tomtom.sdk.examples.maps
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.tomtom.sdk.examples.BuildConfig
 import com.tomtom.sdk.examples.R
+import com.tomtom.sdk.examples.databinding.ActivityMapOptionsListBinding
 import com.tomtom.sdk.examples.databinding.ActivityMapViewBinding
+import com.tomtom.sdk.examples.maps.mapdetails.preference.MapPreference
+import com.tomtom.sdk.examples.maps.mapdetails.preference.MapPreferenceAdapter
+import com.tomtom.sdk.examples.maps.mapdetails.preference.MapPreferenceType
+import com.tomtom.sdk.examples.maps.mapdetails.style.MapStyle
+import com.tomtom.sdk.examples.maps.mapdetails.style.MapStyleAdapter
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
@@ -18,6 +30,8 @@ import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
+import com.tomtom.sdk.map.display.style.LoadingStyleFailure
+import com.tomtom.sdk.map.display.style.StyleLoadingCallback
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.MapView
 
@@ -25,6 +39,20 @@ import com.tomtom.sdk.map.display.ui.MapView
  * This activity is responsible for displaying the TomTom Vector Map, both with location and without.
  */
 class ConfigurableMapActivity : AppCompatActivity() {
+
+    private val viewModel: ConfigurableMapViewModel by lazy {
+        ViewModelProvider(this)[ConfigurableMapViewModel::class.java]
+    }
+
+    private val mapStyleAdapter: MapStyleAdapter by lazy {
+        MapStyleAdapter(viewModel.baseMapStyles, viewModel.currentStyleItem) { mapStyle -> updateMapStyle(mapStyle) }
+    }
+
+    private val mapPreferencesAdapter: MapPreferenceAdapter by lazy {
+        MapPreferenceAdapter(viewModel.mapPreferences) { mapPreference, isEnabled ->
+            viewModel.changeMapPreference(mapPreference, isEnabled)
+        }
+    }
 
     private lateinit var binding: ActivityMapViewBinding
     private lateinit var mapView: MapView
@@ -42,8 +70,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapViewBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
         initMap()
 
         /**
@@ -51,6 +78,14 @@ class ConfigurableMapActivity : AppCompatActivity() {
          */
         binding.goBackImageButton.setOnClickListener {
             onBackPressed()
+        }
+
+        binding.mapOptionsImageButton.setOnClickListener {
+            showBottomOptionsDialog()
+        }
+
+        viewModel.mapPreferenceChanged.observe(this) { entry ->
+            updateMapPreference(entry.first, entry.second)
         }
     }
 
@@ -150,11 +185,7 @@ class ConfigurableMapActivity : AppCompatActivity() {
         ) {
             showUserLocation()
         } else {
-            Toast.makeText(
-                this,
-                getString(R.string.location_permission_denied),
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, getString(R.string.location_permission_denied), Toast.LENGTH_SHORT).show()
             showDefaultLocation()
         }
     }
@@ -167,9 +198,80 @@ class ConfigurableMapActivity : AppCompatActivity() {
         Manifest.permission.ACCESS_COARSE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
 
+    private fun showBottomOptionsDialog() {
+        val dialogBinding = ActivityMapOptionsListBinding.inflate(layoutInflater)
+        val bottomDialog = BottomSheetDialog(this).apply {
+            setContentView(dialogBinding.root)
+            window?.attributes?.windowAnimations = R.style.BottomSheetDialogAnimation
+            show()
+        }
+
+        dialogBinding.backButton.setOnClickListener {
+            bottomDialog.dismiss()
+        }
+
+        setUpMapStyleRecycler(dialogBinding.baseMapStylesRecyclerList)
+        setUpMapPreferencesRecycler(dialogBinding.mapPreferencesRecyclerList)
+    }
+
+    private fun updateMapStyle(mapStyle: MapStyle) {
+        val onStyleLoadedCallback = object : StyleLoadingCallback {
+            override fun onSuccess() {
+                viewModel.changeMapStyle(mapStyle)
+            }
+
+            override fun onFailure(failure: LoadingStyleFailure) {
+                updateMapStyle(viewModel.currentStyleItem)
+                Toast.makeText(this@ConfigurableMapActivity, getString(R.string.can_t_set_style), Toast.LENGTH_SHORT).show()
+                Log.w("ConfigurableMapActivity: Could not update map with style descriptor", failure.message)
+            }
+        }
+        mapStyleAdapter.updateCurrentStyle(mapStyle)
+        tomTomMap.setStyleMode(mapStyle.styleMode)
+        tomTomMap.loadStyle(mapStyle.styleDescriptor, onStyleLoadedCallback)
+    }
+
+    private fun updateMapPreference(mapPreference: MapPreference, isEnabled: Boolean) {
+        when (mapPreference.preferenceType) {
+            MapPreferenceType.SHOW_TRAFFIC_FLOW ->
+                if (isEnabled) tomTomMap.showTrafficFlow() else tomTomMap.hideTrafficFlow()
+
+            MapPreferenceType.SHOW_HILL_SHADING ->
+                if (isEnabled) tomTomMap.showHillShading() else tomTomMap.hideHillShading()
+
+            MapPreferenceType.SHOW_VEHICLE_RESTRICTIONS ->
+                if (isEnabled) tomTomMap.showVehicleRestrictions() else tomTomMap.hideVehicleRestrictions()
+
+            MapPreferenceType.SHOW_HOUSE_NUMBERS -> toggleHouseNumbers(isEnabled)
+
+            MapPreferenceType.SHOW_LANE_HIGHLIGHTING -> {
+                //disabled for now, as it would make no sense to add lane highlighting without ability simulate a route
+            }
+        }
+
+        mapPreferencesAdapter.updatePreference(mapPreference, isEnabled)
+    }
+
+    private fun toggleHouseNumbers(enabled: Boolean) {
+        tomTomMap.layers.filter { it.metadata.contains(HOUSE_NUMBERS_LAYER_ID) }
+            .forEach { if (enabled) it.show() else it.hide() }
+    }
+
+    private fun setUpMapStyleRecycler(baseMapStyleRecyclerList: RecyclerView) {
+        baseMapStyleRecyclerList.layoutManager = GridLayoutManager(this, LAYOUT_SPAN_2_RECYCLER_VIEW)
+        baseMapStyleRecyclerList.adapter = mapStyleAdapter
+    }
+
+    private fun setUpMapPreferencesRecycler(mapPreferenceRecyclerList: RecyclerView) {
+        mapPreferenceRecyclerList.layoutManager = LinearLayoutManager(this)
+        mapPreferenceRecyclerList.adapter = mapPreferencesAdapter
+    }
+
     companion object {
         const val AMSTERDAM_GEO_POINT_LATITUDE = 52.379189
         const val AMSTERDAM_GEO_POINT_LONGITUDE = 4.899431
         const val CAMERA_ZOOM_CITY_LEVEL = 8.0
+        const val LAYOUT_SPAN_2_RECYCLER_VIEW = 2
+        const val HOUSE_NUMBERS_LAYER_ID = "\"group\":\"address_point_label\""
     }
 }
