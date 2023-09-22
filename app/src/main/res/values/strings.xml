@@ -13,7 +13,7 @@
     <string name="navigation">Navigation</string>
     <string name="offline_maps">Offline</string>
     <string name="map_demo_activity_title">Map display examples coming soon</string>
-    <string name="navigation_activity_title">Navigation examples coming soon</string>
+    <string name="navigation_activity_title">Starting navigation…</string>
     <string name="offline_demo_activity_title">Offline examples coming soon</string>
     <string name="routing_demo_activity_title">Routing examples coming soon</string>
     <string name="search_demo_activity_title">Search examples coming soon</string>
@@ -57,4 +57,6 @@ Road Network, 3D Buildings, Traffic Incidents, Hill Shading, House Numbers,  Tra
     <string name="lane_highlighting">Lane Highlighting</string>
     <string name="monochrome">Monochrome</string>
     <string name="can_t_set_style">Can\'t set style</string>
+    <string name="distance_along_the_route">Distance along the route: %s</string>
+    <string name="remaining_travel_time">Remaining travel time: %s</string>
 </resources>
