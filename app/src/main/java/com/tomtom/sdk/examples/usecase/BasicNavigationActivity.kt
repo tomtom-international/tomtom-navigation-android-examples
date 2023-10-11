@@ -222,14 +222,22 @@ class BasicNavigationActivity : AppCompatActivity() {
     }
 
     /**
-     * Used to start navigation based on a tapped route.
+     * Checks whether navigation is currently running.
+     */
+    private fun isNavigationRunning(): Boolean = tomTomNavigation.navigationSnapshot != null
+
+
+    /**
+     * Used to start navigation based on a tapped route, if navigation is not already running.
      * - Hide the location button
      * - Then start the navigation using the selected route.
      */
     private val routeClickListener = RouteClickListener {
-        route?.let { route ->
-            mapFragment.currentLocationButton.visibilityPolicy = VisibilityPolicy.Invisible
-            startNavigation(route)
+        if (!isNavigationRunning()) {
+            route?.let { route ->
+                mapFragment.currentLocationButton.visibilityPolicy = VisibilityPolicy.Invisible
+                startNavigation(route)
+            }
         }
     }
 
@@ -404,6 +412,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         navigationFragment.stopNavigation()
         mapFragment.currentLocationButton.visibilityPolicy =
             VisibilityPolicy.InvisibleWhenRecentered
+        tomTomMap.removeCameraChangeListener(cameraChangeListener)
         tomTomMap.cameraTrackingMode = CameraTrackingMode.None
         tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Pointer))
         resetMapPadding()
