@@ -77,7 +77,7 @@ import com.tomtom.sdk.vehicle.Vehicle
  * Navigation is started in a simulation mode, once the user taps on the route.
  * The application will display upcoming manoeuvres, remaining distance, estimated time of arrival (ETA), current speed, and speed limit information.
  *
- * For more details on this example, check out the tutorial: https://developer.tomtom.com/android/navigation/documentation/tutorials/navigation-use-case
+ * For more details on this example, check out the tutorial: https://developer.tomtom.com/android/navigation/documentation/use-cases/build-a-navigation-app
  *
  **/
 
