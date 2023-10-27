@@ -5,4 +5,4 @@
 This example shows how to build a simple application to display a vector map using the TomTom Maps SDK for Android.
 The application displays a vector map and shows the user’s location. 
 
-For further explanations on the example provided can be found in this [tutorial](https://developer.tomtom.com/android/navigation/documentation/tutorials/navigation-use-case).
+For further explanations on the example provided can be found in this [tutorial](https://developer.tomtom.com/android/navigation/documentation/use-cases/build-a-navigation-app).
