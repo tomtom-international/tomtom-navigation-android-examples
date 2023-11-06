@@ -10,14 +10,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {
-            credentials {
-                username = repositoryUsername
-                password = repositoryIdentityToken
-            }
-            url = uri("https://repositories.tomtom.com/artifactory/maven")
-
-        }
     }
 }
 rootProject.name = "TomTom SDK Examples"
