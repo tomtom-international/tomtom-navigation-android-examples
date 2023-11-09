@@ -25,25 +25,25 @@
             android:name=".usecase.BasicNavigationActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.sdk.examples.offline.OfflineExamplesActivity"
+            android:name=".offline.OfflineExamplesActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.sdk.examples.navigation.NavigationExamplesActivity"
+            android:name=".navigation.NavigationExamplesActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.sdk.examples.routing.RoutingExamplesActivity"
+            android:name=".routing.RoutingExamplesActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.sdk.examples.search.SearchExamplesActivity"
+            android:name=".search.SearchExamplesActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.sdk.examples.maps.MapExamplesActivity"
+            android:name=".maps.MapExamplesActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.sdk.examples.maps.ConfigurableMapActivity"
+            android:name=".maps.ConfigurableMapActivity"
             android:exported="false" />
         <activity
-            android:name="com.tomtom.sdk.examples.MainMenu"
+            android:name=".MainMenu"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
