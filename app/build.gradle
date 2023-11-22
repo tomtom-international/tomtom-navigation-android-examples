@@ -1,17 +1,16 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    alias libs.plugins.android.application
+    alias libs.plugins.kotlin.android
 }
-apply from: '../dependencies.gradle'
 
 android {
     namespace = "com.tomtom.sdk.examples"
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.tomtom.sdk.examples"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -37,10 +36,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
     packagingOptions {
-        pickFirst "lib/**/libc++_shared.so"
+        jniLibs {
+            pickFirsts += ['lib/**/libc++_shared.so']
+        }
     }
+
     buildFeatures {
         viewBinding true
         buildConfig true
@@ -56,31 +57,25 @@ android {
 }
 
 dependencies {
-    implementation tomTomSdkLibraries.routePlannerOnline
-    implementation tomTomSdkLibraries.locationAndroid
-    implementation tomTomSdkLibraries.locationSimulation
-    implementation tomTomSdkLibraries.locationMapmatched
-    implementation tomTomSdkLibraries.mapsDisplay
-    implementation tomTomSdkLibraries.navigationOnline
-    implementation tomTomSdkLibraries.navigationUi
-    implementation tomTomSdkLibraries.navigationRouteReplannerOnline
-    implementation tomTomSdkLibraries.searchOnline
-    implementation tomTomSdkLibraries.searchUi
 
-    implementation libraries.androidXCore
-    implementation libraries.androidXCompat
-    implementation libraries.androidXNavigationFragment
-    implementation libraries.androidXNavigationUi
-    implementation libraries.androidXConstraintLayout
-    implementation libraries.material
-    implementation libraries.uiAnimator
-    testImplementation libraries.junit
-    androidTestImplementation libraries.androidXJunit
-    androidTestImplementation libraries.androidXEspresso
+    // TomTom Bundle
+    implementation libs.bundles.tomtomBundle
+
+    // Androidx
+    implementation libs.androidXCore
+    implementation libs.androidXCompat
+    implementation libs.androidXNavigationFragment
+    implementation libs.androidXNavigationUi
+    implementation libs.androidXConstraintLayout
+    implementation libs.material
+    implementation libs.uiAnimator
 
     // Tests
-    testImplementation libraries.truth
-    androidTestImplementation libraries.truth
+    testImplementation libs.junit
+    androidTestImplementation libs.androidXJunit
+    androidTestImplementation libs.androidXEspresso
+    testImplementation libs.truth
+    androidTestImplementation libs.truth
 
-    androidTestUtil libraries.testOrchestrator
+    androidTestUtil libs.testOrchestrator
 }
