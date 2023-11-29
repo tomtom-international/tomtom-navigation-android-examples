@@ -42,11 +42,10 @@ import com.tomtom.sdk.map.display.route.RouteClickListener
 import com.tomtom.sdk.map.display.route.RouteOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.currentlocation.CurrentLocationButton.VisibilityPolicy
+import com.tomtom.sdk.navigation.ActiveRouteChangedListener
 import com.tomtom.sdk.navigation.NavigationFailure
 import com.tomtom.sdk.navigation.ProgressUpdatedListener
 import com.tomtom.sdk.navigation.RoutePlan
-import com.tomtom.sdk.navigation.RouteUpdateReason
-import com.tomtom.sdk.navigation.RouteUpdatedListener
 import com.tomtom.sdk.navigation.TomTomNavigation
 import com.tomtom.sdk.navigation.online.Configuration
 import com.tomtom.sdk.navigation.online.OnlineTomTomNavigationFactory
@@ -68,8 +67,8 @@ import com.tomtom.sdk.routing.options.guidance.InstructionType
 import com.tomtom.sdk.routing.options.guidance.ProgressPoints
 import com.tomtom.sdk.routing.online.OnlineRoutePlanner
 import com.tomtom.sdk.routing.route.Route
-import com.tomtom.sdk.vehicle.DefaultVehicleProvider
 import com.tomtom.sdk.vehicle.Vehicle
+import com.tomtom.sdk.vehicle.VehicleProviderFactory
 
 /**
  * This example shows how to build a simple navigation application using the TomTom Navigation SDK for Android.
@@ -160,7 +159,7 @@ class BasicNavigationActivity : AppCompatActivity() {
             apiKey = apiKey,
             locationProvider = locationProvider,
             routeReplanner = routeReplanner,
-            vehicleProvider = DefaultVehicleProvider(vehicle = Vehicle.Car())
+            vehicleProvider = VehicleProviderFactory.create(vehicle = Vehicle.Car())
         )
         tomTomNavigation = OnlineTomTomNavigationFactory.create(configuration)
     }
@@ -333,7 +332,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         navigationFragment.startNavigation(routePlan)
         navigationFragment.addNavigationListener(navigationListener)
         tomTomNavigation.addProgressUpdatedListener(progressUpdatedListener)
-        tomTomNavigation.addRouteUpdatedListener(routeUpdatedListener)
+        tomTomNavigation.addActiveRouteChangedListener(activeRouteChangedListener)
     }
 
     /**
@@ -380,15 +379,10 @@ class BasicNavigationActivity : AppCompatActivity() {
         tomTomMap.routes.first().progress = it.distanceAlongRoute
     }
 
-    private val routeUpdatedListener by lazy {
-        RouteUpdatedListener { route, updateReason ->
-            if (updateReason != RouteUpdateReason.Refresh &&
-                updateReason != RouteUpdateReason.Increment &&
-                updateReason != RouteUpdateReason.LanguageChange
-            ) {
-                tomTomMap.removeRoutes()
-                drawRoute(route)
-            }
+    private val activeRouteChangedListener by lazy {
+        ActiveRouteChangedListener { route ->
+            tomTomMap.removeRoutes()
+            drawRoute(route)
         }
     }
 
@@ -418,7 +412,7 @@ class BasicNavigationActivity : AppCompatActivity() {
         resetMapPadding()
         navigationFragment.removeNavigationListener(navigationListener)
         tomTomNavigation.removeProgressUpdatedListener(progressUpdatedListener)
-        tomTomNavigation.removeRouteUpdatedListener(routeUpdatedListener)
+        tomTomNavigation.removeActiveRouteChangedListener(activeRouteChangedListener)
         clearMap()
         initLocationProvider()
         enableUserLocation()
