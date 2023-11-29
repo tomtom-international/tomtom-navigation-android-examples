@@ -26,6 +26,6 @@ tomtomApiKey = YOUR_API_KEY
 
 | Project | |
 |:-----|---------|
-| <br> <b>tomtom-navigation-core-examples</b><br><br>A collection of examples showcasing online use cases: <br><br> • Basic driving navigation applicaton<br>• Map Display functionalities <br>• Search functionalities<br>• Routing functionalities<br>• Navigation functionalities<br><br> **[> Browse](core/)**<br><br> | <img src=".github/nav-sdk-phone.png" width="320" alt="Core"></img> |
+| <br> <b>tomtom-navigation-core-examples</b><br><br>A collection of examples showcasing online use cases: <br><br> • Basic driving navigation applicaton<br>• Map Display functionalities <br>• Search functionalities<br>• Routing functionalities<br>• Navigation functionalities<br><br> **[> Browse](tomtom-navigation-core-examples/)**<br><br> | <img src="tomtom-navigation-core-examples/assets/nav-sdk-phone.png" width="320" alt="Core"></img> |
 |  |  |
-|  <br> <b>tomtom-navigation-offline-examples</b><br><br>A collection of examples showcasing offline use cases: <br><br> • Basic driving navigation app working in offline mode<br>• Offline map management<br><br> **[> Browse](offline/)**<br><br> | <img src=".github/nav-sdk-phone.png" width="320" alt="Offline"></img> |
+|  <br> <b>tomtom-navigation-offline-examples</b><br><br>A collection of examples showcasing offline use cases: <br><br> • Basic driving navigation app working in offline mode<br>• Offline map management<br><br> **[> Browse](tomtom-navigation-offline-examples/)**<br><br> | <img src="tomtom-navigation-offline-examples/assets/nav-sdk-phone.png" width="320" alt="Offline"></img> |
