@@ -8,11 +8,14 @@ package com.example.usecase
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.usecase.BuildConfig.TOMTOM_API_KEY
+import com.tomtom.sdk.common.Result
+import com.tomtom.sdk.common.ifFailure
 import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
@@ -35,11 +38,18 @@ import com.tomtom.sdk.map.display.route.RouteOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.currentlocation.CurrentLocationButton.VisibilityPolicy
 import com.tomtom.sdk.navigation.ActiveRouteChangedListener
+import com.tomtom.sdk.navigation.NavigationSnapshot
 import com.tomtom.sdk.navigation.ProgressUpdatedListener
 import com.tomtom.sdk.navigation.RoutePlan
 import com.tomtom.sdk.navigation.TomTomNavigation
 import com.tomtom.sdk.navigation.online.Configuration
 import com.tomtom.sdk.navigation.online.OnlineTomTomNavigationFactory
+import com.tomtom.sdk.navigation.replanning.ReplannedRoute
+import com.tomtom.sdk.navigation.replanning.RouteReplanningEngine
+import com.tomtom.sdk.navigation.replanning.RouteReplanningEngineFactory
+import com.tomtom.sdk.navigation.replanning.RouteReplanningEngineOptions
+import com.tomtom.sdk.navigation.replanning.RouteReplanningFailure
+import com.tomtom.sdk.navigation.replanning.RouteUpdateMode
 import com.tomtom.sdk.navigation.routereplanner.RouteReplanner
 import com.tomtom.sdk.navigation.routereplanner.online.OnlineRouteReplannerFactory
 import com.tomtom.sdk.navigation.ui.NavigationFragment
@@ -60,6 +70,7 @@ import com.tomtom.sdk.routing.online.OnlineRoutePlanner
 import com.tomtom.sdk.routing.route.Route
 import com.tomtom.sdk.vehicle.Vehicle
 import com.tomtom.sdk.vehicle.VehicleProviderFactory
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * This example shows how to build a simple navigation application using the TomTom Navigation SDK for Android.
@@ -146,6 +157,31 @@ class MainActivity : AppCompatActivity() {
             vehicleProvider = VehicleProviderFactory.create(vehicle = Vehicle.Car())
         )
         tomTomNavigation = OnlineTomTomNavigationFactory.create(configuration)
+        class RouteReplanningEngineWrapper(val wrapped : RouteReplanningEngine) :
+            RouteReplanningEngine {
+            override fun shouldReplan(navigationSnapshot: NavigationSnapshot): Boolean {
+                return wrapped.shouldReplan(navigationSnapshot)
+            }
+
+            override fun replan(navigationSnapshot: NavigationSnapshot): Result<List<ReplannedRoute>, RouteReplanningFailure> {
+                return wrapped.replan(navigationSnapshot).also {
+                    it.ifFailure {
+                        Log.e("RouteReplanningEngine", "replan failed because: ${it.message}")
+                    }
+                }
+            }
+
+            override fun close() {
+                wrapped.close()
+            }
+        }
+        val routeReplanningEngineOptions = RouteReplanningEngineOptions(
+            routeUpdateMode = RouteUpdateMode.Enabled,
+            replanRouteInterval = 10.seconds,
+        )
+        val engineWithLogs = RouteReplanningEngineWrapper(
+            RouteReplanningEngineFactory.create( routeReplanner, routeReplanningEngineOptions))
+        tomTomNavigation.navigationEngineRegistry.updateEngines(routeReplanningEngine =  engineWithLogs)
     }
 
     /**
