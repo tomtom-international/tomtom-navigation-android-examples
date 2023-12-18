@@ -1,33 +1,29 @@
+# TomTom Navigation SDK examples
 
-# TomTom Navigation Android SDK Examples
+This repository contains a set of individual Android Studio projects showcasing features for TomTom Navigation SDK for
+Android.
 
-Hello and welcome to this repository with examples showcasing the [TomTom Navigation SDK for Android](https://developer.tomtom.com/android/navigation/documentation/overview/introduction).
+For more information,
+please [read the documentation](https://developer.tomtom.com/android/navigation/documentation/overview/introduction).
 
-<div align="center">
-  <img align="center" src=".github/nav-sdk-phone.png" width="400"/>
-</div>
-
-## Setup
-
-> **Note**  Navigation SDK for Android is only available upon request. [Contact us](https://developer.tomtom.com/tomtom-sdk-for-android/request-access "Contact us") to get access.
+💻 Requirements
+------------
+> **Note**  TomTom Navigation SDK for Android is only available upon
+> request. [Contact us](https://developer.tomtom.com/tomtom-sdk-for-android/request-access "Contact us") to get access.
 
 Once you have obtained access, do the following:
 
-### Android studio
-It is always recommended to have the latest Android Studio installed. This sample code was build using Android Studio Giraffe | 2022.3.1 Patch 2
+* Install the latest Android Studio. This sample code was build using Android Studio Giraffe | 2022.3.1 Patch 2
+* Make sure that the minimum SDK API level is set to at least 21 (Android 5.0 "Lollipop") and that the compile SDK API
+  level is set to 33.
 
-### Android setup
-Make sure that the minimum SDK API level is set to at least 21 (Android 5.0 "Lollipop") and that the compile SDK API level is set to 31.
-
-### Cloning the repository
+## Cloning the repository
 Clone the repository `https://github.com/tomtom-international/tomtom-navigation-android-examples.git`
 
-### Add gradle.properties file
-Add the entries below to the global `~/.gradle/gradle.properties` file at `$HOME/.gradle/gradle.properties`.
+🚀 Examples
+------------
 
-```bash
-
-# required in order to use TomTom's APIs
-tomtomApiKey = YOUR_API_KEY
-```
-
+| Project                                                                                                                                                                                                                                                                                                                                                      |                                                                                                           |                                                                                                                               |                                                                                                                         |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| <b>tomtom-navigation-core-examples</b><br><br>A collection of examples showcasing online use cases, including a basic driving application that displays a map, shows the user’s location, calculates and displays routes, and enables turn-by-turn navigation using built-in UI components.<br><br> **[> Browse](tomtom-navigation-core-examples/)**<br><br> | <img src="tomtom-navigation-core-examples/assets/nav-sdk-online.png" width="320" alt="Core"></img>        | <img src="tomtom-navigation-core-examples/assets/nav-sdk-route-preview.png" width="320" alt="Route Preview"></img>            | <img src="tomtom-navigation-core-examples/assets/nav-sdk-navigation.png" width="320" alt="Navigation"></img>            |
+| <b>tomtom-navigation-offline-examples</b><br><br>A collection of examples showcasing offline use cases, including a basic driving application that operates with a default installed offline map.<br><br> **[> Browse](tomtom-navigation-offline-examples/)**<br><br>                                                                                        | <img src="tomtom-navigation-offline-examples/assets/nav-sdk-offline.png" width="320" alt="Offline"></img> | <img src="tomtom-navigation-offline-examples/assets/nav-sdk-offline-route-preview.png" width="320" alt="Route Preview"></img> | <img src="tomtom-navigation-offline-examples/assets/nav-sdk-offline-navigation.png" width="320" alt="Navigation"></img> |
