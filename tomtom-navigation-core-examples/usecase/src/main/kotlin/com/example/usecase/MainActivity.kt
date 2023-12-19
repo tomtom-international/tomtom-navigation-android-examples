@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationProvider: LocationProvider
     private lateinit var onLocationUpdateListener: OnLocationUpdateListener
     private lateinit var routePlanner: RoutePlanner
+    private lateinit var routeReplanner: RouteReplanner
     private var route: Route? = null
     private lateinit var routePlanningOptions: RoutePlanningOptions
     private lateinit var tomTomNavigation: TomTomNavigation
@@ -137,6 +138,7 @@ class MainActivity : AppCompatActivity() {
     private fun initRouting() {
         routePlanner =
             OnlineRoutePlanner.create(context = this, apiKey = apiKey)
+        routeReplanner = OnlineRouteReplannerFactory.create(routePlanner)
     }
 
     /**
@@ -147,7 +149,7 @@ class MainActivity : AppCompatActivity() {
             context = this,
             apiKey = apiKey,
             locationProvider = locationProvider,
-            routePlanner = routePlanner,
+            routeReplanner = routeReplanner,
             vehicleProvider = VehicleProviderFactory.create(vehicle = Vehicle.Car())
         )
         tomTomNavigation = OnlineTomTomNavigationFactory.create(configuration)
@@ -334,7 +336,7 @@ class MainActivity : AppCompatActivity() {
     private val navigationListener = object : NavigationFragment.NavigationListener {
         override fun onStarted() {
             tomTomMap.addCameraChangeListener(cameraChangeListener)
-            tomTomMap.cameraTrackingMode = CameraTrackingMode.FollowRouteDirection
+            tomTomMap.cameraTrackingMode = CameraTrackingMode.FollowRoute
             tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Chevron))
             setMapMatchedLocationProvider()
             setSimulationLocationProviderToNavigation(route!!)
@@ -456,7 +458,7 @@ class MainActivity : AppCompatActivity() {
     private val cameraChangeListener by lazy {
         CameraChangeListener {
             val cameraTrackingMode = tomTomMap.cameraTrackingMode
-            if (cameraTrackingMode == CameraTrackingMode.FollowRouteDirection) {
+            if (cameraTrackingMode == CameraTrackingMode.FollowRoute) {
                 navigationFragment.navigationView.showSpeedView()
             } else {
                 navigationFragment.navigationView.hideSpeedView()

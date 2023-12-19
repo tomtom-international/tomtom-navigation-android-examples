@@ -315,7 +315,7 @@ class MainActivity : AppCompatActivity() {
 
     private val navigationListener = object : NavigationFragment.NavigationListener {
         override fun onStarted() {
-            tomTomMap.cameraTrackingMode = CameraTrackingMode.FollowRouteDirection
+            tomTomMap.cameraTrackingMode = CameraTrackingMode.FollowRoute
             tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Chevron))
             setMapMatchedLocationProvider()
             setSimulationLocationProviderToNavigation()
