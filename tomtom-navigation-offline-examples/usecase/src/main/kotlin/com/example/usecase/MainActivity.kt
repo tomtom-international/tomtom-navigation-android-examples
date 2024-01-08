@@ -26,11 +26,12 @@ import com.tomtom.quantity.Distance
 import com.tomtom.quantity.Speed
 import com.tomtom.sdk.annotations.InternalTomTomSdkApi
 import com.tomtom.sdk.common.fold
-import com.tomtom.sdk.datamanagement.datastoreupdater.DataStoreUpdater
 import com.tomtom.sdk.datamanagement.nds.NdsStore
 import com.tomtom.sdk.datamanagement.nds.NdsStoreAccessPermit
 import com.tomtom.sdk.datamanagement.nds.NdsStoreConfiguration
-import com.tomtom.sdk.datamanagement.nds.NdsStoreUpdateConfig
+import com.tomtom.sdk.datamanagement.nds.NdsMapContext
+import com.tomtom.sdk.datamanagement.nds.update.NdsStoreUpdateConfig
+import com.tomtom.sdk.datamanagement.nds.update.NdsStoreUpdater
 import com.tomtom.sdk.featuretoggle.FeatureToggleController
 import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
@@ -92,7 +93,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tomTomNavigation: TomTomNavigation
     private lateinit var navigationFragment: NavigationFragment
     private lateinit var ndsStore: NdsStore
-    private lateinit var ndsDataStoreUpdater: DataStoreUpdater
+    private lateinit var ndsStoreUpdater: NdsStoreUpdater
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,18 +125,7 @@ class MainActivity : AppCompatActivity() {
             context = this, NdsStoreConfiguration(
                 ndsStorePath,
                 keystorePath,
-                storeAccessPermit = NdsStoreAccessPermit.MapLicense(NDS_MAP_LICENSE),
-                ndsStoreUpdateConfig = NdsStoreUpdateConfig(
-                    updateStoragePath = path.resolve(RELATIVE_UPDATE_STORAGE_PATH),
-                    persistentStoragePath = path.resolve(RELATIVE_MAP_UPDATE_PERSISTENCE_PATH),
-                    automaticUpdatesConfiguration = NdsStoreUpdateConfig.AutomaticUpdatesConfiguration(
-                        relevantRegionsEnabled = IQ_MAPS_RELEVANT_REGIONS_UPDATE,
-                        relevantRegionsRadius = IQ_MAPS_RELEVANT_REGIONS_RADIUS,
-                        relevantRegionsUpdateInterval = IQ_MAPS_RELEVANT_REGIONS_UPDATE_INTERVAL
-                    ),
-                    updateServerUri = Uri.parse(UPDATE_SERVER_URL),
-                    updateServerApiKey = TOMTOM_API_KEY
-                )
+                storeAccessPermit = NdsStoreAccessPermit.MapLicense(NDS_MAP_LICENSE)
             )
         ).fold({ it }, {
             Toast.makeText(
@@ -144,7 +134,24 @@ class MainActivity : AppCompatActivity() {
             throw IllegalStateException(it.message)
         })
 
-        ndsStore.setUpdatesEnabled(true)
+        ndsStoreUpdater = NdsStoreUpdater.create(context = this, ndsStore = ndsStore, config = NdsStoreUpdateConfig(
+            updateStoragePath = path.resolve(RELATIVE_UPDATE_STORAGE_PATH),
+            persistentStoragePath = path.resolve(RELATIVE_MAP_UPDATE_PERSISTENCE_PATH),
+            automaticUpdatesConfiguration = NdsStoreUpdateConfig.AutomaticUpdatesConfiguration(
+                relevantRegionsEnabled = IQ_MAPS_RELEVANT_REGIONS_UPDATE,
+                relevantRegionsRadius = IQ_MAPS_RELEVANT_REGIONS_RADIUS,
+                relevantRegionsUpdateInterval = IQ_MAPS_RELEVANT_REGIONS_UPDATE_INTERVAL
+            ),
+            updateServerUri = Uri.parse(UPDATE_SERVER_URL),
+            updateServerApiKey = TOMTOM_API_KEY
+        )).fold({ it }, {
+            Toast.makeText(
+                this, it.message, Toast.LENGTH_LONG
+            ).show()
+            throw IllegalStateException(it.message)
+        })
+
+        ndsStoreUpdater.setUpdatesEnabled(true)
     }
 
     private fun initMap() {
@@ -201,16 +208,14 @@ class MainActivity : AppCompatActivity() {
             Configuration(
                 context = this,
                 locationProvider = locationProvider,
-                ndsStore = ndsStore,
+                ndsMapContext = NdsMapContext(
+                    ndsStore = ndsStore,
+                    updater = ndsStoreUpdater
+                ),
                 routePlanner = routePlanner,
                 guidanceEngine = guidanceEngine
             )
         )
-        tomTomNavigation.let {
-            ndsDataStoreUpdater =
-                DataStoreUpdater(ndsStore, locationProvider, it)
-            ndsDataStoreUpdater.start()
-        }
     }
 
     private fun setUpMapListeners() {
@@ -315,7 +320,7 @@ class MainActivity : AppCompatActivity() {
 
     private val navigationListener = object : NavigationFragment.NavigationListener {
         override fun onStarted() {
-            tomTomMap.cameraTrackingMode = CameraTrackingMode.FollowRoute
+            tomTomMap.cameraTrackingMode = CameraTrackingMode.FollowRouteDirection
             tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Chevron))
             setMapMatchedLocationProvider()
             setSimulationLocationProviderToNavigation()
@@ -330,7 +335,6 @@ class MainActivity : AppCompatActivity() {
     private fun setSimulationLocationProviderToNavigation() {
         locationProvider = createSimulationLocationProvider(route!!)
         tomTomNavigation.locationProvider = locationProvider
-        ndsDataStoreUpdater.setLocationProvider(locationProvider)
         locationProvider.enable()
     }
 
@@ -355,7 +359,6 @@ class MainActivity : AppCompatActivity() {
         tomTomNavigation.removeActiveRouteChangedListener(activeRouteChangedListener)
         clearMap()
         initLocationProvider()
-        ndsDataStoreUpdater.setLocationProvider(locationProvider)
         enableUserLocation()
     }
 
@@ -416,15 +419,16 @@ class MainActivity : AppCompatActivity() {
     ) == PackageManager.PERMISSION_GRANTED
 
     private fun setNdsStorePosition(currentPosition: GeoPoint) {
-        ndsStore.updatePosition(currentPosition)
+        ndsStoreUpdater.updatePosition(currentPosition)
     }
 
     override fun onDestroy() {
-        ndsDataStoreUpdater.stop()
         tomTomMap.setLocationProvider(null)
         super.onDestroy()
         tomTomNavigation.close()
         locationProvider.close()
+        ndsStoreUpdater.close()
+        ndsStore.close()
     }
 
     companion object {

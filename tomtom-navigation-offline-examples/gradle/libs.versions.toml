@@ -1,7 +1,7 @@
 [versions]
 androidx_compat = "1.6.1"
 androidx_constraintlayout = "2.1.4"
-tomtom_sdk = "0.42.2"
+tomtom_sdk = "0.43.0"
 default_world_map = "45424"
 
 [libraries]
@@ -16,7 +16,6 @@ routeReplannerOnline = { module = "com.tomtom.sdk.navigation:route-replanner-onl
 androidXCompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx_compat" }
 androidXConstraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx_constraintlayout" }
 dataProviderOffline = { module = "com.tomtom.sdk.maps:data-provider-offline", version.ref = "tomtom_sdk" }
-dataStorageUpdater = { module = "com.tomtom.sdk.datamanagement:data-store-updater", version.ref = "tomtom_sdk" }
 onboardNdsStore = {module = "com.tomtom.sdk.datamanagement:nds-store", version.ref = "tomtom_sdk"}
 featureToggle = { module = "com.tomtom.sdk:feature-toggle", version.ref = "tomtom_sdk" }
 navigationOffline = { module = "com.tomtom.sdk.navigation:navigation-offline", version.ref = "tomtom_sdk" }

@@ -45,7 +45,6 @@ android {
 dependencies {
     // TomTom SDK dependencies.
     implementation(libs.dataProviderOffline)
-    implementation(libs.dataStorageUpdater)
     implementation(libs.onboardNdsStore)
     implementation(libs.featureToggle)
     implementation(libs.locationProvider)
