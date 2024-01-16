@@ -146,9 +146,9 @@ class MainActivity : AppCompatActivity() {
             updateServerApiKey = TOMTOM_API_KEY
         )).fold({ it }, {
             Toast.makeText(
-                this, it.message, Toast.LENGTH_LONG
+                this, it.toString(), Toast.LENGTH_LONG
             ).show()
-            throw IllegalStateException(it.message)
+            throw IllegalStateException(it.toString())
         })
 
         ndsStoreUpdater.setUpdatesEnabled(true)
@@ -207,11 +207,11 @@ class MainActivity : AppCompatActivity() {
         tomTomNavigation = OfflineTomTomNavigationFactory.create(
             Configuration(
                 context = this,
-                locationProvider = locationProvider,
                 ndsMapContext = NdsMapContext(
                     ndsStore = ndsStore,
                     updater = ndsStoreUpdater
                 ),
+                locationProvider = locationProvider,
                 routePlanner = routePlanner,
                 guidanceEngine = guidanceEngine
             )

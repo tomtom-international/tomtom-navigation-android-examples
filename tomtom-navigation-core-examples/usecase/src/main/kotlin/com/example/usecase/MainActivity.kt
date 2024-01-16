@@ -135,8 +135,7 @@ class MainActivity : AppCompatActivity() {
      * You can plan route by initializing by using the online route planner and default route replanner.
      */
     private fun initRouting() {
-        routePlanner =
-            OnlineRoutePlanner.create(context = this, apiKey = apiKey)
+        routePlanner = OnlineRoutePlanner.create(context = this, apiKey = apiKey)
     }
 
     /**
@@ -350,12 +349,15 @@ class MainActivity : AppCompatActivity() {
      * Used to initialize the NavigationFragment to display the UI navigation information,
      */
     private fun initNavigationFragment() {
-        val navigationUiOptions = NavigationUiOptions(
-            keepInBackground = true
-        )
-        navigationFragment = NavigationFragment.newInstance(navigationUiOptions)
+        if (!::navigationFragment.isInitialized) {
+            navigationFragment = NavigationFragment.newInstance(
+                NavigationUiOptions(
+                    keepInBackground = true
+                )
+            )
+        }
         supportFragmentManager.beginTransaction()
-            .add(R.id.navigation_fragment_container, navigationFragment)
+            .replace(R.id.navigation_fragment_container, navigationFragment)
             .commitNow()
     }
 
