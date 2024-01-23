@@ -33,6 +33,7 @@ android {
     }
 
     kotlinOptions {
+        allWarningsAsErrors = true
         jvmTarget = "1.8"
     }
 

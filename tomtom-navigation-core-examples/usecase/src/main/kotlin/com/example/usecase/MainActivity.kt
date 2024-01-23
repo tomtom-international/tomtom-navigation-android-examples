@@ -20,6 +20,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.usecase.BuildConfig.TOMTOM_API_KEY
+import com.tomtom.sdk.datamanagement.navigationtile.NavigationTileStore
+import com.tomtom.sdk.datamanagement.navigationtile.NavigationTileStoreConfiguration
 import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
@@ -57,12 +59,9 @@ import com.tomtom.sdk.routing.RoutePlanningResponse
 import com.tomtom.sdk.routing.RoutingFailure
 import com.tomtom.sdk.routing.options.Itinerary
 import com.tomtom.sdk.routing.options.RoutePlanningOptions
-import com.tomtom.sdk.routing.options.guidance.AnnouncementPoints
 import com.tomtom.sdk.routing.options.guidance.ExtendedSections
 import com.tomtom.sdk.routing.options.guidance.GuidanceOptions
 import com.tomtom.sdk.routing.options.guidance.InstructionPhoneticsType
-import com.tomtom.sdk.routing.options.guidance.InstructionType
-import com.tomtom.sdk.routing.options.guidance.ProgressPoints
 import com.tomtom.sdk.routing.online.OnlineRoutePlanner
 import com.tomtom.sdk.routing.route.Route
 import com.tomtom.sdk.vehicle.Vehicle
@@ -80,6 +79,7 @@ import com.tomtom.sdk.vehicle.VehicleProviderFactory
 class MainActivity : AppCompatActivity() {
     private lateinit var mapFragment: MapFragment
     private lateinit var tomTomMap: TomTomMap
+    private lateinit var navigationTileStore: NavigationTileStore
     private lateinit var locationProvider: LocationProvider
     private lateinit var onLocationUpdateListener: OnLocationUpdateListener
     private lateinit var routePlanner: RoutePlanner
@@ -95,6 +95,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
         initMap()
+        initNavigationTileStore()
         initLocationProvider()
         initRouting()
         initNavigation()
@@ -123,6 +124,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
+     * The SDK provides a [NavigationTileStore] class that is used between different modules to get tile data based
+     * on the online map.
+     */
+    private fun initNavigationTileStore() {
+        navigationTileStore = NavigationTileStore.create(
+            context = this,
+            navigationTileStoreConfig = NavigationTileStoreConfiguration(
+                apiKey = apiKey
+            )
+        )
+    }
+
+    /**
      * The SDK provides a [LocationProvider] interface that is used between different modules to get location updates.
      * This examples uses the [AndroidLocationProvider].
      * Under the hood, the engine uses Android’s system location services.
@@ -144,7 +158,7 @@ class MainActivity : AppCompatActivity() {
     private fun initNavigation() {
         val configuration = Configuration(
             context = this,
-            apiKey = apiKey,
+            navigationTileStore = navigationTileStore,
             locationProvider = locationProvider,
             routePlanner = routePlanner,
             vehicleProvider = VehicleProviderFactory.create(vehicle = Vehicle.Car())
@@ -230,11 +244,8 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Used to calculate a route using the following parameters:
-     * - InstructionType - This indicates that the routing result has to contain guidance instructions.
      * - InstructionPhoneticsType - This specifies whether to include phonetic transcriptions in the response.
-     * - AnnouncementPoints - When this parameter is specified, the instruction in the response includes up to three additional fine-grained announcement points, each with its own location, maneuver type, and distance to the instruction point.
      * - ExtendedSections - This specifies whether to include extended guidance sections in the response, such as sections of type road shield, lane, and speed limit.
-     * - ProgressPoints - This specifies whether to include progress points in the response.
      */
     private fun calculateRouteTo(destination: GeoPoint) {
         val userLocation =
@@ -243,11 +254,8 @@ class MainActivity : AppCompatActivity() {
         routePlanningOptions = RoutePlanningOptions(
             itinerary = itinerary,
             guidanceOptions = GuidanceOptions(
-                instructionType = InstructionType.Text,
                 phoneticsType = InstructionPhoneticsType.Ipa,
-                announcementPoints = AnnouncementPoints.All,
                 extendedSections = ExtendedSections.All,
-                progressPoints = ProgressPoints.All
             ),
             vehicle = Vehicle.Car()
         )
@@ -299,8 +307,7 @@ class MainActivity : AppCompatActivity() {
         val routeInstructions = legs.flatMap { routeLeg -> routeLeg.instructions }
         return routeInstructions.map {
             Instruction(
-                routeOffset = it.routeOffset,
-                combineWithNext = it.combineWithNext
+                routeOffset = it.routeOffset
             )
         }
     }
@@ -499,6 +506,7 @@ class MainActivity : AppCompatActivity() {
         tomTomMap.setLocationProvider(null)
         super.onDestroy()
         tomTomNavigation.close()
+        navigationTileStore.close()
         locationProvider.close()
     }
 

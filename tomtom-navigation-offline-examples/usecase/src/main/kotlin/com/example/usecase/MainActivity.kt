@@ -74,11 +74,9 @@ import com.tomtom.sdk.routing.RoutingFailure
 import com.tomtom.sdk.routing.offline.OfflineRoutePlanner
 import com.tomtom.sdk.routing.options.Itinerary
 import com.tomtom.sdk.routing.options.RoutePlanningOptions
-import com.tomtom.sdk.routing.options.guidance.AnnouncementPoints
 import com.tomtom.sdk.routing.options.guidance.ExtendedSections
 import com.tomtom.sdk.routing.options.guidance.GuidanceOptions
 import com.tomtom.sdk.routing.options.guidance.InstructionPhoneticsType
-import com.tomtom.sdk.routing.options.guidance.InstructionType
 import com.tomtom.sdk.routing.options.guidance.ProgressPoints
 import com.tomtom.sdk.routing.route.Route
 import com.tomtom.sdk.vehicle.Vehicle
@@ -125,7 +123,7 @@ class MainActivity : AppCompatActivity() {
             context = this, NdsStoreConfiguration(
                 ndsStorePath,
                 keystorePath,
-                storeAccessPermit = NdsStoreAccessPermit.MapLicense(NDS_MAP_LICENSE)
+                accessPermit = NdsStoreAccessPermit.MapLicense(NDS_MAP_LICENSE)
             )
         ).fold({ it }, {
             Toast.makeText(
@@ -253,11 +251,8 @@ class MainActivity : AppCompatActivity() {
         val itinerary = Itinerary(origin = userLocation, destination = destination)
         routePlanningOptions = RoutePlanningOptions(
             itinerary = itinerary, guidanceOptions = GuidanceOptions(
-                instructionType = InstructionType.Text,
                 phoneticsType = InstructionPhoneticsType.Ipa,
-                announcementPoints = AnnouncementPoints.All,
                 extendedSections = ExtendedSections.All,
-                progressPoints = ProgressPoints.All
             ), vehicle = Vehicle.Car()
         )
         routePlanner.planRoute(routePlanningOptions, routingCallback)
@@ -293,7 +288,7 @@ class MainActivity : AppCompatActivity() {
         val routeInstructions = legs.flatMap { routeLeg -> routeLeg.instructions }
         return routeInstructions.map {
             Instruction(
-                routeOffset = it.routeOffset, combineWithNext = it.combineWithNext
+                routeOffset = it.routeOffset
             )
         }
     }
