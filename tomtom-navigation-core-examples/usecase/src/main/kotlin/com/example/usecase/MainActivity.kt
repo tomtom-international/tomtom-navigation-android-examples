@@ -11,9 +11,9 @@
 
 package com.example.usecase
 
-
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -415,9 +415,21 @@ class MainActivity : AppCompatActivity() {
      * Set the bottom padding on the map. The padding sets a safe area of the MapView in which user interaction is not received. It is used to uncover the chevron in the navigation panel.
      */
     private fun setMapNavigationPadding() {
-        val paddingBottom = resources.getDimensionPixelOffset(R.dimen.map_padding_bottom)
-        val padding = Padding(0, 0, 0, paddingBottom)
-        tomTomMap.setPadding(padding)
+        // This paddingBottom provides 920 which makes the chevron go off the screen
+        // val paddingBottom = resources.getDimensionPixelOffset(R.dimen.map_padding_bottom)
+        val padding = Padding(0, 0, 0, CHEVRON_PADDING)
+        setPadding(padding)
+    }
+
+    private fun setPadding(padding: Padding) {
+        val scale: Float = resources.displayMetrics.density
+        val paddingInPixels = Padding(
+            top = (padding.top * scale).toInt(),
+            left = (padding.left * scale).toInt(),
+            right = (padding.right * scale).toInt(),
+            bottom = (padding.bottom * scale).toInt()
+        )
+        tomTomMap.setPadding(paddingInPixels)
     }
 
     private fun resetMapPadding() {
@@ -482,24 +494,30 @@ class MainActivity : AppCompatActivity() {
      * Method to verify permissions:
      * - [Manifest.permission.ACCESS_FINE_LOCATION]
      * - [Manifest.permission.ACCESS_COARSE_LOCATION]
+     * - [Manifest.permission.FOREGROUND_SERVICE_LOCATION]
      */
-    private fun areLocationPermissionsGranted() = ContextCompat.checkSelfPermission(
-        this,
-        Manifest.permission.ACCESS_FINE_LOCATION
-    ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-        this,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    ) == PackageManager.PERMISSION_GRANTED
+    private fun areLocationPermissionsGranted(): Boolean {
+        val fineLocationGranted = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
 
-    override fun onDestroy() {
-        tomTomMap.setLocationProvider(null)
-        super.onDestroy()
-        tomTomNavigation.close()
-        navigationTileStore.close()
-        locationProvider.close()
+        val coarseLocationGranted = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val isForegroundServiceLocationRequired =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE
+        val foregroundServiceLocationGranted = if (isForegroundServiceLocationRequired) {
+            ContextCompat.checkSelfPermission(
+                this, Manifest.permission.FOREGROUND_SERVICE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        } else true // Assume granted for lower versions
+
+        return fineLocationGranted && coarseLocationGranted && foregroundServiceLocationGranted
     }
 
     companion object {
         private const val ZOOM_TO_ROUTE_PADDING = 100
+        private const val CHEVRON_PADDING = 263
     }
 }
