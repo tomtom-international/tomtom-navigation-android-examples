@@ -8,16 +8,14 @@
  * not the licensee, you are not authorized to use this software in any manner and should
  * immediately return or destroy it.
  */
-package com.tomtom.sdk.examples.usecase
-
+package com.example.usecase
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -28,9 +26,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.content.ContextCompat
-import com.tomtom.sdk.examples.BuildConfig
-import com.tomtom.sdk.examples.R
-import com.tomtom.sdk.examples.databinding.ActivityBasicNavigationBinding
+import com.example.usecase.databinding.ActivityBasicNavigationBinding
+import com.tomtom.sdk.datamanagement.navigationtile.NavigationTileStore
+import com.tomtom.sdk.datamanagement.navigationtile.NavigationTileStoreConfiguration
 import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
@@ -52,16 +50,12 @@ import com.tomtom.sdk.map.display.route.RouteClickListener
 import com.tomtom.sdk.map.display.route.RouteOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.currentlocation.CurrentLocationButton.VisibilityPolicy
-import com.tomtom.sdk.navigation.NavigationFailure
+import com.tomtom.sdk.navigation.ActiveRouteChangedListener
 import com.tomtom.sdk.navigation.ProgressUpdatedListener
 import com.tomtom.sdk.navigation.RoutePlan
-import com.tomtom.sdk.navigation.RouteUpdateReason
-import com.tomtom.sdk.navigation.RouteUpdatedListener
 import com.tomtom.sdk.navigation.TomTomNavigation
 import com.tomtom.sdk.navigation.online.Configuration
 import com.tomtom.sdk.navigation.online.OnlineTomTomNavigationFactory
-import com.tomtom.sdk.navigation.routereplanner.RouteReplanner
-import com.tomtom.sdk.navigation.routereplanner.online.OnlineRouteReplannerFactory
 import com.tomtom.sdk.navigation.ui.NavigationFragment
 import com.tomtom.sdk.navigation.ui.NavigationUiOptions
 import com.tomtom.sdk.routing.RoutePlanner
@@ -71,15 +65,12 @@ import com.tomtom.sdk.routing.RoutingFailure
 import com.tomtom.sdk.routing.online.OnlineRoutePlanner
 import com.tomtom.sdk.routing.options.Itinerary
 import com.tomtom.sdk.routing.options.RoutePlanningOptions
-import com.tomtom.sdk.routing.options.guidance.AnnouncementPoints
 import com.tomtom.sdk.routing.options.guidance.ExtendedSections
 import com.tomtom.sdk.routing.options.guidance.GuidanceOptions
 import com.tomtom.sdk.routing.options.guidance.InstructionPhoneticsType
-import com.tomtom.sdk.routing.options.guidance.InstructionType
-import com.tomtom.sdk.routing.options.guidance.ProgressPoints
 import com.tomtom.sdk.routing.route.Route
-import com.tomtom.sdk.vehicle.DefaultVehicleProvider
 import com.tomtom.sdk.vehicle.Vehicle
+import com.tomtom.sdk.vehicle.VehicleProviderFactory
 
 /**
  * This example shows how to build a simple navigation application using the TomTom Navigation SDK for Android.
@@ -95,31 +86,16 @@ class BasicNavigationCompose : AppCompatActivity() {
     private lateinit var binding: ActivityBasicNavigationBinding
     private lateinit var mapFragment: MapFragment
     private lateinit var tomTomMap: TomTomMap
+    private lateinit var navigationTileStore: NavigationTileStore
     private lateinit var locationProvider: LocationProvider
     private lateinit var onLocationUpdateListener: OnLocationUpdateListener
     private lateinit var routePlanner: RoutePlanner
-    private lateinit var routeReplanner: RouteReplanner
     private var route: Route? = null
     private lateinit var routePlanningOptions: RoutePlanningOptions
     private lateinit var tomTomNavigation: TomTomNavigation
     private lateinit var navigationFragment: NavigationFragment
 
-    /**
-     * Navigation SDK is only avaialble upon request.
-     * Use the API key provided by TomTom to start using the SDK.
-     */
     private val apiKey = BuildConfig.TOMTOM_API_KEY
-
-
-    override fun onCreateView(
-        parent: View?,
-        name: String,
-        context: Context,
-        attrs: AttributeSet
-    ): View? {
-        return super.onCreateView(parent, name, context, attrs)
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,6 +110,7 @@ class BasicNavigationCompose : AppCompatActivity() {
                                 mapFragment = this.mapContainer.getFragment()
 
                                 initMap()
+                                initNavigationTileStore()
                                 initLocationProvider()
                                 initRouting()
                                 initNavigation()
@@ -167,8 +144,22 @@ class BasicNavigationCompose : AppCompatActivity() {
     }
 
     /**
-     * The SDK provides a LocationProvider interface that is used between different modules to get location updates.
-     * This examples uses the AndroidLocationProvider.
+     * The SDK provides a [NavigationTileStore] class that is used between different modules to get tile data based
+     * on the online map.
+     */
+    private fun initNavigationTileStore() {
+        navigationTileStore = NavigationTileStore.create(
+            context = this,
+            navigationTileStoreConfig = NavigationTileStoreConfiguration(
+                apiKey = apiKey
+            )
+        )
+    }
+
+
+    /**
+     * The SDK provides a [LocationProvider] interface that is used between different modules to get location updates.
+     * This examples uses the [AndroidLocationProvider].
      * Under the hood, the engine uses Android’s system location services.
      */
     private fun initLocationProvider() {
@@ -179,9 +170,7 @@ class BasicNavigationCompose : AppCompatActivity() {
      * You can plan route by initializing by using the online route planner and default route replanner.
      */
     private fun initRouting() {
-        routePlanner =
-            OnlineRoutePlanner.create(context = this, apiKey = apiKey)
-        routeReplanner = OnlineRouteReplannerFactory.create(routePlanner)
+        routePlanner = OnlineRoutePlanner.create(context = this, apiKey = apiKey)
     }
 
     /**
@@ -190,10 +179,10 @@ class BasicNavigationCompose : AppCompatActivity() {
     private fun initNavigation() {
         val configuration = Configuration(
             context = this,
-            apiKey = apiKey,
+            navigationTileStore = navigationTileStore,
             locationProvider = locationProvider,
-            routeReplanner = routeReplanner,
-            vehicleProvider = DefaultVehicleProvider(vehicle = Vehicle.Car())
+            routePlanner = routePlanner,
+            vehicleProvider = VehicleProviderFactory.create(vehicle = Vehicle.Car())
         )
         tomTomNavigation = OnlineTomTomNavigationFactory.create(configuration)
     }
@@ -289,11 +278,8 @@ class BasicNavigationCompose : AppCompatActivity() {
         routePlanningOptions = RoutePlanningOptions(
             itinerary = itinerary,
             guidanceOptions = GuidanceOptions(
-                instructionType = InstructionType.Text,
                 phoneticsType = InstructionPhoneticsType.Ipa,
-                announcementPoints = AnnouncementPoints.All,
                 extendedSections = ExtendedSections.All,
-                progressPoints = ProgressPoints.All
             ),
             vehicle = Vehicle.Car()
         )
@@ -314,6 +300,7 @@ class BasicNavigationCompose : AppCompatActivity() {
         }
 
         override fun onFailure(failure: RoutingFailure) {
+            Log.w(TAG, failure.message)
             Toast.makeText(this@BasicNavigationCompose, failure.message, Toast.LENGTH_SHORT).show()
         }
 
@@ -346,7 +333,6 @@ class BasicNavigationCompose : AppCompatActivity() {
         return routeInstructions.map {
             Instruction(
                 routeOffset = it.routeOffset,
-                combineWithNext = it.combineWithNext
             )
         }
     }
@@ -366,7 +352,7 @@ class BasicNavigationCompose : AppCompatActivity() {
         navigationFragment.startNavigation(routePlan)
         navigationFragment.addNavigationListener(navigationListener)
         tomTomNavigation.addProgressUpdatedListener(progressUpdatedListener)
-        tomTomNavigation.addRouteUpdatedListener(routeUpdatedListener)
+        tomTomNavigation.addActiveRouteChangedListener(activeRouteChangedListener)
     }
 
     /**
@@ -379,16 +365,11 @@ class BasicNavigationCompose : AppCompatActivity() {
     private val navigationListener = object : NavigationFragment.NavigationListener {
         override fun onStarted() {
             tomTomMap.addCameraChangeListener(cameraChangeListener)
-            tomTomMap.cameraTrackingMode = CameraTrackingMode.FollowRoute
+            tomTomMap.cameraTrackingMode = CameraTrackingMode.FollowRouteDirection
             tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Chevron))
             setMapMatchedLocationProvider()
             setSimulationLocationProviderToNavigation(route!!)
             setMapNavigationPadding()
-        }
-
-        override fun onFailed(failure: NavigationFailure) {
-            Toast.makeText(this@BasicNavigationCompose, failure.message, Toast.LENGTH_SHORT).show()
-            stopNavigation()
         }
 
         override fun onStopped() {
@@ -400,12 +381,15 @@ class BasicNavigationCompose : AppCompatActivity() {
      * Used to initialize the NavigationFragment to display the UI navigation information,
      */
     private fun initNavigationFragment() {
-        val navigationUiOptions = NavigationUiOptions(
-            keepInBackground = true
-        )
-        navigationFragment = NavigationFragment.newInstance(navigationUiOptions)
+        if (!::navigationFragment.isInitialized) {
+            navigationFragment = NavigationFragment.newInstance(
+                NavigationUiOptions(
+                    keepInBackground = true
+                )
+            )
+        }
         supportFragmentManager.beginTransaction()
-            .add(R.id.navigation_fragment_container, navigationFragment)
+            .replace(R.id.navigation_fragment_container, navigationFragment)
             .commitNow()
     }
 
@@ -413,15 +397,10 @@ class BasicNavigationCompose : AppCompatActivity() {
         tomTomMap.routes.first().progress = it.distanceAlongRoute
     }
 
-    private val routeUpdatedListener by lazy {
-        RouteUpdatedListener { route, updateReason ->
-            if (updateReason != RouteUpdateReason.Refresh &&
-                updateReason != RouteUpdateReason.Increment &&
-                updateReason != RouteUpdateReason.LanguageChange
-            ) {
-                tomTomMap.removeRoutes()
-                drawRoute(route)
-            }
+    private val activeRouteChangedListener by lazy {
+        ActiveRouteChangedListener { route ->
+            tomTomMap.removeRoutes()
+            drawRoute(route)
         }
     }
 
@@ -451,7 +430,7 @@ class BasicNavigationCompose : AppCompatActivity() {
         resetMapPadding()
         navigationFragment.removeNavigationListener(navigationListener)
         tomTomNavigation.removeProgressUpdatedListener(progressUpdatedListener)
-        tomTomNavigation.removeRouteUpdatedListener(routeUpdatedListener)
+        tomTomNavigation.removeActiveRouteChangedListener(activeRouteChangedListener)
         clearMap()
         initLocationProvider()
         enableUserLocation()
@@ -461,8 +440,9 @@ class BasicNavigationCompose : AppCompatActivity() {
      * Set the bottom padding on the map. The padding sets a safe area of the MapView in which user interaction is not received. It is used to uncover the chevron in the navigation panel.
      */
     private fun setMapNavigationPadding() {
-        val paddingBottom = resources.getDimensionPixelOffset(R.dimen.map_padding_bottom)
-        val padding = Padding(0, 0, 0, paddingBottom)
+        // This paddingBottom provides 920 which makes the chevron go off the screen
+        // val paddingBottom = resources.getDimensionPixelOffset(R.dimen.map_padding_bottom)
+        val padding = Padding(0, 0, 0, CHEVRON_PADDING)
         setPadding(padding)
     }
 
@@ -511,7 +491,7 @@ class BasicNavigationCompose : AppCompatActivity() {
     private val cameraChangeListener by lazy {
         CameraChangeListener {
             val cameraTrackingMode = tomTomMap.cameraTrackingMode
-            if (cameraTrackingMode == CameraTrackingMode.FollowRoute) {
+            if (cameraTrackingMode == CameraTrackingMode.FollowRouteDirection) {
                 navigationFragment.navigationView.showSpeedView()
             } else {
                 navigationFragment.navigationView.hideSpeedView()
@@ -527,30 +507,51 @@ class BasicNavigationCompose : AppCompatActivity() {
         ) {
             showUserLocation()
         } else {
+            Log.w(TAG, getString(R.string.location_permission_denied))
             Toast.makeText(
-                this,
-                getString(R.string.location_permission_denied),
-                Toast.LENGTH_SHORT
+                this, getString(R.string.location_permission_denied), Toast.LENGTH_SHORT
             ).show()
         }
     }
 
-    private fun areLocationPermissionsGranted() = ContextCompat.checkSelfPermission(
-        this,
-        Manifest.permission.ACCESS_FINE_LOCATION
-    ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-        this,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    ) == PackageManager.PERMISSION_GRANTED
+    /**
+     * Method to verify permissions:
+     * - [Manifest.permission.ACCESS_FINE_LOCATION]
+     * - [Manifest.permission.ACCESS_COARSE_LOCATION]
+     * - [Manifest.permission.FOREGROUND_SERVICE_LOCATION]
+     */
+    private fun areLocationPermissionsGranted(): Boolean {
+        val fineLocationGranted = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val coarseLocationGranted = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val isForegroundServiceLocationRequired =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE
+        val foregroundServiceLocationGranted = if (isForegroundServiceLocationRequired) {
+            ContextCompat.checkSelfPermission(
+                this, Manifest.permission.FOREGROUND_SERVICE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        } else true // Assume granted for lower versions
+
+        return fineLocationGranted && coarseLocationGranted && foregroundServiceLocationGranted
+    }
+
 
     override fun onDestroy() {
         tomTomMap.setLocationProvider(null)
         super.onDestroy()
         tomTomNavigation.close()
+        navigationTileStore.close()
         locationProvider.close()
     }
 
     companion object {
+        private const val TAG = "BasicNavigationCompose"
         private const val ZOOM_TO_ROUTE_PADDING = 100
+        private const val CHEVRON_PADDING = 263
     }
 }
