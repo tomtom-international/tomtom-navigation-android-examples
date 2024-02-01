@@ -255,7 +255,7 @@ class MainActivity : AppCompatActivity() {
             itinerary = itinerary,
             guidanceOptions = GuidanceOptions(
                 phoneticsType = InstructionPhoneticsType.Ipa,
-                extendedSections = ExtendedSections.All,
+                extendedSections = ExtendedSections.All
             ),
             vehicle = Vehicle.Car()
         )

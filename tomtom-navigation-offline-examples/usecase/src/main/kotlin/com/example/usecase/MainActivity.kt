@@ -77,7 +77,6 @@ import com.tomtom.sdk.routing.options.RoutePlanningOptions
 import com.tomtom.sdk.routing.options.guidance.ExtendedSections
 import com.tomtom.sdk.routing.options.guidance.GuidanceOptions
 import com.tomtom.sdk.routing.options.guidance.InstructionPhoneticsType
-import com.tomtom.sdk.routing.options.guidance.ProgressPoints
 import com.tomtom.sdk.routing.route.Route
 import com.tomtom.sdk.vehicle.Vehicle
 import kotlin.time.Duration.Companion.minutes
@@ -252,7 +251,7 @@ class MainActivity : AppCompatActivity() {
         routePlanningOptions = RoutePlanningOptions(
             itinerary = itinerary, guidanceOptions = GuidanceOptions(
                 phoneticsType = InstructionPhoneticsType.Ipa,
-                extendedSections = ExtendedSections.All,
+                extendedSections = ExtendedSections.All
             ), vehicle = Vehicle.Car()
         )
         routePlanner.planRoute(routePlanningOptions, routingCallback)
