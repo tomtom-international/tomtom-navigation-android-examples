@@ -81,7 +81,6 @@ import com.tomtom.sdk.vehicle.VehicleProviderFactory
  * For more details on this example, check out the tutorial: https://developer.tomtom.com/android/navigation/documentation/use-cases/build-a-navigation-app
  *
  **/
-
 class BasicNavigationCompose : AppCompatActivity() {
     private lateinit var binding: ActivityBasicNavigationBinding
     private lateinit var mapFragment: MapFragment
