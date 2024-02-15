@@ -1,6 +1,8 @@
 [versions]
 androidx_compat = "1.6.1"
 androidx_constraintlayout = "2.1.4"
+androidx_activityCompose = "1.8.2"
+androidx_composeBom = "2024.02.00"
 tomtom_sdk = "0.47.0"
 
 [libraries]
@@ -14,12 +16,39 @@ routePlannerOnline = { module = "com.tomtom.sdk.routing:route-planner-online", v
 routeReplannerOnline = { module = "com.tomtom.sdk.navigation:route-replanner-online", version.ref = "tomtom_sdk" }
 androidXCompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx_compat" }
 androidXConstraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx_constraintlayout" }
+androidxActivityCompose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx_activityCompose" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx_composeBom" }
+compose-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
+compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class" }
+compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
+compose-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-viewbinding = { group = "androidx.compose.ui", name = "ui-viewbinding" }
 
 [bundles]
-androidCommon = ["androidXCompat", "androidXConstraintLayout"]
+androidCommon = [
+    "androidXCompat",
+    "androidXConstraintLayout",
+    "androidxActivityCompose",
+]
+
+androidCompose = [
+    "compose-graphics",
+    "compose-material-icons-core",
+    "compose-material-icons-extended",
+    "compose-material3",
+    "compose-material3-window-size",
+    "compose-runtime-livedata",
+    "compose-tooling-preview",
+    "compose-ui",
+    "compose-viewbinding",
+]
 
 [plugins]
-androidApplication = { id = "com.android.application", version = "8.2.1" }
-androidLibrary = { id = "com.android.library", version = "8.2.1" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "1.8.22"}
+androidApplication = { id = "com.android.application", version = "8.2.2" }
+androidLibrary = { id = "com.android.library", version = "8.2.2" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "1.9.22"}
 
