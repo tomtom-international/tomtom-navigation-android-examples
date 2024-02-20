@@ -85,12 +85,11 @@ You can see the downloaded map when the downloading process finished as below.
 You can enable the relevant maps region configuration as below.
 
 ```
-val relevantRegionUpdateConfig: NdsStoreUpdateConfig = defaultUpdateConfig.copy(
-    automaticUpdatesConfiguration = defaultUpdateConfig.automaticUpdatesConfiguration.copy(
-        relevantRegionsEnabled = true,
-        relevantRegionsRadius = Distance.kilometers(10.0),
-        relevantRegionsUpdateInterval = 60.minutes
-    )
+val relevantRegionUpdateConfig: NdsStoreUpdaterConfiguration = defaultUpdaterConfiguration.copy(
+     relevantRegions = RelevantRegionsAutomaticUpdatesConfiguration(
+                radius = Distance.kilometers(10.0),
+                updateInterval = 60.minutes
+            )
 )
 ```
 

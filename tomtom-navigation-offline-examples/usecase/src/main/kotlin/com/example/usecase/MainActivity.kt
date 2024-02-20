@@ -30,8 +30,10 @@ import com.tomtom.sdk.datamanagement.nds.NdsStore
 import com.tomtom.sdk.datamanagement.nds.NdsStoreAccessPermit
 import com.tomtom.sdk.datamanagement.nds.NdsStoreConfiguration
 import com.tomtom.sdk.datamanagement.nds.NdsMapContext
-import com.tomtom.sdk.datamanagement.nds.update.NdsStoreUpdateConfig
+import com.tomtom.sdk.datamanagement.nds.update.NdsStoreUpdaterConfiguration
 import com.tomtom.sdk.datamanagement.nds.update.NdsStoreUpdater
+import com.tomtom.sdk.datamanagement.nds.update.automatic.AutomaticNdsStoreUpdaterConfiguration
+import com.tomtom.sdk.datamanagement.nds.update.automatic.AutomaticNdsStoreUpdaterConfiguration.RelevantRegions
 import com.tomtom.sdk.featuretoggle.FeatureToggleController
 import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
@@ -131,17 +133,24 @@ class MainActivity : AppCompatActivity() {
             throw IllegalStateException(it.message)
         })
 
-        ndsStoreUpdater = NdsStoreUpdater.create(context = this, ndsStore = ndsStore, config = NdsStoreUpdateConfig(
-            updateStoragePath = path.resolve(RELATIVE_UPDATE_STORAGE_PATH),
-            persistentStoragePath = path.resolve(RELATIVE_MAP_UPDATE_PERSISTENCE_PATH),
-            automaticUpdatesConfiguration = NdsStoreUpdateConfig.AutomaticUpdatesConfiguration(
-                relevantRegionsEnabled = IQ_MAPS_RELEVANT_REGIONS_UPDATE,
-                relevantRegionsRadius = IQ_MAPS_RELEVANT_REGIONS_RADIUS,
-                relevantRegionsUpdateInterval = IQ_MAPS_RELEVANT_REGIONS_UPDATE_INTERVAL
-            ),
-            updateServerUri = Uri.parse(UPDATE_SERVER_URL),
-            updateServerApiKey = TOMTOM_API_KEY
-        )).fold({ it }, {
+        var relevantRegions : RelevantRegions? = null
+        if (AUTOMATIC_UPDATES_RELEVANT_REGIONS_UPDATE) {
+            relevantRegions = RelevantRegions(
+                radius = AUTOMATIC_UPDATES_RELEVANT_REGIONS_RADIUS,
+                updateInterval = AUTOMATIC_UPDATES_RELEVANT_REGIONS_UPDATE_INTERVAL
+            )
+        }
+        ndsStoreUpdater = NdsStoreUpdater.create(
+            context = this, ndsStore = ndsStore, configuration = NdsStoreUpdaterConfiguration(
+                updateStoragePath = path.resolve(RELATIVE_UPDATE_STORAGE_PATH),
+                persistentStoragePath = path.resolve(RELATIVE_MAP_UPDATE_PERSISTENCE_PATH),
+                automaticUpdates = AutomaticNdsStoreUpdaterConfiguration(
+                    relevantRegions = relevantRegions
+                ),
+                updateServerUri = Uri.parse(UPDATE_SERVER_URL),
+                updateServerApiKey = TOMTOM_API_KEY
+            )
+        ).fold({ it }, {
             Toast.makeText(
                 this, it.toString(), Toast.LENGTH_LONG
             ).show()
@@ -431,9 +440,9 @@ class MainActivity : AppCompatActivity() {
         private const val RELATIVE_UPDATE_STORAGE_PATH = "updates"
         private const val RELATIVE_KEYSTORE_PATH = "keystore.sqlite"
         private const val RELATIVE_MAP_UPDATE_PERSISTENCE_PATH = "mapUpdatePersistence"
-        private const val IQ_MAPS_RELEVANT_REGIONS_UPDATE = true
-        private val IQ_MAPS_RELEVANT_REGIONS_RADIUS = Distance.kilometers(20.0)
-        private val IQ_MAPS_RELEVANT_REGIONS_UPDATE_INTERVAL = 60.minutes
+        private const val AUTOMATIC_UPDATES_RELEVANT_REGIONS_UPDATE = true
+        private val AUTOMATIC_UPDATES_RELEVANT_REGIONS_RADIUS = Distance.kilometers(20.0)
+        private val AUTOMATIC_UPDATES_RELEVANT_REGIONS_UPDATE_INTERVAL = 60.minutes
         private const val UPDATE_SERVER_URL = "https://api.tomtom.com/nds-test/updates/1/fetch"
         private const val SPEED_METERS_PER_SECOND = 30.0
         private const val ZOOM_TO_ROUTE_PADDING = 100
