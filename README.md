@@ -14,7 +14,7 @@ please [read the documentation](https://developer.tomtom.com/android/navigation/
 Once you have obtained access, do the following:
 
 * Install the latest Android Studio. This sample code was build using Android Studio Giraffe | 2022.3.1 Patch 2
-* Make sure that the minimum SDK API level is set to at least 21 (Android 5.0 "Lollipop") and that the compile SDK API
+* Make sure that the minimum SDK API level is set to at least 26 (Android 8.0 "Oreo") and that the compile SDK API
   level is set to 33.
 
 ## Cloning the repository
