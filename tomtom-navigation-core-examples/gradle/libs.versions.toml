@@ -57,7 +57,7 @@ androidCompose = [
 ]
 
 [plugins]
-androidApplication = { id = "com.android.application", version = "8.2.2" }
-androidLibrary = { id = "com.android.library", version = "8.2.2" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "1.9.22"}
+androidApplication = { id = "com.android.application", version = "8.3.1" }
+androidLibrary = { id = "com.android.library", version = "8.3.1" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "1.9.23"}
 
