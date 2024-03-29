@@ -8,18 +8,25 @@
  * not the licensee, you are not authorized to use this software in any manner and should
  * immediately return or destroy it.
  */
-
 package com.example.usecase
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.content.ContextCompat
-import com.example.usecase.BuildConfig.TOMTOM_API_KEY
+import com.example.usecase.databinding.ActivityBasicNavigationBinding
 import com.tomtom.sdk.datamanagement.navigationtile.NavigationTileStore
 import com.tomtom.sdk.datamanagement.navigationtile.NavigationTileStoreConfiguration
 import com.tomtom.sdk.location.GeoLocation
@@ -71,10 +78,11 @@ import com.tomtom.sdk.vehicle.VehicleProviderFactory
  * Navigation is started in a simulation mode, once the user taps on the route.
  * The application will display upcoming manoeuvres, remaining distance, estimated time of arrival (ETA), current speed, and speed limit information.
  *
- * For more details on this example, check out the tutorial: https://developer.tomtom.com/android/navigation/documentation/tutorials/navigation-use-case
+ * For more details on this example, check out the tutorial: https://developer.tomtom.com/android/navigation/documentation/use-cases/build-a-navigation-app
+ *
  **/
-
-class MainActivity : AppCompatActivity() {
+class BasicNavigationCompose : AppCompatActivity() {
+    private lateinit var binding: ActivityBasicNavigationBinding
     private lateinit var mapFragment: MapFragment
     private lateinit var tomTomMap: TomTomMap
     private lateinit var navigationTileStore: NavigationTileStore
@@ -86,34 +94,47 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tomTomNavigation: TomTomNavigation
     private lateinit var navigationFragment: NavigationFragment
 
-    private val apiKey = TOMTOM_API_KEY
+    private val apiKey = BuildConfig.TOMTOM_API_KEY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
-        initMap()
-        initNavigationTileStore()
-        initLocationProvider()
-        initRouting()
-        initNavigation()
+        setContent { // In here, we can call composables!
+            MaterialTheme {
+                AndroidViewBinding(
+                    factory = { inflater: LayoutInflater, viewGroup: ViewGroup, attachToParent: Boolean ->
+                        ActivityBasicNavigationBinding.inflate(inflater, viewGroup, attachToParent)
+                            .apply {
+                                navigationFragment = this.navigationFragmentContainer.getFragment()
+                                mapFragment = this.mapContainer.getFragment()
+
+                                initMap()
+                                initNavigationTileStore()
+                                initLocationProvider()
+                                initRouting()
+                                initNavigation()
+                            }
+                    },
+                    modifier = Modifier.fillMaxSize(),
+                ) { }
+            }
+        }
     }
 
     /**
-     * [MapOptions] is required to initialize the map with [MapFragment.newInstance]
-     * Use [MapFragment.getMapAsync] to render the map.
+     * Displaying a map
      *
-     * Optional: You can further configure the map by setting various properties of the MapOptions object. You can learn more in the Map Configuration guide.
+     * MapOptions is required to initialize the map.
+     * Use MapFragment to display a map.
+     * Optional configuration: You can further configure the map by setting various properties of the MapOptions object. You can learn more in the Map Configuration guide.
      * The last step is adding the MapFragment to the previously created container.
      */
     private fun initMap() {
         val mapOptions = MapOptions(mapKey = apiKey)
         mapFragment = MapFragment.newInstance(mapOptions)
-
         supportFragmentManager.beginTransaction()
             .replace(R.id.map_container, mapFragment)
             .commit()
-
         mapFragment.getMapAsync { map ->
             tomTomMap = map
             enableUserLocation()
@@ -133,6 +154,7 @@ class MainActivity : AppCompatActivity() {
             )
         )
     }
+
 
     /**
      * The SDK provides a [LocationProvider] interface that is used between different modules to get location updates.
@@ -242,8 +264,11 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Used to calculate a route using the following parameters:
+     * - InstructionType - This indicates that the routing result has to contain guidance instructions.
      * - InstructionPhoneticsType - This specifies whether to include phonetic transcriptions in the response.
+     * - AnnouncementPoints - When this parameter is specified, the instruction in the response includes up to three additional fine-grained announcement points, each with its own location, maneuver type, and distance to the instruction point.
      * - ExtendedSections - This specifies whether to include extended guidance sections in the response, such as sections of type road shield, lane, and speed limit.
+     * - ProgressPoints - This specifies whether to include progress points in the response.
      */
     private fun calculateRouteTo(destination: GeoPoint) {
         val userLocation =
@@ -253,7 +278,7 @@ class MainActivity : AppCompatActivity() {
             itinerary = itinerary,
             guidanceOptions = GuidanceOptions(
                 phoneticsType = InstructionPhoneticsType.Ipa,
-                extendedSections = ExtendedSections.All
+                extendedSections = ExtendedSections.All,
             ),
             vehicle = Vehicle.Car()
         )
@@ -274,7 +299,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onFailure(failure: RoutingFailure) {
-            Toast.makeText(this@MainActivity, failure.message, Toast.LENGTH_SHORT).show()
+            Log.w(TAG, failure.message)
+            Toast.makeText(this@BasicNavigationCompose, failure.message, Toast.LENGTH_SHORT).show()
         }
 
         override fun onRoutePlanned(route: Route) = Unit
@@ -305,7 +331,7 @@ class MainActivity : AppCompatActivity() {
         val routeInstructions = legs.flatMap { routeLeg -> routeLeg.instructions }
         return routeInstructions.map {
             Instruction(
-                routeOffset = it.routeOffset
+                routeOffset = it.routeOffset,
             )
         }
     }
@@ -480,10 +506,9 @@ class MainActivity : AppCompatActivity() {
         ) {
             showUserLocation()
         } else {
+            Log.w(TAG, getString(R.string.location_permission_denied))
             Toast.makeText(
-                this,
-                getString(R.string.location_permission_denied),
-                Toast.LENGTH_SHORT
+                this, getString(R.string.location_permission_denied), Toast.LENGTH_SHORT
             ).show()
         }
     }
@@ -514,7 +539,17 @@ class MainActivity : AppCompatActivity() {
         return fineLocationGranted && coarseLocationGranted && foregroundServiceLocationGranted
     }
 
+
+    override fun onDestroy() {
+        tomTomMap.setLocationProvider(null)
+        super.onDestroy()
+        tomTomNavigation.close()
+        navigationTileStore.close()
+        locationProvider.close()
+    }
+
     companion object {
+        private const val TAG = "BasicNavigationCompose"
         private const val ZOOM_TO_ROUTE_PADDING = 100
         private const val CHEVRON_PADDING = 263
     }
