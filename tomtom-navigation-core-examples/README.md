@@ -2,7 +2,7 @@
 
 This project is a sample app to show how to run online modules using the TomTom Navigation SDK on Android.
 
-- [TomTom Navigation SDK for Android](https://developer.tomtom.com/android/navigation/documentation/overview/introduction).
+- [TomTom Navigation SDK for Android](https://developer.tomtom.com/navigation/android/introduction/introduction).
 
 > **Note:** It's not a complete app that includes all TomTom Navigation SDK functionalities and implementations.
 

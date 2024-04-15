@@ -2,7 +2,7 @@
 
 This project is a sample app to show how to run offline modules using the TomTom Navigation SDK on Android.
 
-- [Offline functionality for the TomTom Navigation SDK for Android](https://developer.tomtom.com/android/navigation/documentation/guides/offline/quickstart)
+- [Offline functionality for the TomTom Navigation SDK for Android](https://developer.tomtom.com/navigation/android/guides/offline/quickstart)
 
 > **Note:** It's not a complete app that includes all TomTom Navigation SDK functionalities and implementations.
 
@@ -10,14 +10,12 @@ This project is a sample app to show how to run offline modules using the TomTom
   <img align="center" src="assets/nav-sdk-offline.png" width="400"/>
 </div> <br>
 
-This is a reference implementation for the Offline Navigation Use Case tutorial for TomTom Navigation SDK for
-Android [https://developer.tomtom.com/android/navigation/documentation/tutorials/offline-navigation-use-case](https://developer.tomtom.com/android/navigation/documentation/tutorials/offline-navigation-use-case).
+This is a reference implementation of the Android [Offline Navigation Use Case tutorial](https://developer.tomtom.com/navigation/android/build-a-navigation-app/building-an-offline-navigation-app) for the TomTom Navigation SDK.
 
 It does not include integration of the TPEG traffic module described in the tutorial.
 
 An empty NDS store is included and this is populated using the device location, loading relevant map regions around the
-current location. For more information on offline map updates see the
-guide [https://developer.tomtom.com/android/navigation/documentation/guides/offline/quickstart](https://developer.tomtom.com/android/navigation/documentation/guides/offline/quickstart)
+current location. For more information on offline map updates see the [guide](https://developer.tomtom.com/navigation/android/guides/offline/quickstart).
 
 ## Features
 

@@ -8,4 +8,4 @@ The application displays a map and shows the user’s location. After the user s
 the app plans a route and draws it on the map. Navigation is started once the user taps on the route.
 
 Further explanations on the example provided can be found in
-this [tutorial](https://developer.tomtom.com/android/navigation/documentation/use-cases/build-a-navigation-app).
+this [tutorial](https://developer.tomtom.com/navigation/android/build-a-navigation-app/building-a-navigation-app).

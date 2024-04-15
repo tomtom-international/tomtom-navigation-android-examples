@@ -2,7 +2,7 @@
 androidx_compat = "1.6.1"
 androidx_constraintlayout = "2.1.4"
 default_world_map = "45424"
-tomtom_sdk = "0.50.6"
+tomtom_sdk = "1.0.0"
 
 [libraries]
 dataProviderOffline = { module = "com.tomtom.sdk.maps:data-provider-offline", version.ref = "tomtom_sdk" }
@@ -28,7 +28,7 @@ routeReplannerOnline = { module = "com.tomtom.sdk.navigation:route-replanner-onl
 androidCommon = ["androidXCompat", "androidXConstraintLayout"]
 
 [plugins]
-androidApplication = { id = "com.android.application", version = "8.2.1" }
-androidLibrary = { id = "com.android.library", version = "8.2.1" }
+androidApplication = { id = "com.android.application", version = "8.3.1" }
+androidLibrary = { id = "com.android.library", version = "8.3.1" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "1.8.22"}
 

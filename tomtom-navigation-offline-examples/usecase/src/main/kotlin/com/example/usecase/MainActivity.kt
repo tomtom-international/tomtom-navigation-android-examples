@@ -29,7 +29,6 @@ import com.tomtom.sdk.common.fold
 import com.tomtom.sdk.datamanagement.nds.NdsStore
 import com.tomtom.sdk.datamanagement.nds.NdsStoreAccessPermit
 import com.tomtom.sdk.datamanagement.nds.NdsStoreConfiguration
-import com.tomtom.sdk.datamanagement.nds.NdsMapContext
 import com.tomtom.sdk.datamanagement.nds.update.NdsStoreUpdaterConfiguration
 import com.tomtom.sdk.datamanagement.nds.update.NdsStoreUpdater
 import com.tomtom.sdk.datamanagement.nds.update.automatic.AutomaticNdsStoreUpdaterConfiguration
@@ -213,10 +212,8 @@ class MainActivity : AppCompatActivity() {
         tomTomNavigation = OfflineTomTomNavigationFactory.create(
             Configuration(
                 context = this,
-                ndsMapContext = NdsMapContext(
-                    ndsStore = ndsStore,
-                    updater = ndsStoreUpdater
-                ),
+                ndsStore = ndsStore,
+                ndsMapUpdater = ndsStoreUpdater,
                 locationProvider = locationProvider,
                 routePlanner = routePlanner,
                 guidanceEngine = guidanceEngine
@@ -427,6 +424,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         tomTomMap.setLocationProvider(null)
+        supportFragmentManager.beginTransaction().remove(navigationFragment).commitNowAllowingStateLoss()
         super.onDestroy()
         tomTomNavigation.close()
         locationProvider.close()

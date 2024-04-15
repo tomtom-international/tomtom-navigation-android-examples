@@ -4,7 +4,7 @@ This repository contains a set of individual Android Studio projects showcasing 
 Android.
 
 For more information,
-please [read the documentation](https://developer.tomtom.com/android/navigation/documentation/overview/introduction).
+please [read the documentation](https://developer.tomtom.com/navigation/android/introduction/introduction).
 
 💻 Requirements
 ------------
@@ -15,7 +15,7 @@ Once you have obtained access, do the following:
 
 * Install the latest Android Studio. This sample code was build using Android Studio Giraffe | 2022.3.1 Patch 2
 * Make sure that the minimum SDK API level is set to at least 26 (Android 8.0 "Oreo") and that the compile SDK API
-  level is set to 33.
+  level is set to 34.
 
 ## Cloning the repository
 Clone the repository `https://github.com/tomtom-international/tomtom-navigation-android-examples.git`

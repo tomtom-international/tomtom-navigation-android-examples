@@ -9,4 +9,4 @@ user’s location. After the user selects a destination with a long click, the a
 Navigation is started once the user taps on the route.
 
 For further explanations on the example provided can be found in
-this [tutorial](https://developer.tomtom.com/android/navigation/documentation/tutorials/offline-navigation-use-case).
+this [tutorial](https://developer.tomtom.com/navigation/android/build-a-navigation-app/building-an-offline-navigation-app).
