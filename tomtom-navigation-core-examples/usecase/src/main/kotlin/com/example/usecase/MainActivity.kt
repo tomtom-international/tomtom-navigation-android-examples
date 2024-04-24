@@ -493,7 +493,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         tomTomMap.setLocationProvider(null)
-        supportFragmentManager.beginTransaction().remove(navigationFragment).commitNowAllowingStateLoss()
+        if (::navigationFragment.isInitialized) {
+            supportFragmentManager.beginTransaction().remove(navigationFragment).commitNowAllowingStateLoss()
+        }
         super.onDestroy()
         tomTomNavigation.close()
         navigationTileStore.close()
