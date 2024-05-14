@@ -92,11 +92,29 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
-        initMap()
-        initNavigationTileStore()
+
         initLocationProvider()
+
+        ensureLocationPermissions {
+            // Enables the location provider to start receiving location updates.
+            locationProvider.enable()
+        }
+
+        initMap {
+            /**
+             * The LocationProvider itself only reports location changes.
+             * It does not interact internally with the map or navigation.
+             * Therefore, to show the user’s location on the map you have to set the LocationProvider to the TomTomMap.
+             * The TomTomMap will then use the LocationProvider to show a location marker on the map.
+             */
+            tomTomMap.setLocationProvider(locationProvider)
+
+            showUserLocation()
+            setUpMapListeners()
+        }
+
+        initNavigationTileStore()
         initRouting()
         initNavigation()
     }
@@ -105,10 +123,13 @@ class MainActivity : AppCompatActivity() {
      * [MapOptions] is required to initialize the map with [MapFragment.newInstance]
      * Use [MapFragment.getMapAsync] to render the map.
      *
-     * Optional: You can further configure the map by setting various properties of the MapOptions object. You can learn more in the Map Configuration guide.
-     * The last step is adding the MapFragment to the previously created container.
+     * Optional: You can further configure the map by setting various properties of the MapOptions object.
+     * You can learn more in the Map Configuration guide.
+     * The next step is adding the MapFragment to the previously created container.
+     * The map is ready to use once the [MapFragment.getMapAsync] method is called and the map is fetched,
+     * after which the [onMapReady] callback is triggered.
      */
-    private fun initMap() {
+    private fun initMap(onMapReady: () -> Unit) {
         val mapOptions = MapOptions(mapKey = apiKey)
         mapFragment = MapFragment.newInstance(mapOptions)
 
@@ -118,8 +139,7 @@ class MainActivity : AppCompatActivity() {
 
         mapFragment.getMapAsync { map ->
             tomTomMap = map
-            enableUserLocation()
-            setUpMapListeners()
+            onMapReady()
         }
     }
 
@@ -146,7 +166,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * You can plan route by initializing by using the online route planner and default route replanner.
+     * Plans the route by initializing by using the online route planner and default route replanner.
      */
     private fun initRouting() {
         routePlanner = OnlineRoutePlanner.create(context = this, apiKey = apiKey)
@@ -167,35 +187,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * In order to show the user’s location, the application must use the device’s location services, which requires the appropriate permissions.
+     * The application must use the device’s location services, which requires the appropriate permissions.
      */
-    private fun enableUserLocation() {
+    private fun ensureLocationPermissions(onLocationPermissionsGranted: () -> Unit) {
         if (areLocationPermissionsGranted()) {
-            showUserLocation()
+            onLocationPermissionsGranted()
         } else {
-            requestLocationPermission()
+            requestLocationPermission(onLocationPermissionsGranted)
         }
     }
 
     /**
-     * The LocationProvider itself only reports location changes. It does not interact internally with the map or navigation.
-     * Therefore, to show the user’s location on the map you have to set the LocationProvider to the TomTomMap.
-     * You also have to manually enable the location indicator.
+     * Manually enables the location marker.
      * It can be configured using the LocationMarkerOptions class.
      *
      * Read more about user location on the map in the Showing User Location guide.
      */
     private fun showUserLocation() {
-        locationProvider.enable()
         // zoom to current location at city level
         onLocationUpdateListener = OnLocationUpdateListener { location ->
+            val locationMarker = LocationMarkerOptions(type = LocationMarkerOptions.Type.Pointer)
+            tomTomMap.enableLocationMarker(locationMarker)
             tomTomMap.moveCamera(CameraOptions(location.position, zoom = 8.0))
             locationProvider.removeOnLocationUpdateListener(onLocationUpdateListener)
         }
         locationProvider.addOnLocationUpdateListener(onLocationUpdateListener)
-        tomTomMap.setLocationProvider(locationProvider)
-        val locationMarker = LocationMarkerOptions(type = LocationMarkerOptions.Type.Pointer)
-        tomTomMap.enableLocationMarker(locationMarker)
     }
 
     /**
@@ -263,10 +279,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * The RoutePlanningCallback itself has two methods.
-     * - The first method is triggered if the request fails.
-     * - The second method returns RoutePlanningResponse containing the routing results.
-     * - This example draws the first retrieved route on the map, using the RouteOptions class.
+     * The RoutePlanningCallback itself has three methods.
+     * - The `onFailure()` method is triggered if the request fails.
+     * - The `onSuccess()` method returns RoutePlanningResponse containing the routing results.
+     * - The `onRoutePlanned()` method is triggered when each route is successfully calculated.
+     *
+     * This example draws the first retrieved route on the map.
+     * You can show the overview of the added routes using the TomTomMap.zoomToRoutes(Int) method.
+     * Note that its padding parameter is expressed in pixels.
      */
     private val routePlanningCallback = object : RoutePlanningCallback {
         override fun onSuccess(result: RoutePlanningResponse) {
@@ -284,7 +304,6 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Used to draw route on the map
-     * You can show the overview of the added routes using the TomTomMap.zoomToRoutes(Int) method. Note that its padding parameter is expressed in pixels.
      */
     private fun drawRoute(route: Route) {
         val instructions = route.mapInstructions()
@@ -408,7 +427,8 @@ class MainActivity : AppCompatActivity() {
         tomTomNavigation.removeActiveRouteChangedListener(activeRouteChangedListener)
         clearMap()
         initLocationProvider()
-        enableUserLocation()
+        locationProvider.enable()
+        showUserLocation()
     }
 
     /**
@@ -442,15 +462,6 @@ class MainActivity : AppCompatActivity() {
         tomTomMap.clear()
     }
 
-    private fun requestLocationPermission() {
-        locationPermissionRequest.launch(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-        )
-    }
-
     private val cameraChangeListener by lazy {
         CameraChangeListener {
             val cameraTrackingMode = tomTomMap.cameraTrackingMode
@@ -459,22 +470,6 @@ class MainActivity : AppCompatActivity() {
             } else {
                 navigationFragment.navigationView.hideSpeedView()
             }
-        }
-    }
-
-    private val locationPermissionRequest = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true &&
-            permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
-        ) {
-            showUserLocation()
-        } else {
-            Toast.makeText(
-                this,
-                getString(R.string.location_permission_denied),
-                Toast.LENGTH_SHORT
-            ).show()
         }
     }
 
@@ -490,6 +485,27 @@ class MainActivity : AppCompatActivity() {
         this,
         Manifest.permission.ACCESS_COARSE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
+
+
+    private fun requestLocationPermission(onLocationPermissionsGranted: () -> Unit) =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true
+                && permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            ) {
+                onLocationPermissionsGranted()
+            } else {
+                Toast.makeText(
+                    this, getString(R.string.location_permission_denied), Toast.LENGTH_SHORT
+                ).show()
+            }
+        }.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        )
 
     override fun onDestroy() {
         tomTomMap.setLocationProvider(null)
