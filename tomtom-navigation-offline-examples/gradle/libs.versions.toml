@@ -2,7 +2,7 @@
 androidx_compat = "1.6.1"
 androidx_constraintlayout = "2.1.4"
 default_world_map = "45424"
-tomtom_sdk = "1.3.1"
+tomtom_sdk = "1.4.0"
 
 [libraries]
 dataProviderOffline = { module = "com.tomtom.sdk.maps:data-provider-offline", version.ref = "tomtom_sdk" }
