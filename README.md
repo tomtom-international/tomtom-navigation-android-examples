@@ -13,7 +13,7 @@ please [read the documentation](https://developer.tomtom.com/navigation/android/
 
 Once you have obtained access, do the following:
 
-* Install the latest Android Studio. This sample code was build using Android Studio Giraffe | 2022.3.1 Patch 2
+* Install the latest Android Studio. This sample code was build using Android Studio Jellyfish | 2023.3.1
 * Make sure that the minimum SDK API level is set to at least 26 (Android 8.0 "Oreo") and that the compile SDK API
   level is set to 34.
 
