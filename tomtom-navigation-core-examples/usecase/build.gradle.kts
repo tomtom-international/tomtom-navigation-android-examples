@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         buildConfigField("String", "TOMTOM_API_KEY", "\"${extra["tomtomApiKey"].toString()}\"")
@@ -36,9 +36,14 @@ android {
         jvmTarget = "1.8"
     }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.11"
+    }
+
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        compose = true
     }
 }
 
@@ -55,4 +60,8 @@ dependencies {
 
     // Android dependencies.
     implementation(libs.bundles.androidCommon)
+
+    // Compose
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.androidCompose)
 }
