@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun initNavigationTileStore() {
         navigationTileStore = NavigationTileStore.create(
-            context = this,
+            context = applicationContext,
             navigationTileStoreConfig = NavigationTileStoreConfiguration(
                 apiKey = apiKey
             )
@@ -162,14 +162,14 @@ class MainActivity : AppCompatActivity() {
      * Under the hood, the engine uses Android’s system location services.
      */
     private fun initLocationProvider() {
-        locationProvider = AndroidLocationProvider(context = this)
+        locationProvider = AndroidLocationProvider(context = applicationContext)
     }
 
     /**
      * Plans the route by initializing by using the online route planner and default route replanner.
      */
     private fun initRouting() {
-        routePlanner = OnlineRoutePlanner.create(context = this, apiKey = apiKey)
+        routePlanner = OnlineRoutePlanner.create(context = applicationContext, apiKey = apiKey)
     }
 
     /**
@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun initNavigation() {
         val configuration = Configuration(
-            context = this,
+            context = applicationContext,
             navigationTileStore = navigationTileStore,
             locationProvider = locationProvider,
             routePlanner = routePlanner,
@@ -391,11 +391,9 @@ class MainActivity : AppCompatActivity() {
         tomTomMap.routes.first().progress = it.distanceAlongRoute
     }
 
-    private val activeRouteChangedListener by lazy {
-        ActiveRouteChangedListener { route ->
-            tomTomMap.removeRoutes()
-            drawRoute(route)
-        }
+    private val activeRouteChangedListener = ActiveRouteChangedListener { route ->
+        tomTomMap.removeRoutes()
+        drawRoute(route)
     }
 
     /**
@@ -427,6 +425,7 @@ class MainActivity : AppCompatActivity() {
         tomTomNavigation.removeActiveRouteChangedListener(activeRouteChangedListener)
         clearMap()
         initLocationProvider()
+        tomTomMap.setLocationProvider(locationProvider)
         locationProvider.enable()
         showUserLocation()
     }
@@ -462,14 +461,12 @@ class MainActivity : AppCompatActivity() {
         tomTomMap.clear()
     }
 
-    private val cameraChangeListener by lazy {
-        CameraChangeListener {
-            val cameraTrackingMode = tomTomMap.cameraTrackingMode
-            if (cameraTrackingMode == CameraTrackingMode.FollowRouteDirection) {
-                navigationFragment.navigationView.showSpeedView()
-            } else {
-                navigationFragment.navigationView.hideSpeedView()
-            }
+    private val cameraChangeListener = CameraChangeListener {
+        val cameraTrackingMode = tomTomMap.cameraTrackingMode
+        if (cameraTrackingMode == CameraTrackingMode.FollowRouteDirection) {
+            navigationFragment.navigationView.showSpeedView()
+        } else {
+            navigationFragment.navigationView.hideSpeedView()
         }
     }
 

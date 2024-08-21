@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        FeatureToggleController.initialize(this)
+        FeatureToggleController.initialize(applicationContext)
 
         setContentView(R.layout.activity_main)
         initNdsStore()
@@ -113,14 +113,14 @@ class MainActivity : AppCompatActivity() {
         val keystorePath = path.resolve(RELATIVE_KEYSTORE_PATH)
 
         OnboardMapAssetsExtractor.extractMapAssets(
-            this,
+            applicationContext,
             ndsStorePath,
             keystorePath,
             false
         )
 
         ndsStore = NdsStore.create(
-            context = this, NdsStoreConfiguration(
+            context = applicationContext, NdsStoreConfiguration(
                 ndsStorePath,
                 keystorePath,
                 accessPermit = NdsStoreAccessPermit.MapLicense(NDS_MAP_LICENSE)
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
         ndsStoreUpdater = NdsStoreUpdater.create(
-            context = this, ndsStore = ndsStore, configuration = NdsStoreUpdaterConfiguration(
+            context = applicationContext, ndsStore = ndsStore, configuration = NdsStoreUpdaterConfiguration(
                 updateStoragePath = path.resolve(RELATIVE_UPDATE_STORAGE_PATH),
                 persistentStoragePath = path.resolve(RELATIVE_MAP_UPDATE_PERSISTENCE_PATH),
                 automaticUpdates = AutomaticNdsStoreUpdaterConfiguration(
@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initLocationProvider() {
-        locationProvider = AndroidLocationProvider(context = this)
+        locationProvider = AndroidLocationProvider(context = applicationContext)
 
         val updateListener = object : OnLocationUpdateListener {
             override fun onLocationUpdate(location: GeoLocation) {
@@ -204,14 +204,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun initNavigation() {
         val guidanceEngine = GuidanceEngineFactory.createDynamicGuidanceEngine(
-            this, GuidanceEngineOptions(
+            applicationContext, GuidanceEngineOptions(
                 Distance.ZERO, AnnouncementMode.Comprehensive
             )
         )
 
         tomTomNavigation = OfflineTomTomNavigationFactory.create(
             Configuration(
-                context = this,
+                context = applicationContext,
                 ndsStore = ndsStore,
                 ndsMapUpdater = ndsStoreUpdater,
                 locationProvider = locationProvider,
@@ -342,11 +342,9 @@ class MainActivity : AppCompatActivity() {
         tomTomMap.routes.first().progress = it.distanceAlongRoute
     }
 
-    private val activeRouteChangedListener by lazy {
-        ActiveRouteChangedListener { route ->
-            tomTomMap.removeRoutes()
-            drawRoute(route)
-        }
+    private val activeRouteChangedListener = ActiveRouteChangedListener { route ->
+        tomTomMap.removeRoutes()
+        drawRoute(route)
     }
 
     private fun stopNavigation() {
