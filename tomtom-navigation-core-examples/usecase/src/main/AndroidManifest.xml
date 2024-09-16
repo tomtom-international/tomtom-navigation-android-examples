@@ -13,6 +13,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
     <!-- Always include this permission -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- Include only if your app benefits from precise location access. -->
@@ -20,11 +21,11 @@
 
     <application
         android:label="Navigation App"
-        tools:targetApi="33"
+        tools:targetApi="34"
         android:theme="@style/Theme.App">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".BasicNavigationCompose"
             android:exported="true">
 
             <intent-filter>
