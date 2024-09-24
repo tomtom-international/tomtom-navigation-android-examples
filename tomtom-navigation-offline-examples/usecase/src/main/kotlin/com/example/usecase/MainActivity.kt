@@ -39,7 +39,7 @@ import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
 import com.tomtom.sdk.location.android.AndroidLocationProvider
-import com.tomtom.sdk.location.mapmatched.MapMatchedLocationProvider
+import com.tomtom.sdk.location.mapmatched.MapMatchedLocationProviderFactory
 import com.tomtom.sdk.location.simulation.SimulationLocationProvider
 import com.tomtom.sdk.location.simulation.strategy.InterpolationStrategy
 import com.tomtom.sdk.map.display.MapOptions
@@ -375,7 +375,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setMapMatchedLocationProvider() {
-        val mapMatchedLocationProvider = MapMatchedLocationProvider(tomTomNavigation)
+        val mapMatchedLocationProvider = MapMatchedLocationProviderFactory.create(tomTomNavigation)
         tomTomMap.setLocationProvider(mapMatchedLocationProvider)
         mapMatchedLocationProvider.enable()
     }

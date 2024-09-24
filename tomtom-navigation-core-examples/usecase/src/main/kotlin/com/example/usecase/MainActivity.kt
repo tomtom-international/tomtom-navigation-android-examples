@@ -27,7 +27,7 @@ import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
 import com.tomtom.sdk.location.android.AndroidLocationProvider
-import com.tomtom.sdk.location.mapmatched.MapMatchedLocationProvider
+import com.tomtom.sdk.location.mapmatched.MapMatchedLocationProviderFactory
 import com.tomtom.sdk.location.simulation.SimulationLocationProvider
 import com.tomtom.sdk.location.simulation.strategy.InterpolationStrategy
 import com.tomtom.sdk.map.display.MapOptions
@@ -353,7 +353,7 @@ class MainActivity : AppCompatActivity() {
      * Handle the updates to the navigation states using the NavigationListener
      * - Use CameraChangeListener to observe camera tracking mode and detect if the camera is locked on the chevron. If the user starts to move the camera, it will change and you can adjust the UI to suit.
      * - Use the SimulationLocationProvider for testing purposes.
-     * - Once navigation is started, the camera is set to follow the user position, and the location indicator is changed to a chevron. To match raw location updates to the routes, use MapMatchedLocationProvider and set it to the TomTomMap.
+     * - Once navigation is started, the camera is set to follow the user position, and the location indicator is changed to a chevron. To match raw location updates to the routes, create LocationProvider using MapMatchedLocationProviderFactory and set it to the TomTomMap.
      * - Set the bottom padding on the map. The padding sets a safe area of the MapView in which user interaction is not received. It is used to uncover the chevron in the navigation panel.
      */
     private val navigationListener = object : NavigationFragment.NavigationListener {
@@ -445,10 +445,10 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Once navigation is started, the camera is set to follow the user position, and the location indicator is changed to a chevron.
-     * To match raw location updates to the routes, use MapMatchedLocationProvider and set it to the TomTomMap.
+     * To match raw location updates to the routes, create a LocationProvider instance using MapMatchedLocationProviderFactory and set it to the TomTomMap.
      */
     private fun setMapMatchedLocationProvider() {
-        val mapMatchedLocationProvider = MapMatchedLocationProvider(tomTomNavigation)
+        val mapMatchedLocationProvider = MapMatchedLocationProviderFactory.create(tomTomNavigation)
         tomTomMap.setLocationProvider(mapMatchedLocationProvider)
         mapMatchedLocationProvider.enable()
     }
