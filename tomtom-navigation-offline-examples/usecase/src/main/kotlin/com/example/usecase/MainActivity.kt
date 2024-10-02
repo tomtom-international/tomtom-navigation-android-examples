@@ -34,11 +34,11 @@ import com.tomtom.sdk.datamanagement.nds.update.NdsStoreUpdater
 import com.tomtom.sdk.datamanagement.nds.update.automatic.AutomaticNdsStoreUpdaterConfiguration
 import com.tomtom.sdk.datamanagement.nds.update.automatic.AutomaticNdsStoreUpdaterConfiguration.RelevantRegions
 import com.tomtom.sdk.featuretoggle.FeatureToggleController
+import com.tomtom.sdk.location.DefaultLocationProviderFactory
 import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
-import com.tomtom.sdk.location.android.AndroidLocationProvider
 import com.tomtom.sdk.location.mapmatched.MapMatchedLocationProviderFactory
 import com.tomtom.sdk.location.simulation.SimulationLocationProvider
 import com.tomtom.sdk.location.simulation.strategy.InterpolationStrategy
@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initLocationProvider() {
-        locationProvider = AndroidLocationProvider(context = applicationContext)
+        locationProvider = DefaultLocationProviderFactory.create(context = applicationContext)
 
         val updateListener = object : OnLocationUpdateListener {
             override fun onLocationUpdate(location: GeoLocation) {

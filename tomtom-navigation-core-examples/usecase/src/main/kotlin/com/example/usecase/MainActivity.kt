@@ -22,11 +22,11 @@ import androidx.core.content.ContextCompat
 import com.example.usecase.BuildConfig.TOMTOM_API_KEY
 import com.tomtom.sdk.datamanagement.navigationtile.NavigationTileStore
 import com.tomtom.sdk.datamanagement.navigationtile.NavigationTileStoreConfiguration
+import com.tomtom.sdk.location.DefaultLocationProviderFactory
 import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
-import com.tomtom.sdk.location.android.AndroidLocationProvider
 import com.tomtom.sdk.location.mapmatched.MapMatchedLocationProviderFactory
 import com.tomtom.sdk.location.simulation.SimulationLocationProvider
 import com.tomtom.sdk.location.simulation.strategy.InterpolationStrategy
@@ -158,11 +158,11 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * The SDK provides a [LocationProvider] interface that is used between different modules to get location updates.
-     * This examples uses the [AndroidLocationProvider].
+     * This examples uses the default [LocationProvider].
      * Under the hood, the engine uses Android’s system location services.
      */
     private fun initLocationProvider() {
-        locationProvider = AndroidLocationProvider(context = applicationContext)
+        locationProvider = DefaultLocationProviderFactory.create(context = applicationContext)
     }
 
     /**
