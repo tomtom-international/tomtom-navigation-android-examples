@@ -1,24 +1,27 @@
 [versions]
 androidx_compat = "1.6.1"
 androidx_constraintlayout = "2.1.4"
+tomtom_sdk = "1.19.0"
 default_world_map = "45424"
-tomtom_sdk = "1.18.1"
 
 [libraries]
-dataProviderOffline = { module = "com.tomtom.sdk.maps:data-provider-offline", version.ref = "tomtom_sdk" }
-ndsStore = {module = "com.tomtom.sdk.datamanagement:nds-store", version.ref = "tomtom_sdk"}
-ndsStoreUpdater = {module = "com.tomtom.sdk.datamanagement:nds-store-updater", version.ref = "tomtom_sdk"}
-featureToggle = { module = "com.tomtom.sdk:feature-toggle", version.ref = "tomtom_sdk" }
 locationProvider = { module = "com.tomtom.sdk.location:provider-default", version.ref = "tomtom_sdk" }
 locationSimulation = { module = "com.tomtom.sdk.location:provider-simulation", version.ref = "tomtom_sdk" }
 locationMapmatched = { module = "com.tomtom.sdk.location:provider-map-matched", version.ref = "tomtom_sdk" }
 mapsDisplay = { module = "com.tomtom.sdk.maps:map-display", version.ref = "tomtom_sdk" }
-navigationOffline = { module = "com.tomtom.sdk.navigation:navigation-offline", version.ref = "tomtom_sdk" }
+navigationOnline = { module = "com.tomtom.sdk.navigation:navigation-online", version.ref = "tomtom_sdk" }
 navigationUi = { module = "com.tomtom.sdk.navigation:ui", version.ref = "tomtom_sdk" }
-routeReplannerOffline = { module = "com.tomtom.sdk.routing:route-planner-offline", version.ref = "tomtom_sdk" }
-styleProviderOffline = { module = "com.tomtom.sdk.maps:style-provider-offline", version.ref = "tomtom_sdk" }
+routePlannerOnline = { module = "com.tomtom.sdk.routing:route-planner-online", version.ref = "tomtom_sdk" }
+routeReplannerOnline = { module = "com.tomtom.sdk.navigation:route-replanner-online", version.ref = "tomtom_sdk" }
 androidXCompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx_compat" }
 androidXConstraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx_constraintlayout" }
+dataProviderOffline = { module = "com.tomtom.sdk.maps:data-provider-offline", version.ref = "tomtom_sdk" }
+ndsStore = {module = "com.tomtom.sdk.datamanagement:nds-store", version.ref = "tomtom_sdk"}
+ndsStoreUpdater = {module = "com.tomtom.sdk.datamanagement:nds-store-updater", version.ref = "tomtom_sdk"}
+featureToggle = { module = "com.tomtom.sdk:feature-toggle", version.ref = "tomtom_sdk" }
+navigationOffline = { module = "com.tomtom.sdk.navigation:navigation-offline", version.ref = "tomtom_sdk" }
+routeReplannerOffline = { module = "com.tomtom.sdk.routing:route-planner-offline", version.ref = "tomtom_sdk" }
+styleProviderOffline = { module = "com.tomtom.sdk.maps:style-provider-offline", version.ref = "tomtom_sdk" }
 defaultMap = { module = "com.tomtom.sdk.datamanagement.nds:default-world-map", version.ref = "default_world_map" }
 
 [bundles]
