@@ -6,6 +6,10 @@ This project is a sample app to show how to run online modules using the TomTom 
 
 > **Note:** It's not a complete app that includes all TomTom Navigation SDK functionalities and implementations.
 
+> **Note**  TomTom Navigation SDK for Android is only available upon
+> request. The API key required for this example must be provisioned to access the navigation features.
+> Please reach to your sales contact in TomTom or [Contact us here](https://developer.tomtom.com/tomtom-sdk-for-android/request-access "Contact us") to get started.
+
 <div align="center">
   <img align="center" src="assets/nav-sdk-online.png" width="400"/>
 </div> <br>

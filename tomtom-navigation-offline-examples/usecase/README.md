@@ -1,7 +1,8 @@
 # Offline navigation Use Case for Android
 
-> **Note:** TomTom Navigation SDK for Android is only available upon
-> request. [Contact us](https://developer.tomtom.com/tomtom-sdk-for-android/request-access "Contact us") to get started.
+> **Note**  TomTom Navigation SDK for Android is only available upon
+> request. The API key required for this example must be provisioned to access the navigation features.
+> Please reach to your sales contact in TomTom or [Contact us here](https://developer.tomtom.com/tomtom-sdk-for-android/request-access "Contact us") to get started.
 
 This example shows how to build a simple offline navigation application using the TomTom Navigation SDK for Android.
 The application displays an empty map first, automatically downloads the tiles around the user location and shows the
