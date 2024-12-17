@@ -87,15 +87,18 @@ class MainActivity : AppCompatActivity() {
                 tomTomMap.setLocationProvider(viewModel.mapLocationProvider)
                 showUserLocation()
             } else {
+                setMapNavigationPadding()
                 tomTomMap.setLocationProvider(viewModel.mapMatchedLocationProvider)
             }
             setUpMapListeners()
             viewModel.route.observe(this) {
-                tomTomMap.removeRoutes()
-                drawRoute(it)
+                if (viewModel.isNavigationRunning()) {
+                    tomTomMap.removeRoutes()
+                    drawRoute(it)
+                }
             }
             viewModel.distanceAlongRoute.observe(this) {
-                tomTomMap.routes.first().progress = it
+                tomTomMap.routes.firstOrNull()?.progress = it
             }
         }
 
@@ -326,7 +329,10 @@ class MainActivity : AppCompatActivity() {
      */
     private fun setMapNavigationPadding() {
         val paddingBottom = resources.getDimensionPixelOffset(R.dimen.map_padding_bottom)
-        val padding = Padding(0, 0, 0, paddingBottom)
+        val paddingLeft = resources.getDimensionPixelOffset(R.dimen.map_padding_left)
+        val paddingRight = resources.getDimensionPixelOffset(R.dimen.map_padding_right)
+        val paddingTop = resources.getDimensionPixelOffset(R.dimen.map_padding_top)
+        val padding = Padding(paddingLeft, paddingTop, paddingRight, paddingBottom)
         tomTomMap.setPadding(padding)
     }
 

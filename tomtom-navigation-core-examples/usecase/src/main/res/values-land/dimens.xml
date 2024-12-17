@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ © 2023 TomTom NV. All rights reserved.
+  ~ © 2024 TomTom NV. All rights reserved.
   ~
   ~ This software is the proprietary copyright of TomTom NV and its subsidiaries and may be
   ~ used for internal evaluation purposes or commercial use strictly subject to separate
@@ -11,8 +11,8 @@
   -->
 
 <resources>
-    <dimen name="map_padding_bottom">263dp</dimen>
-    <dimen name="map_padding_left">0dp</dimen>
-    <dimen name="map_padding_right">0dp</dimen>
+    <dimen name="map_padding_bottom">30dp</dimen>
+    <dimen name="map_padding_left">60dp</dimen>
+    <dimen name="map_padding_right">300dp</dimen>
     <dimen name="map_padding_top">0dp</dimen>
 </resources>
