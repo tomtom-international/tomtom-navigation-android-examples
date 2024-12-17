@@ -13,6 +13,7 @@ import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
+import com.tomtom.sdk.location.mapmatched.MapMatchedLocationProviderFactory
 import com.tomtom.sdk.location.simulation.SimulationLocationProvider
 import com.tomtom.sdk.location.simulation.strategy.InterpolationStrategy
 import com.tomtom.sdk.navigation.ActiveRouteChangedListener
@@ -21,7 +22,6 @@ import com.tomtom.sdk.navigation.RoutePlan
 import com.tomtom.sdk.navigation.TomTomNavigation
 import com.tomtom.sdk.navigation.online.Configuration
 import com.tomtom.sdk.navigation.online.OnlineTomTomNavigationFactory
-import com.tomtom.sdk.navigation.ui.NavigationFragment
 import com.tomtom.sdk.routing.RoutePlanner
 import com.tomtom.sdk.routing.RoutePlanningCallback
 import com.tomtom.sdk.routing.RoutePlanningResponse
@@ -41,21 +41,23 @@ class MainViewModel(private val application: Application): AndroidViewModel(appl
     private val applicationContext = application.applicationContext
     private val apiKey = TOMTOM_API_KEY
 
-    private lateinit var navigationTileStore: NavigationTileStore
-    lateinit var locationProvider: LocationProvider
+    lateinit var mapLocationProvider: LocationProvider
         private set
+    private lateinit var navigationLocationProvider: LocationProvider
+    private var _mapMatchedLocationProvider: LocationProvider? = null
+    val mapMatchedLocationProvider: LocationProvider
+        get() = checkNotNull(_mapMatchedLocationProvider) {
+            "MapMatchedLocationProvider is not initialized"
+        }
+
     private lateinit var routePlanner: RoutePlanner
-    private lateinit var routePlanningOptions: RoutePlanningOptions
+    private lateinit var navigationTileStore: NavigationTileStore
     lateinit var tomTomNavigation: TomTomNavigation
         private set
-    private lateinit var navigationFragment: NavigationFragment
 
     private val _location = MutableLiveData<GeoLocation>()
     val location: LiveData<GeoLocation>
         get() = _location
-    private val _routePlan = MutableLiveData<RoutePlan>()
-    val routePlan: LiveData<RoutePlan>
-        get() = _routePlan
     private val _routingFailure = MutableLiveData<RoutingFailure>()
     val routingFailure: LiveData<RoutingFailure>
         get() = _routingFailure
@@ -64,12 +66,18 @@ class MainViewModel(private val application: Application): AndroidViewModel(appl
     val distanceAlongRoute: LiveData<Distance>
         get() = _distanceAlongRoute
 
-    private val _activeRoute = MutableLiveData<Route>()
-    val activeRoute: LiveData<Route>
-        get() = _activeRoute
+    private val _route = MutableLiveData<Route>()
+    val route: LiveData<Route>
+        get() = _route
+
+    private var _routePlanningOptions: RoutePlanningOptions? = null
+    val routePlanningOptions: RoutePlanningOptions
+        get() = checkNotNull(_routePlanningOptions) {
+            "RoutePlanningOptions is not initialized"
+        }
 
     init {
-        initLocationProvider()
+        initMapLocationProvider()
         initNavigationTileStore()
         initRouting()
         initNavigation()
@@ -93,8 +101,8 @@ class MainViewModel(private val application: Application): AndroidViewModel(appl
      * This examples uses the default [LocationProvider].
      * Under the hood, the engine uses Android’s system location services.
      */
-    fun initLocationProvider() {
-        locationProvider = DefaultLocationProviderFactory.create(context = applicationContext)
+    private fun initMapLocationProvider() {
+        mapLocationProvider = DefaultLocationProviderFactory.create(context = applicationContext)
     }
 
     /**
@@ -108,10 +116,11 @@ class MainViewModel(private val application: Application): AndroidViewModel(appl
      * To use navigation in the application, start by by initialising the navigation configuration.
      */
     private fun initNavigation() {
+        navigationLocationProvider = DefaultLocationProviderFactory.create(context = applicationContext)
         val configuration = Configuration(
             context = applicationContext,
             navigationTileStore = navigationTileStore,
-            locationProvider = locationProvider,
+            locationProvider = navigationLocationProvider,
             routePlanner = routePlanner,
             vehicleProvider = VehicleProviderFactory.create(vehicle = Vehicle.Car())
         )
@@ -120,11 +129,11 @@ class MainViewModel(private val application: Application): AndroidViewModel(appl
 
     override fun onLocationUpdate(location: GeoLocation) {
         _location.value = location
-        locationProvider.removeOnLocationUpdateListener(this)
+        mapLocationProvider.removeOnLocationUpdateListener(this)
     }
 
     fun registerLocationUpdatesListener() {
-        locationProvider.addOnLocationUpdateListener(this)
+        mapLocationProvider.addOnLocationUpdateListener(this)
     }
 
     /**
@@ -134,7 +143,7 @@ class MainViewModel(private val application: Application): AndroidViewModel(appl
      */
     fun calculateRoute(origin: GeoPoint, destination: GeoPoint) {
         val itinerary = Itinerary(origin = origin, destination = destination)
-        routePlanningOptions = RoutePlanningOptions(
+        _routePlanningOptions = RoutePlanningOptions(
             itinerary = itinerary,
             guidanceOptions = GuidanceOptions(
                 phoneticsType = InstructionPhoneticsType.Ipa,
@@ -157,7 +166,7 @@ class MainViewModel(private val application: Application): AndroidViewModel(appl
      */
     private val routePlanningCallback = object : RoutePlanningCallback {
         override fun onSuccess(result: RoutePlanningResponse) {
-            _routePlan.value = RoutePlan(result.routes.first(), routePlanningOptions)
+            _route.value = result.routes.first()
         }
 
         override fun onFailure(failure: RoutingFailure) {
@@ -169,41 +178,48 @@ class MainViewModel(private val application: Application): AndroidViewModel(appl
 
     private val progressUpdatedListener = ProgressUpdatedListener {
         _distanceAlongRoute.value = it.distanceAlongRoute
-//        tomTomMap.routes.first().progress = it.distanceAlongRoute
     }
 
     private val activeRouteChangedListener = ActiveRouteChangedListener { route ->
-        _activeRoute.value = route
-//        tomTomMap.removeRoutes()
-//        drawRoute(route)
+        _route.value = route
     }
 
-    fun navigationStarted() {
+    fun navigationStart(route: Route) {
         tomTomNavigation.addProgressUpdatedListener(progressUpdatedListener)
         tomTomNavigation.addActiveRouteChangedListener(activeRouteChangedListener)
-    }
-
-    fun navigationStopped() {
-        tomTomNavigation.removeProgressUpdatedListener(progressUpdatedListener)
-        tomTomNavigation.removeActiveRouteChangedListener(activeRouteChangedListener)
-        val oldLocationProvider = locationProvider
-        initLocationProvider()
-        locationProvider.enable()
-        oldLocationProvider.close()
+        setSimulationLocationProviderToNavigation(route)
+        setUpMapMatchedLocationProvider()
     }
 
     /**
      * Use the SimulationLocationProvider for testing purposes.
      */
-    fun setSimulationLocationProviderToNavigation() {
-        val route = routePlan.value?.route ?: return
+    private fun setSimulationLocationProviderToNavigation(route: Route) {
         val routeGeoLocations = route.geometry.map { GeoLocation(it) }
         val simulationStrategy = InterpolationStrategy(routeGeoLocations)
-        locationProvider = SimulationLocationProvider.create(strategy = simulationStrategy)
-        tomTomNavigation.locationProvider = locationProvider
-        locationProvider.enable()
+        navigationLocationProvider = SimulationLocationProvider.create(strategy = simulationStrategy)
+        tomTomNavigation.locationProvider = navigationLocationProvider
+        navigationLocationProvider.enable()
     }
 
+    /**
+     * Once navigation is started, the camera is set to follow the user position, and the location indicator is changed to a chevron.
+     * To match raw location updates to the routes, create a LocationProvider instance using MapMatchedLocationProviderFactory and set it to the TomTomMap.
+     */
+    private fun setUpMapMatchedLocationProvider() {
+        _mapMatchedLocationProvider = MapMatchedLocationProviderFactory.create(tomTomNavigation)
+        _mapMatchedLocationProvider?.enable()
+        mapLocationProvider.disable()
+    }
+
+
+    fun navigationStopped() {
+        tomTomNavigation.removeProgressUpdatedListener(progressUpdatedListener)
+        tomTomNavigation.removeActiveRouteChangedListener(activeRouteChangedListener)
+        mapLocationProvider.enable()
+        navigationLocationProvider.disable()
+        _mapMatchedLocationProvider?.close()
+    }
     /**
      * Checks whether navigation is currently running.
      */
@@ -211,11 +227,10 @@ class MainViewModel(private val application: Application): AndroidViewModel(appl
 
     override fun onCleared() {
         super.onCleared()
+        _mapMatchedLocationProvider?.close()
         tomTomNavigation.close()
+        navigationLocationProvider.close()
         navigationTileStore.close()
-        locationProvider.close()
+        mapLocationProvider.close()
     }
-
-
-
 }
