@@ -17,6 +17,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.usecase.BuildConfig.TOMTOM_API_KEY
@@ -77,28 +78,25 @@ import com.tomtom.sdk.vehicle.VehicleProviderFactory
  **/
 
 class MainActivity : AppCompatActivity() {
+    private var _navigationFragment: NavigationFragment? = null
+    private val navigationFragment: NavigationFragment
+        get() =
+            _navigationFragment
+                ?: throw IllegalStateException("Navigation fragment was not initialized")
     private lateinit var mapFragment: MapFragment
     private lateinit var tomTomMap: TomTomMap
-    private lateinit var navigationTileStore: NavigationTileStore
-    private lateinit var locationProvider: LocationProvider
-    private lateinit var onLocationUpdateListener: OnLocationUpdateListener
-    private lateinit var routePlanner: RoutePlanner
-    private var route: Route? = null
-    private lateinit var routePlanningOptions: RoutePlanningOptions
-    private lateinit var tomTomNavigation: TomTomNavigation
-    private lateinit var navigationFragment: NavigationFragment
 
     private val apiKey = TOMTOM_API_KEY
+
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        initLocationProvider()
-
         ensureLocationPermissions {
             // Enables the location provider to start receiving location updates.
-            locationProvider.enable()
+            viewModel.locationProvider.enable()
         }
 
         initMap {
@@ -108,16 +106,33 @@ class MainActivity : AppCompatActivity() {
              * Therefore, to show the user’s location on the map you have to set the LocationProvider to the TomTomMap.
              * The TomTomMap will then use the LocationProvider to show a location marker on the map.
              */
-            tomTomMap.setLocationProvider(locationProvider)
+            tomTomMap.setLocationProvider(viewModel.locationProvider)
 
-            showUserLocation()
+//            showUserLocation()
             setUpMapListeners()
+            viewModel.activeRoute.observe(this) {
+                tomTomMap.removeRoutes()
+                drawRoute(it)
+            }
+            createNavigationFragment()
+            if(viewModel.isNavigationRunning()) {
+                resumeNavigation()
+            } else {
+                showUserLocation()
+            }
         }
 
-        initNavigationTileStore()
-        initRouting()
-        initNavigation()
     }
+
+//    override fun onStart() {
+//        super.onStart()
+//        _navigationFragment?.addNavigationListener(navigationListener)
+//    }
+//
+//    override fun onStop() {
+//        super.onStop()
+//        _navigationFragment?.removeNavigationListener(navigationListener)
+//    }
 
     /**
      * [MapOptions] is required to initialize the map with [MapFragment.newInstance]
@@ -130,60 +145,20 @@ class MainActivity : AppCompatActivity() {
      * after which the [onMapReady] callback is triggered.
      */
     private fun initMap(onMapReady: () -> Unit) {
-        val mapOptions = MapOptions(mapKey = apiKey)
-        mapFragment = MapFragment.newInstance(mapOptions)
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.map_container, mapFragment)
-            .commit()
-
+        mapFragment = supportFragmentManager.findFragmentByTag(MAP_FRAGMENT_TAG)?.let {
+            it as MapFragment
+        } ?: run {
+            val mapOptions = MapOptions(mapKey = apiKey)
+            MapFragment.newInstance(mapOptions).also {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.map_container, it, MAP_FRAGMENT_TAG)
+                    .commit()
+            }
+        }
         mapFragment.getMapAsync { map ->
             tomTomMap = map
             onMapReady()
         }
-    }
-
-    /**
-     * The SDK provides a [NavigationTileStore] class that is used between different modules to get tile data based
-     * on the online map.
-     */
-    private fun initNavigationTileStore() {
-        navigationTileStore = NavigationTileStore.create(
-            context = applicationContext,
-            navigationTileStoreConfig = NavigationTileStoreConfiguration(
-                apiKey = apiKey
-            )
-        )
-    }
-
-    /**
-     * The SDK provides a [LocationProvider] interface that is used between different modules to get location updates.
-     * This examples uses the default [LocationProvider].
-     * Under the hood, the engine uses Android’s system location services.
-     */
-    private fun initLocationProvider() {
-        locationProvider = DefaultLocationProviderFactory.create(context = applicationContext)
-    }
-
-    /**
-     * Plans the route by initializing by using the online route planner and default route replanner.
-     */
-    private fun initRouting() {
-        routePlanner = OnlineRoutePlanner.create(context = applicationContext, apiKey = apiKey)
-    }
-
-    /**
-     * To use navigation in the application, start by by initialising the navigation configuration.
-     */
-    private fun initNavigation() {
-        val configuration = Configuration(
-            context = applicationContext,
-            navigationTileStore = navigationTileStore,
-            locationProvider = locationProvider,
-            routePlanner = routePlanner,
-            vehicleProvider = VehicleProviderFactory.create(vehicle = Vehicle.Car())
-        )
-        tomTomNavigation = OnlineTomTomNavigationFactory.create(configuration)
     }
 
     /**
@@ -205,13 +180,12 @@ class MainActivity : AppCompatActivity() {
      */
     private fun showUserLocation() {
         // zoom to current location at city level
-        onLocationUpdateListener = OnLocationUpdateListener { location ->
+        viewModel.location.observe(this) {
             val locationMarker = LocationMarkerOptions(type = LocationMarkerOptions.Type.Pointer)
             tomTomMap.enableLocationMarker(locationMarker)
-            tomTomMap.moveCamera(CameraOptions(location.position, zoom = 8.0))
-            locationProvider.removeOnLocationUpdateListener(onLocationUpdateListener)
+            tomTomMap.moveCamera(CameraOptions(it.position, zoom = 8.0))
         }
-        locationProvider.addOnLocationUpdateListener(onLocationUpdateListener)
+        viewModel.registerLocationUpdatesListener()
     }
 
     /**
@@ -239,67 +213,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Checks whether navigation is currently running.
-     */
-    private fun isNavigationRunning(): Boolean = tomTomNavigation.navigationSnapshot != null
-
-
-    /**
      * Used to start navigation based on a tapped route, if navigation is not already running.
      * - Hide the location button
      * - Then start the navigation using the selected route.
      */
     private val routeClickListener = RouteClickListener {
-        if (!isNavigationRunning()) {
-            route?.let { route ->
+        if (!viewModel.isNavigationRunning()) {
+            viewModel.routePlan.value?.let { routePlan ->
                 mapFragment.currentLocationButton.visibilityPolicy = VisibilityPolicy.Invisible
-                startNavigation(route)
+                startNavigation(routePlan)
             }
         }
     }
 
-    /**
-     * Used to calculate a route using the following parameters:
-     * - InstructionPhoneticsType - This specifies whether to include phonetic transcriptions in the response.
-     * - ExtendedSections - This specifies whether to include extended guidance sections in the response, such as sections of type road shield, lane, and speed limit.
-     */
     private fun calculateRouteTo(destination: GeoPoint) {
         val userLocation =
             tomTomMap.currentLocation?.position ?: return
-        val itinerary = Itinerary(origin = userLocation, destination = destination)
-        routePlanningOptions = RoutePlanningOptions(
-            itinerary = itinerary,
-            guidanceOptions = GuidanceOptions(
-                phoneticsType = InstructionPhoneticsType.Ipa,
-                extendedSections = ExtendedSections.All
-            ),
-            vehicle = Vehicle.Car()
-        )
-        routePlanner.planRoute(routePlanningOptions, routePlanningCallback)
-    }
-
-    /**
-     * The RoutePlanningCallback itself has three methods.
-     * - The `onFailure()` method is triggered if the request fails.
-     * - The `onSuccess()` method returns RoutePlanningResponse containing the routing results.
-     * - The `onRoutePlanned()` method is triggered when each route is successfully calculated.
-     *
-     * This example draws the first retrieved route on the map.
-     * You can show the overview of the added routes using the TomTomMap.zoomToRoutes(Int) method.
-     * Note that its padding parameter is expressed in pixels.
-     */
-    private val routePlanningCallback = object : RoutePlanningCallback {
-        override fun onSuccess(result: RoutePlanningResponse) {
-            route = result.routes.first()
-            drawRoute(route!!)
+        viewModel.routePlan.observe(this) {
+            drawRoute(it.route)
             tomTomMap.zoomToRoutes(ZOOM_TO_ROUTE_PADDING)
         }
-
-        override fun onFailure(failure: RoutingFailure) {
-            Toast.makeText(this@MainActivity, failure.message, Toast.LENGTH_SHORT).show()
+        viewModel.routingFailure.observe(this) {
+            Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_SHORT).show()
         }
-
-        override fun onRoutePlanned(route: Route) = Unit
+        viewModel.calculateRoute(userLocation, destination)
     }
 
     /**
@@ -338,15 +275,38 @@ class MainActivity : AppCompatActivity() {
      * - handling the updates to the navigation states using the NavigationListener.
      * Note that you have to set the previously-created TomTom Navigation object to the NavigationFragment before using it.
      */
-
-    private fun startNavigation(route: Route) {
-        initNavigationFragment()
-        navigationFragment.setTomTomNavigation(tomTomNavigation)
-        val routePlan = RoutePlan(route, routePlanningOptions)
+    private fun startNavigation(routePlan: RoutePlan) {
+        displayNavigationFragment()
+        navigationFragment.setTomTomNavigation(viewModel.tomTomNavigation)
         navigationFragment.startNavigation(routePlan)
         navigationFragment.addNavigationListener(navigationListener)
-        tomTomNavigation.addProgressUpdatedListener(progressUpdatedListener)
-        tomTomNavigation.addActiveRouteChangedListener(activeRouteChangedListener)
+        viewModel.distanceAlongRoute.observe(this) {
+            tomTomMap.routes.first().progress = it
+        }
+
+        viewModel.navigationStarted()
+    }
+
+    private fun resumeNavigation() {
+        displayNavigationFragment()
+        navigationFragment.setTomTomNavigation(viewModel.tomTomNavigation)
+        navigationFragment.addNavigationListener(navigationListener)
+        viewModel.distanceAlongRoute.observe(this) {
+            tomTomMap.routes.first().progress = it
+        }
+        viewModel.activeRoute.observe(this) {
+            tomTomMap.removeRoutes()
+            drawRoute(it)
+        }
+        setUpMapForNavigation()
+    }
+
+    private fun setUpMapForNavigation() {
+        tomTomMap.addCameraChangeListener(cameraChangeListener)
+        tomTomMap.cameraTrackingMode = CameraTrackingMode.FollowRouteDirection
+        tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Chevron))
+        setMapMatchedLocationProvider()
+        setMapNavigationPadding()
     }
 
     /**
@@ -358,12 +318,8 @@ class MainActivity : AppCompatActivity() {
      */
     private val navigationListener = object : NavigationFragment.NavigationListener {
         override fun onStarted() {
-            tomTomMap.addCameraChangeListener(cameraChangeListener)
-            tomTomMap.cameraTrackingMode = CameraTrackingMode.FollowRouteDirection
-            tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Chevron))
-            setMapMatchedLocationProvider()
-            setSimulationLocationProviderToNavigation(route!!)
-            setMapNavigationPadding()
+            setUpMapForNavigation()
+            viewModel.setSimulationLocationProviderToNavigation()
         }
 
         override fun onStopped() {
@@ -374,37 +330,22 @@ class MainActivity : AppCompatActivity() {
     /**
      * Used to initialize the NavigationFragment to display the UI navigation information,
      */
-    private fun initNavigationFragment() {
-        if (!::navigationFragment.isInitialized) {
-            navigationFragment = NavigationFragment.newInstance(
+    private fun displayNavigationFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.navigation_fragment_container, navigationFragment, NAVIGATION_FRAGMENT_TAG)
+            .commitNow()
+    }
+
+    private fun createNavigationFragment() {
+        _navigationFragment =
+            supportFragmentManager.findFragmentByTag(NAVIGATION_FRAGMENT_TAG) as? NavigationFragment
+        if (_navigationFragment == null) {
+            _navigationFragment = NavigationFragment.newInstance(
                 NavigationUiOptions(
                     keepInBackground = true
                 )
             )
         }
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.navigation_fragment_container, navigationFragment)
-            .commitNow()
-    }
-
-    private val progressUpdatedListener = ProgressUpdatedListener {
-        tomTomMap.routes.first().progress = it.distanceAlongRoute
-    }
-
-    private val activeRouteChangedListener = ActiveRouteChangedListener { route ->
-        tomTomMap.removeRoutes()
-        drawRoute(route)
-    }
-
-    /**
-     * Use the SimulationLocationProvider for testing purposes.
-     */
-    private fun setSimulationLocationProviderToNavigation(route: Route) {
-        val routeGeoLocations = route.geometry.map { GeoLocation(it) }
-        val simulationStrategy = InterpolationStrategy(routeGeoLocations)
-        locationProvider = SimulationLocationProvider.create(strategy = simulationStrategy)
-        tomTomNavigation.locationProvider = locationProvider
-        locationProvider.enable()
     }
 
     /**
@@ -421,12 +362,9 @@ class MainActivity : AppCompatActivity() {
         tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Pointer))
         resetMapPadding()
         navigationFragment.removeNavigationListener(navigationListener)
-        tomTomNavigation.removeProgressUpdatedListener(progressUpdatedListener)
-        tomTomNavigation.removeActiveRouteChangedListener(activeRouteChangedListener)
         clearMap()
-        initLocationProvider()
-        tomTomMap.setLocationProvider(locationProvider)
-        locationProvider.enable()
+        viewModel.navigationStopped()
+        tomTomMap.setLocationProvider(viewModel.locationProvider)
         showUserLocation()
     }
 
@@ -448,7 +386,7 @@ class MainActivity : AppCompatActivity() {
      * To match raw location updates to the routes, create a LocationProvider instance using MapMatchedLocationProviderFactory and set it to the TomTomMap.
      */
     private fun setMapMatchedLocationProvider() {
-        val mapMatchedLocationProvider = MapMatchedLocationProviderFactory.create(tomTomNavigation)
+        val mapMatchedLocationProvider = MapMatchedLocationProviderFactory.create(viewModel.tomTomNavigation)
         tomTomMap.setLocationProvider(mapMatchedLocationProvider)
         mapMatchedLocationProvider.enable()
     }
@@ -506,16 +444,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         tomTomMap.setLocationProvider(null)
-        if (::navigationFragment.isInitialized) {
-            supportFragmentManager.beginTransaction().remove(navigationFragment).commitNowAllowingStateLoss()
-        }
+        tomTomMap.removeRouteClickListener(routeClickListener)
+        tomTomMap.removeMapLongClickListener(mapLongClickListener)
+        // TODO is it needed???
+//        if (_navigationFragment != null) {
+//            supportFragmentManager.beginTransaction().remove(navigationFragment).commitNowAllowingStateLoss()
+//        }
         super.onDestroy()
-        tomTomNavigation.close()
-        navigationTileStore.close()
-        locationProvider.close()
     }
 
     companion object {
         private const val ZOOM_TO_ROUTE_PADDING = 100
+        private const val NAVIGATION_FRAGMENT_TAG = "NAVIGATION_FRAGMENT_TAG"
+        private const val MAP_FRAGMENT_TAG = "MAP_FRAGMENT_TAG"
     }
 }
