@@ -197,9 +197,11 @@ class MainViewModel(private val application: Application): AndroidViewModel(appl
     private fun setSimulationLocationProviderToNavigation(route: Route) {
         val routeGeoLocations = route.geometry.map { GeoLocation(it) }
         val simulationStrategy = InterpolationStrategy(routeGeoLocations)
+        val oldNavigationLocationProvider = navigationLocationProvider
         navigationLocationProvider = SimulationLocationProvider.create(strategy = simulationStrategy)
         tomTomNavigation.locationProvider = navigationLocationProvider
         navigationLocationProvider.enable()
+        oldNavigationLocationProvider.close()
     }
 
     /**
@@ -226,11 +228,15 @@ class MainViewModel(private val application: Application): AndroidViewModel(appl
     fun isNavigationRunning(): Boolean = tomTomNavigation.navigationSnapshot != null
 
     override fun onCleared() {
+
+        println("LWWW MainViewModel.onCleared start")
         super.onCleared()
         _mapMatchedLocationProvider?.close()
         tomTomNavigation.close()
         navigationLocationProvider.close()
         navigationTileStore.close()
+        println("LWWW MainViewModel.onCleared")
         mapLocationProvider.close()
+        println("LWWW MainViewModel.onCleared end")
     }
 }

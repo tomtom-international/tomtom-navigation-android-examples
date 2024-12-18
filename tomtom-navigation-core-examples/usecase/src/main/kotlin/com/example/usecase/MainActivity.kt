@@ -20,6 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.usecase.BuildConfig.TOMTOM_API_KEY
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.map.display.MapOptions
@@ -75,6 +76,7 @@ class MainActivity : AppCompatActivity() {
         createNavigationFragment()
 
         initMap {
+
             if(!viewModel.isNavigationRunning()) {
                 /**
                  * The LocationProvider itself only reports location changes.
@@ -393,10 +395,13 @@ class MainActivity : AppCompatActivity() {
         )
 
     override fun onDestroy() {
+        println("LWWW onDestroy")
+//        tomTomMap.setLocationProvider(null)
         tomTomMap.setLocationProvider(null)
         tomTomMap.removeRouteClickListener(routeClickListener)
         tomTomMap.removeMapLongClickListener(mapLongClickListener)
         super.onDestroy()
+        println("LWWW onDestroy after super")
     }
 
     companion object {

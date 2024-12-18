@@ -19,7 +19,6 @@ androidXLifecycleViewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmod
 androidXLifecycleLivedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle_version" }
 androidXFragmentKtx = { module = "androidx.fragment:fragment-ktx", version = "1.8.5" }
 
-
 [bundles]
 androidCommon = ["androidXCompat", "androidXConstraintLayout", "androidXLifecycleViewmodelKtx", "androidXLifecycleLivedataKtx", "androidXFragmentKtx"]
 
