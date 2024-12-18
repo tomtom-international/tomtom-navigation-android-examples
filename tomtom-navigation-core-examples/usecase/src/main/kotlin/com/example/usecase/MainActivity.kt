@@ -66,7 +66,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         ensureLocationPermissions {
             // Enables the location provider to start receiving location updates only if we are in browsing mode.
             if (savedInstanceState == null) {
@@ -76,7 +75,6 @@ class MainActivity : AppCompatActivity() {
         createNavigationFragment()
 
         initMap {
-
             if(!viewModel.isNavigationRunning()) {
                 /**
                  * The LocationProvider itself only reports location changes.
@@ -88,20 +86,32 @@ class MainActivity : AppCompatActivity() {
                 showUserLocation()
             } else {
                 setMapNavigationPadding()
+                /**
+                 * When already navigating the MapMatchedLocationProvider is set to the TomTomMap.
+                 * It may happen when there is screen rotation.
+                 */
                 tomTomMap.setLocationProvider(viewModel.mapMatchedLocationProvider)
             }
             setUpMapListeners()
-            viewModel.route.observe(this) {
-                if (viewModel.isNavigationRunning()) {
-                    tomTomMap.removeRoutes()
-                    drawRoute(it)
-                }
-            }
-            viewModel.distanceAlongRoute.observe(this) {
-                tomTomMap.routes.firstOrNull()?.progress = it
-            }
+            setUpViewModelObservers()
         }
 
+    }
+
+    private fun setUpViewModelObservers() {
+        viewModel.route.observe(this) {
+            tomTomMap.removeRoutes()
+            drawRoute(it)
+            if (!viewModel.isNavigationRunning()) {
+                tomTomMap.zoomToRoutes(ZOOM_TO_ROUTE_PADDING)
+            }
+        }
+        viewModel.distanceAlongRoute.observe(this) {
+            tomTomMap.routes.firstOrNull()?.progress = it
+        }
+        viewModel.routingFailure.observe(this) {
+            Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onStart() {
@@ -209,13 +219,6 @@ class MainActivity : AppCompatActivity() {
     private fun calculateRouteTo(destination: GeoPoint) {
         val userLocation =
             tomTomMap.currentLocation?.position ?: return
-        viewModel.route.observe(this) {
-            drawRoute(it)
-            tomTomMap.zoomToRoutes(ZOOM_TO_ROUTE_PADDING)
-        }
-        viewModel.routingFailure.observe(this) {
-            Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_SHORT).show()
-        }
         viewModel.calculateRoute(userLocation, destination)
     }
 
@@ -315,9 +318,7 @@ class MainActivity : AppCompatActivity() {
             VisibilityPolicy.InvisibleWhenRecentered
         tomTomMap.removeCameraChangeListener(cameraChangeListener)
         tomTomMap.cameraTrackingMode = CameraTrackingMode.None
-        tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Pointer))
         resetMapPadding()
-        navigationFragment.removeNavigationListener(navigationListener)
         clearMap()
         tomTomMap.setLocationProvider(viewModel.mapLocationProvider)
         viewModel.navigationStopped()
