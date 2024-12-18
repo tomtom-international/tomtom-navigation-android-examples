@@ -125,7 +125,6 @@ class MainActivity : AppCompatActivity() {
         // onCleared in ViewModel is called before onDestroy in Activity so the clean up
         // has to be done in onStop - https://issuetracker.google.com/issues/363903522
         if (isFinishing || isChangingConfigurations) {
-            println("LWWW clean up TomTomMap")
             tomTomMap.setLocationProvider(null)
             tomTomMap.removeRouteClickListener(routeClickListener)
             tomTomMap.removeMapLongClickListener(mapLongClickListener)
