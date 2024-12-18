@@ -20,14 +20,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.example.usecase.BuildConfig.TOMTOM_API_KEY
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
-import com.tomtom.sdk.map.display.camera.CameraTrackingMode
 import com.tomtom.sdk.map.display.camera.CameraChangeListener
 import com.tomtom.sdk.map.display.camera.CameraOptions
+import com.tomtom.sdk.map.display.camera.CameraTrackingMode
 import com.tomtom.sdk.map.display.common.screen.Padding
 import com.tomtom.sdk.map.display.gesture.MapLongClickListener
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
@@ -76,7 +75,6 @@ class MainActivity : AppCompatActivity() {
         createNavigationFragment()
 
         initMap {
-
             if(!viewModel.isNavigationRunning()) {
                 /**
                  * The LocationProvider itself only reports location changes.
@@ -124,6 +122,14 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         _navigationFragment?.removeNavigationListener(navigationListener)
+        // onCleared in ViewModel is called before onDestroy in Activity so the clean up
+        // has to be done in onStop - https://issuetracker.google.com/issues/363903522
+        if (isFinishing || isChangingConfigurations) {
+            println("LWWW clean up TomTomMap")
+            tomTomMap.setLocationProvider(null)
+            tomTomMap.removeRouteClickListener(routeClickListener)
+            tomTomMap.removeMapLongClickListener(mapLongClickListener)
+        }
     }
 
     /**
@@ -393,16 +399,6 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             )
         )
-
-    override fun onDestroy() {
-        println("LWWW onDestroy")
-//        tomTomMap.setLocationProvider(null)
-        tomTomMap.setLocationProvider(null)
-        tomTomMap.removeRouteClickListener(routeClickListener)
-        tomTomMap.removeMapLongClickListener(mapLongClickListener)
-        super.onDestroy()
-        println("LWWW onDestroy after super")
-    }
 
     companion object {
         private const val ZOOM_TO_ROUTE_PADDING = 100

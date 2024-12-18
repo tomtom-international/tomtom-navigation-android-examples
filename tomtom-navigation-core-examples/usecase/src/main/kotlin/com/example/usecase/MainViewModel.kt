@@ -18,7 +18,6 @@ import com.tomtom.sdk.location.simulation.SimulationLocationProvider
 import com.tomtom.sdk.location.simulation.strategy.InterpolationStrategy
 import com.tomtom.sdk.navigation.ActiveRouteChangedListener
 import com.tomtom.sdk.navigation.ProgressUpdatedListener
-import com.tomtom.sdk.navigation.RoutePlan
 import com.tomtom.sdk.navigation.TomTomNavigation
 import com.tomtom.sdk.navigation.online.Configuration
 import com.tomtom.sdk.navigation.online.OnlineTomTomNavigationFactory
@@ -36,7 +35,7 @@ import com.tomtom.sdk.routing.route.Route
 import com.tomtom.sdk.vehicle.Vehicle
 import com.tomtom.sdk.vehicle.VehicleProviderFactory
 
-class MainViewModel(private val application: Application): AndroidViewModel(application), OnLocationUpdateListener {
+class MainViewModel(application: Application): AndroidViewModel(application), OnLocationUpdateListener {
 
     private val applicationContext = application.applicationContext
     private val apiKey = TOMTOM_API_KEY
@@ -228,15 +227,11 @@ class MainViewModel(private val application: Application): AndroidViewModel(appl
     fun isNavigationRunning(): Boolean = tomTomNavigation.navigationSnapshot != null
 
     override fun onCleared() {
-
-        println("LWWW MainViewModel.onCleared start")
         super.onCleared()
         _mapMatchedLocationProvider?.close()
         tomTomNavigation.close()
         navigationLocationProvider.close()
         navigationTileStore.close()
-        println("LWWW MainViewModel.onCleared")
         mapLocationProvider.close()
-        println("LWWW MainViewModel.onCleared end")
     }
 }
