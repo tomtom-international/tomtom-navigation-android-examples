@@ -117,6 +117,13 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         _navigationFragment?.addNavigationListener(navigationListener)
+        if (::tomTomMap.isInitialized && tomTomMap.getLocationProvider() == null) {
+            if (viewModel.isNavigationRunning()) {
+                tomTomMap.setLocationProvider(viewModel.mapMatchedLocationProvider)
+            } else {
+                tomTomMap.setLocationProvider(viewModel.mapLocationProvider)
+            }
+        }
     }
 
     override fun onStop() {
@@ -124,11 +131,15 @@ class MainActivity : AppCompatActivity() {
         _navigationFragment?.removeNavigationListener(navigationListener)
         // onCleared in ViewModel is called before onDestroy in Activity so the clean up
         // has to be done in onStop - https://issuetracker.google.com/issues/363903522
-        if (isFinishing || isChangingConfigurations) {
+        if(::tomTomMap.isInitialized) {
             tomTomMap.setLocationProvider(null)
-            tomTomMap.removeRouteClickListener(routeClickListener)
-            tomTomMap.removeMapLongClickListener(mapLongClickListener)
         }
+    }
+
+    override fun onDestroy() {
+        tomTomMap.removeRouteClickListener(routeClickListener)
+        tomTomMap.removeMapLongClickListener(mapLongClickListener)
+        super.onDestroy()
     }
 
     /**
