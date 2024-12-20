@@ -37,7 +37,8 @@ import com.tomtom.sdk.routing.route.Route
 import com.tomtom.sdk.vehicle.Vehicle
 import com.tomtom.sdk.vehicle.VehicleProviderFactory
 
-class MainViewModel(application: Application): AndroidViewModel(application), OnLocationUpdateListener {
+class MainViewModel(application: Application) : AndroidViewModel(application),
+    OnLocationUpdateListener {
 
     private val applicationContext = application.applicationContext
     private val apiKey = TOMTOM_API_KEY
@@ -64,29 +65,17 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
     val routingFailure: LiveData<RoutingFailure>
         get() = _routingFailure
 
-    val selectedRoute: Route?
-        get() {
-            return if (::navigationVisualization.isInitialized) {
-                navigationVisualization.selectedRoute
-            } else {
-                null
-            }
-        }
-
     data class NavigationStarted(
         val routePlan: com.tomtom.sdk.navigation.RoutePlan,
         val tomTomNavigation: TomTomNavigation,
         val locationProvider: LocationProvider,
     )
+
     private var _navigationStarted = MutableLiveData<NavigationStarted>()
     val navigationStarted: LiveData<NavigationStarted>
         get() = _navigationStarted
 
-    private var _routePlanningOptions: RoutePlanningOptions? = null
-    val routePlanningOptions: RoutePlanningOptions
-        get() = checkNotNull(_routePlanningOptions) {
-            "RoutePlanningOptions is not initialized"
-        }
+    private var routePlanningOptions: RoutePlanningOptions? = null
 
     init {
         initMapLocationProvider()
@@ -128,7 +117,8 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
      * To use navigation in the application, start by by initialising the navigation configuration.
      */
     private fun initNavigation() {
-        navigationLocationProvider = DefaultLocationProviderFactory.create(context = applicationContext)
+        navigationLocationProvider =
+            DefaultLocationProviderFactory.create(context = applicationContext)
         val configuration = Configuration(
             context = applicationContext,
             navigationTileStore = navigationTileStore,
@@ -174,7 +164,11 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
         setSimulationLocationProviderToNavigation(route)
         setUpMapMatchedLocationProvider()
         _navigationStarted.value = NavigationStarted(
-            routePlan = com.tomtom.sdk.navigation.RoutePlan(route, routePlanningOptions),
+            routePlan = com.tomtom.sdk.navigation.RoutePlan(
+                route = route,
+                routePlanningOptions = checkNotNull(routePlanningOptions) {
+                    "RoutePlanningOptions is not initialized"
+                }),
             tomTomNavigation = tomTomNavigation,
             locationProvider = mapMatchedLocationProvider
         )
@@ -187,7 +181,7 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
      */
     fun calculateRoute(origin: GeoPoint, destination: GeoPoint) {
         val itinerary = Itinerary(origin = origin, destination = destination)
-        _routePlanningOptions = RoutePlanningOptions(
+        routePlanningOptions = RoutePlanningOptions(
             itinerary = itinerary,
             guidanceOptions = GuidanceOptions(
                 phoneticsType = InstructionPhoneticsType.Ipa,
@@ -195,7 +189,7 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
             ),
             vehicle = Vehicle.Car()
         )
-        routePlanner.planRoute(routePlanningOptions, routePlanningCallback)
+        routePlanner.planRoute(routePlanningOptions!!, routePlanningCallback)
     }
 
     /**
@@ -229,7 +223,8 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
         val routeGeoLocations = route.geometry.map { GeoLocation(it) }
         val simulationStrategy = InterpolationStrategy(routeGeoLocations)
         val oldNavigationLocationProvider = navigationLocationProvider
-        navigationLocationProvider = SimulationLocationProvider.create(strategy = simulationStrategy)
+        navigationLocationProvider =
+            SimulationLocationProvider.create(strategy = simulationStrategy)
         tomTomNavigation.locationProvider = navigationLocationProvider
         navigationLocationProvider.enable()
         oldNavigationLocationProvider.close()
@@ -251,6 +246,7 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
         navigationLocationProvider.disable()
         _mapMatchedLocationProvider?.close()
     }
+
     /**
      * Checks whether navigation is currently running.
      */
