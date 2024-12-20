@@ -205,7 +205,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
         override fun onSuccess(result: RoutePlanningResponse) {
             val routePlan = RoutePlan(result.routes)
             navigationVisualization.displayRoutePlan(routePlan)
-            navigationVisualization.selectRoute(routePlan.routes.first().id)
         }
 
         override fun onFailure(failure: RoutingFailure) {
