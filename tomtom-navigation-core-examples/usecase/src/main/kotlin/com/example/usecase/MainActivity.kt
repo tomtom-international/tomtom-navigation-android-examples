@@ -24,18 +24,15 @@ import com.example.usecase.BuildConfig.TOMTOM_API_KEY
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
+import com.tomtom.sdk.map.display.camera.CameraChangeListener
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.camera.CameraTrackingMode
 import com.tomtom.sdk.map.display.common.screen.Padding
 import com.tomtom.sdk.map.display.gesture.MapLongClickListener
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
-import com.tomtom.sdk.map.display.route.RouteClickListener
 import com.tomtom.sdk.map.display.ui.MapFragment
-import com.tomtom.sdk.map.display.ui.currentlocation.CurrentLocationButton.VisibilityPolicy
-import com.tomtom.sdk.navigation.RoutePlan
 import com.tomtom.sdk.navigation.ui.NavigationFragment
 import com.tomtom.sdk.navigation.ui.NavigationUiOptions
-import com.tomtom.sdk.routing.route.Route
 
 /**
  * This example shows how to build a simple navigation application using the TomTom Navigation SDK for Android.
@@ -100,6 +97,11 @@ class MainActivity : AppCompatActivity() {
         viewModel.routingFailure.observe(this) {
             Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_SHORT).show()
         }
+        viewModel.navigationStarted.observe(this) {
+            if (!viewModel.isNavigationRunning()) {
+                startNavigation(it)
+            }
+        }
     }
 
     override fun onStart() {
@@ -125,7 +127,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        tomTomMap.removeRouteClickListener(routeClickListener)
         tomTomMap.removeMapLongClickListener(mapLongClickListener)
         super.onDestroy()
     }
@@ -193,7 +194,6 @@ class MainActivity : AppCompatActivity() {
      */
     private fun setUpMapListeners() {
         tomTomMap.addMapLongClickListener(mapLongClickListener)
-        tomTomMap.addRouteClickListener(routeClickListener)
     }
 
     /**
@@ -206,20 +206,6 @@ class MainActivity : AppCompatActivity() {
         clearMap()
         calculateRouteTo(geoPoint)
         true
-    }
-
-    /**
-     * Used to start navigation based on a tapped route, if navigation is not already running.
-     * - Hide the location button
-     * - Then start the navigation using the selected route.
-     */
-    private val routeClickListener = RouteClickListener {
-        if (!viewModel.isNavigationRunning()) {
-            viewModel.selectedRoute?.let { route ->
-                mapFragment.currentLocationButton.visibilityPolicy = VisibilityPolicy.Invisible
-                startNavigation(route)
-            }
-        }
     }
 
     private fun calculateRouteTo(destination: GeoPoint) {
@@ -235,12 +221,11 @@ class MainActivity : AppCompatActivity() {
      * - handling the updates to the navigation states using the NavigationListener.
      * Note that you have to set the previously-created TomTom Navigation object to the NavigationFragment before using it.
      */
-    private fun startNavigation(route: Route) {
+    private fun startNavigation(navigationStarted: MainViewModel.NavigationStarted) {
         displayNavigationFragment()
-        navigationFragment.setTomTomNavigation(viewModel.tomTomNavigation)
-        viewModel.navigationStart(route)
-        tomTomMap.setLocationProvider(viewModel.mapMatchedLocationProvider)
-        navigationFragment.startNavigation(RoutePlan(route, viewModel.routePlanningOptions))
+        navigationFragment.setTomTomNavigation(navigationStarted.tomTomNavigation)
+        tomTomMap.setLocationProvider(navigationStarted.locationProvider)
+        navigationFragment.startNavigation(navigationStarted.routePlan)
     }
 
     /**
@@ -262,6 +247,7 @@ class MainActivity : AppCompatActivity() {
     private val navigationListener = object : NavigationFragment.NavigationListener {
         override fun onStarted() {
             tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Chevron))
+            tomTomMap.addCameraChangeListener(cameraChangeListener)
             setMapNavigationPadding()
         }
 
@@ -289,12 +275,9 @@ class MainActivity : AppCompatActivity() {
      */
     private fun stopNavigation() {
         navigationFragment.stopNavigation()
-        mapFragment.currentLocationButton.visibilityPolicy =
-            VisibilityPolicy.InvisibleWhenRecentered
-//        tomTomMap.removeCameraChangeListener(cameraChangeListener)
+        tomTomMap.removeCameraChangeListener(cameraChangeListener)
         tomTomMap.cameraTrackingMode = CameraTrackingMode.None
         resetMapPadding()
-//        clearMap()
         tomTomMap.setLocationProvider(viewModel.mapLocationProvider)
         viewModel.navigationStopped()
         showUserLocation()
@@ -324,14 +307,14 @@ class MainActivity : AppCompatActivity() {
         tomTomMap.clear()
     }
 
-//    private val cameraChangeListener = CameraChangeListener {
-//        val cameraTrackingMode = tomTomMap.cameraTrackingMode
-//        if (cameraTrackingMode == CameraTrackingMode.FollowRouteDirection) {
-//            navigationFragment.navigationView.showSpeedView()
-//        } else {
-//            navigationFragment.navigationView.hideSpeedView()
-//        }
-//    }
+    private val cameraChangeListener = CameraChangeListener {
+        val cameraTrackingMode = tomTomMap.cameraTrackingMode
+        if (cameraTrackingMode == CameraTrackingMode.FollowRouteDirection) {
+            navigationFragment.navigationView.showSpeedView()
+        } else {
+            navigationFragment.navigationView.hideSpeedView()
+        }
+    }
 
     /**
      * Method to verify permissions:
@@ -368,7 +351,6 @@ class MainActivity : AppCompatActivity() {
         )
 
     companion object {
-        private const val ZOOM_TO_ROUTE_PADDING = 100
         private const val NAVIGATION_FRAGMENT_TAG = "NAVIGATION_FRAGMENT_TAG"
         private const val MAP_FRAGMENT_TAG = "MAP_FRAGMENT_TAG"
     }

@@ -18,6 +18,7 @@ import com.tomtom.sdk.location.simulation.strategy.InterpolationStrategy
 import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.visualization.navigation.NavigationVisualization
 import com.tomtom.sdk.map.display.visualization.navigation.NavigationVisualizationFactory
+import com.tomtom.sdk.map.display.visualization.routing.RouteClickedListener
 import com.tomtom.sdk.map.display.visualization.routing.RoutePlan
 import com.tomtom.sdk.navigation.TomTomNavigation
 import com.tomtom.sdk.navigation.online.Configuration
@@ -71,6 +72,15 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
                 null
             }
         }
+
+    data class NavigationStarted(
+        val routePlan: com.tomtom.sdk.navigation.RoutePlan,
+        val tomTomNavigation: TomTomNavigation,
+        val locationProvider: LocationProvider,
+    )
+    private var _navigationStarted = MutableLiveData<NavigationStarted>()
+    val navigationStarted: LiveData<NavigationStarted>
+        get() = _navigationStarted
 
     private var _routePlanningOptions: RoutePlanningOptions? = null
     val routePlanningOptions: RoutePlanningOptions
@@ -137,6 +147,7 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
                 tomtomMap = tomTomMap,
                 tomtomNavigation = tomTomNavigation,
             )
+            navigationVisualization.addRouteClickedListener(routeClickListener)
         }
     }
 
@@ -147,6 +158,26 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
 
     fun registerLocationUpdatesListener() {
         mapLocationProvider.addOnLocationUpdateListener(this)
+    }
+
+    /**
+     * Used to start navigation based on a tapped route, if navigation is not already running.
+     * - Then start the navigation using the selected route.
+     */
+    private val routeClickListener = RouteClickedListener { routingRoute, _ ->
+        if (!isNavigationRunning()) {
+            startNavigation(routingRoute)
+        }
+    }
+
+    private fun startNavigation(route: Route) {
+        setSimulationLocationProviderToNavigation(route)
+        setUpMapMatchedLocationProvider()
+        _navigationStarted.value = NavigationStarted(
+            routePlan = com.tomtom.sdk.navigation.RoutePlan(route, routePlanningOptions),
+            tomTomNavigation = tomTomNavigation,
+            locationProvider = mapMatchedLocationProvider
+        )
     }
 
     /**
@@ -191,11 +222,6 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
         override fun onRoutePlanned(route: Route) = Unit
     }
 
-    fun navigationStart(route: Route) {
-        setSimulationLocationProviderToNavigation(route)
-        setUpMapMatchedLocationProvider()
-    }
-
     /**
      * Use the SimulationLocationProvider for testing purposes.
      */
@@ -237,6 +263,7 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
         navigationLocationProvider.close()
         navigationTileStore.close()
         mapLocationProvider.close()
+        navigationVisualization.removeRouteClickedListener(routeClickListener)
         navigationVisualization.close()
     }
 }
