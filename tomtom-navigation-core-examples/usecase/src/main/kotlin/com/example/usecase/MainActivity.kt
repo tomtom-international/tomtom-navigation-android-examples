@@ -309,7 +309,7 @@ class MainActivity : AppCompatActivity() {
 
     private val cameraChangeListener = CameraChangeListener {
         val cameraTrackingMode = tomTomMap.cameraTrackingMode
-        if (cameraTrackingMode == CameraTrackingMode.FollowRouteDirection) {
+        if (cameraTrackingMode is CameraTrackingMode.FollowRouteDirection) {
             navigationFragment.navigationView.showSpeedView()
         } else {
             navigationFragment.navigationView.hideSpeedView()
