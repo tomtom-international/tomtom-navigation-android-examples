@@ -54,8 +54,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
 
     private lateinit var routePlanner: RoutePlanner
     private lateinit var navigationTileStore: NavigationTileStore
-    lateinit var tomTomNavigation: TomTomNavigation
-        private set
+    private lateinit var tomTomNavigation: TomTomNavigation
     private lateinit var navigationVisualization: NavigationVisualization
 
     private val _location = MutableLiveData<GeoLocation>()
@@ -65,15 +64,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
     val routingFailure: LiveData<RoutingFailure>
         get() = _routingFailure
 
-    data class NavigationStarted(
+    data class NavigationStartParameters(
         val routePlan: com.tomtom.sdk.navigation.RoutePlan,
         val tomTomNavigation: TomTomNavigation,
         val locationProvider: LocationProvider,
     )
 
-    private var _navigationStarted = MutableLiveData<NavigationStarted>()
-    val navigationStarted: LiveData<NavigationStarted>
-        get() = _navigationStarted
+    private var _requestNavigationStart = MutableLiveData<NavigationStartParameters>()
+    val requestNavigationStart: LiveData<NavigationStartParameters>
+        get() = _requestNavigationStart
 
     private var routePlanningOptions: RoutePlanningOptions? = null
 
@@ -163,7 +162,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
     private fun startNavigation(route: Route) {
         setSimulationLocationProviderToNavigation(route)
         setUpMapMatchedLocationProvider()
-        _navigationStarted.value = NavigationStarted(
+        _requestNavigationStart.value = NavigationStartParameters(
             routePlan = com.tomtom.sdk.navigation.RoutePlan(
                 route = route,
                 routePlanningOptions = checkNotNull(routePlanningOptions) {

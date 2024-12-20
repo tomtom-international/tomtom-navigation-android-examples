@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.routingFailure.observe(this) {
             Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_SHORT).show()
         }
-        viewModel.navigationStarted.observe(this) {
+        viewModel.requestNavigationStart.observe(this) {
             if (!viewModel.isNavigationRunning()) {
                 startNavigation(it)
             }
@@ -221,11 +221,11 @@ class MainActivity : AppCompatActivity() {
      * - handling the updates to the navigation states using the NavigationListener.
      * Note that you have to set the previously-created TomTom Navigation object to the NavigationFragment before using it.
      */
-    private fun startNavigation(navigationStarted: MainViewModel.NavigationStarted) {
+    private fun startNavigation(navigationStartParameters: MainViewModel.NavigationStartParameters) {
         displayNavigationFragment()
-        navigationFragment.setTomTomNavigation(navigationStarted.tomTomNavigation)
-        tomTomMap.setLocationProvider(navigationStarted.locationProvider)
-        navigationFragment.startNavigation(navigationStarted.routePlan)
+        navigationFragment.setTomTomNavigation(navigationStartParameters.tomTomNavigation)
+        tomTomMap.setLocationProvider(navigationStartParameters.locationProvider)
+        navigationFragment.startNavigation(navigationStartParameters.routePlan)
     }
 
     /**
