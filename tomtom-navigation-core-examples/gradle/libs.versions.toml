@@ -13,6 +13,7 @@ navigationOnline = { module = "com.tomtom.sdk.navigation:navigation-online", ver
 navigationUi = { module = "com.tomtom.sdk.navigation:ui", version.ref = "tomtom_sdk" }
 routePlannerOnline = { module = "com.tomtom.sdk.routing:route-planner-online", version.ref = "tomtom_sdk" }
 routeReplannerOnline = { module = "com.tomtom.sdk.navigation:route-replanner-online", version.ref = "tomtom_sdk" }
+navigationVisualization = { module = "com.tomtom.sdk.maps.visualization:navigation", version.ref = "tomtom_sdk" }
 androidXCompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx_compat" }
 androidXConstraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx_constraintlayout" }
 androidXLifecycleViewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle_version" }

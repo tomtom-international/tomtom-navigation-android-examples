@@ -24,15 +24,12 @@ import com.example.usecase.BuildConfig.TOMTOM_API_KEY
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
-import com.tomtom.sdk.map.display.camera.CameraChangeListener
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.camera.CameraTrackingMode
 import com.tomtom.sdk.map.display.common.screen.Padding
 import com.tomtom.sdk.map.display.gesture.MapLongClickListener
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
-import com.tomtom.sdk.map.display.route.Instruction
 import com.tomtom.sdk.map.display.route.RouteClickListener
-import com.tomtom.sdk.map.display.route.RouteOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.currentlocation.CurrentLocationButton.VisibilityPolicy
 import com.tomtom.sdk.navigation.RoutePlan
@@ -75,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         createNavigationFragment()
 
         initMap {
+            viewModel.initNavigationVisualization(tomTomMap)
             if(!viewModel.isNavigationRunning()) {
                 /**
                  * The LocationProvider itself only reports location changes.
@@ -99,16 +97,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpViewModelObservers() {
-        viewModel.route.observe(this) {
-            tomTomMap.removeRoutes()
-            drawRoute(it)
-            if (!viewModel.isNavigationRunning()) {
-                tomTomMap.zoomToRoutes(ZOOM_TO_ROUTE_PADDING)
-            }
-        }
-        viewModel.distanceAlongRoute.observe(this) {
-            tomTomMap.routes.firstOrNull()?.progress = it
-        }
         viewModel.routingFailure.observe(this) {
             Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_SHORT).show()
         }
@@ -227,7 +215,7 @@ class MainActivity : AppCompatActivity() {
      */
     private val routeClickListener = RouteClickListener {
         if (!viewModel.isNavigationRunning()) {
-            viewModel.route.value?.let { route ->
+            viewModel.selectedRoute?.let { route ->
                 mapFragment.currentLocationButton.visibilityPolicy = VisibilityPolicy.Invisible
                 startNavigation(route)
             }
@@ -238,35 +226,6 @@ class MainActivity : AppCompatActivity() {
         val userLocation =
             tomTomMap.currentLocation?.position ?: return
         viewModel.calculateRoute(userLocation, destination)
-    }
-
-    /**
-     * Used to draw route on the map
-     */
-    private fun drawRoute(route: Route) {
-        val instructions = route.mapInstructions()
-        val routeOptions = RouteOptions(
-            geometry = route.geometry,
-            destinationMarkerVisible = true,
-            departureMarkerVisible = true,
-            instructions = instructions,
-            routeOffset = route.routePoints.map { it.routeOffset }
-        )
-        tomTomMap.addRoute(routeOptions)
-    }
-
-    /**
-     * For the navigation use case, the instructions can be drawn on the route in form of arrows that indicate maneuvers.
-     * To do this, map the Instruction object provided by routing to the Instruction object used by the map.
-     * Note that during navigation, you need to update the progress property of the drawn route to display the next instructions.
-     */
-    private fun Route.mapInstructions(): List<Instruction> {
-        val routeInstructions = legs.flatMap { routeLeg -> routeLeg.instructions }
-        return routeInstructions.map {
-            Instruction(
-                routeOffset = it.routeOffset
-            )
-        }
     }
 
     /**
@@ -302,8 +261,6 @@ class MainActivity : AppCompatActivity() {
      */
     private val navigationListener = object : NavigationFragment.NavigationListener {
         override fun onStarted() {
-            tomTomMap.addCameraChangeListener(cameraChangeListener)
-            tomTomMap.cameraTrackingMode = CameraTrackingMode.FollowRouteDirection
             tomTomMap.enableLocationMarker(LocationMarkerOptions(LocationMarkerOptions.Type.Chevron))
             setMapNavigationPadding()
         }
@@ -334,10 +291,10 @@ class MainActivity : AppCompatActivity() {
         navigationFragment.stopNavigation()
         mapFragment.currentLocationButton.visibilityPolicy =
             VisibilityPolicy.InvisibleWhenRecentered
-        tomTomMap.removeCameraChangeListener(cameraChangeListener)
+//        tomTomMap.removeCameraChangeListener(cameraChangeListener)
         tomTomMap.cameraTrackingMode = CameraTrackingMode.None
         resetMapPadding()
-        clearMap()
+//        clearMap()
         tomTomMap.setLocationProvider(viewModel.mapLocationProvider)
         viewModel.navigationStopped()
         showUserLocation()
@@ -367,14 +324,14 @@ class MainActivity : AppCompatActivity() {
         tomTomMap.clear()
     }
 
-    private val cameraChangeListener = CameraChangeListener {
-        val cameraTrackingMode = tomTomMap.cameraTrackingMode
-        if (cameraTrackingMode == CameraTrackingMode.FollowRouteDirection) {
-            navigationFragment.navigationView.showSpeedView()
-        } else {
-            navigationFragment.navigationView.hideSpeedView()
-        }
-    }
+//    private val cameraChangeListener = CameraChangeListener {
+//        val cameraTrackingMode = tomTomMap.cameraTrackingMode
+//        if (cameraTrackingMode == CameraTrackingMode.FollowRouteDirection) {
+//            navigationFragment.navigationView.showSpeedView()
+//        } else {
+//            navigationFragment.navigationView.hideSpeedView()
+//        }
+//    }
 
     /**
      * Method to verify permissions:

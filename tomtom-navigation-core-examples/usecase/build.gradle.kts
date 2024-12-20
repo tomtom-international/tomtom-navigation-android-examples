@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.navigationUi)
     implementation(libs.routePlannerOnline)
     implementation(libs.routeReplannerOnline)
+    implementation(libs.navigationVisualization)
 
     // Android dependencies.
     implementation(libs.bundles.androidCommon)

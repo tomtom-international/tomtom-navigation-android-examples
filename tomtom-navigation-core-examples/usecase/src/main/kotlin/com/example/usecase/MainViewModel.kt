@@ -5,7 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.usecase.BuildConfig.TOMTOM_API_KEY
-import com.tomtom.quantity.Distance
 import com.tomtom.sdk.datamanagement.navigationtile.NavigationTileStore
 import com.tomtom.sdk.datamanagement.navigationtile.NavigationTileStoreConfiguration
 import com.tomtom.sdk.location.DefaultLocationProviderFactory
@@ -16,8 +15,10 @@ import com.tomtom.sdk.location.OnLocationUpdateListener
 import com.tomtom.sdk.location.mapmatched.MapMatchedLocationProviderFactory
 import com.tomtom.sdk.location.simulation.SimulationLocationProvider
 import com.tomtom.sdk.location.simulation.strategy.InterpolationStrategy
-import com.tomtom.sdk.navigation.ActiveRouteChangedListener
-import com.tomtom.sdk.navigation.ProgressUpdatedListener
+import com.tomtom.sdk.map.display.TomTomMap
+import com.tomtom.sdk.map.display.visualization.navigation.NavigationVisualization
+import com.tomtom.sdk.map.display.visualization.navigation.NavigationVisualizationFactory
+import com.tomtom.sdk.map.display.visualization.routing.RoutePlan
 import com.tomtom.sdk.navigation.TomTomNavigation
 import com.tomtom.sdk.navigation.online.Configuration
 import com.tomtom.sdk.navigation.online.OnlineTomTomNavigationFactory
@@ -53,6 +54,7 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
     private lateinit var navigationTileStore: NavigationTileStore
     lateinit var tomTomNavigation: TomTomNavigation
         private set
+    private lateinit var navigationVisualization: NavigationVisualization
 
     private val _location = MutableLiveData<GeoLocation>()
     val location: LiveData<GeoLocation>
@@ -61,13 +63,14 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
     val routingFailure: LiveData<RoutingFailure>
         get() = _routingFailure
 
-    private val _distanceAlongRoute = MutableLiveData<Distance>()
-    val distanceAlongRoute: LiveData<Distance>
-        get() = _distanceAlongRoute
-
-    private val _route = MutableLiveData<Route>()
-    val route: LiveData<Route>
-        get() = _route
+    val selectedRoute: Route?
+        get() {
+            return if (::navigationVisualization.isInitialized) {
+                navigationVisualization.selectedRoute
+            } else {
+                null
+            }
+        }
 
     private var _routePlanningOptions: RoutePlanningOptions? = null
     val routePlanningOptions: RoutePlanningOptions
@@ -126,6 +129,17 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
         tomTomNavigation = OnlineTomTomNavigationFactory.create(configuration)
     }
 
+    fun initNavigationVisualization(tomTomMap: TomTomMap) {
+        if (::navigationVisualization.isInitialized) {
+            navigationVisualization.replaceMap(tomTomMap)
+        } else {
+            navigationVisualization = NavigationVisualizationFactory.create(
+                tomtomMap = tomTomMap,
+                tomtomNavigation = tomTomNavigation,
+            )
+        }
+    }
+
     override fun onLocationUpdate(location: GeoLocation) {
         _location.value = location
         mapLocationProvider.removeOnLocationUpdateListener(this)
@@ -165,7 +179,9 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
      */
     private val routePlanningCallback = object : RoutePlanningCallback {
         override fun onSuccess(result: RoutePlanningResponse) {
-            _route.value = result.routes.first()
+            val routePlan = RoutePlan(result.routes)
+            navigationVisualization.displayRoutePlan(routePlan)
+            navigationVisualization.selectRoute(routePlan.routes.first().id)
         }
 
         override fun onFailure(failure: RoutingFailure) {
@@ -175,17 +191,7 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
         override fun onRoutePlanned(route: Route) = Unit
     }
 
-    private val progressUpdatedListener = ProgressUpdatedListener {
-        _distanceAlongRoute.value = it.distanceAlongRoute
-    }
-
-    private val activeRouteChangedListener = ActiveRouteChangedListener { route ->
-        _route.value = route
-    }
-
     fun navigationStart(route: Route) {
-        tomTomNavigation.addProgressUpdatedListener(progressUpdatedListener)
-        tomTomNavigation.addActiveRouteChangedListener(activeRouteChangedListener)
         setSimulationLocationProviderToNavigation(route)
         setUpMapMatchedLocationProvider()
     }
@@ -215,8 +221,6 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
 
 
     fun navigationStopped() {
-        tomTomNavigation.removeProgressUpdatedListener(progressUpdatedListener)
-        tomTomNavigation.removeActiveRouteChangedListener(activeRouteChangedListener)
         mapLocationProvider.enable()
         navigationLocationProvider.disable()
         _mapMatchedLocationProvider?.close()
@@ -233,5 +237,6 @@ class MainViewModel(application: Application): AndroidViewModel(application), On
         navigationLocationProvider.close()
         navigationTileStore.close()
         mapLocationProvider.close()
+        navigationVisualization.close()
     }
 }
