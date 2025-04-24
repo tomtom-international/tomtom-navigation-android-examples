@@ -1,4 +1,4 @@
-## Offline navigation Use Case for Android ##
+## Offline Navigation Use Case for Android ##
 
 This project is a sample app to show how to run offline modules using the TomTom Navigation SDK on Android.
 
@@ -10,19 +10,19 @@ This project is a sample app to show how to run offline modules using the TomTom
   <img align="center" src="assets/nav-sdk-offline.png" width="400"/>
 </div> <br>
 
-This is a reference implementation of the Android [Offline Navigation Use Case tutorial](https://developer.tomtom.com/navigation/android/build-a-navigation-app/building-an-offline-navigation-app) for the TomTom Navigation SDK.
+This is a reference implementation of the Android [Offline Navigation Use Case Tutorial](https://developer.tomtom.com/navigation/android/build-a-navigation-app/building-an-offline-navigation-app) for the TomTom Navigation SDK.
 
 It does not include integration of the TPEG traffic module described in the tutorial.
 
-An empty NDS store is included and this is populated using the device location, loading relevant map regions around the
-current location. For more information on offline map updates see the [guide](https://developer.tomtom.com/navigation/android/guides/offline/quickstart).
+An empty NDS map is included. Map data around the device location will be downloaded and installed. Please be patient,
+as this may take several minutes to complete, depending on the internet connection speed of the device.
+For more information on offline map updates see the [guide](https://developer.tomtom.com/navigation/android/guides/offline/quickstart).
 
 ## Features
 
-- Auto-download offline map for region around the user location
-- Long press on the map to start a navigation
-- Tap on the search result to start a navigation
-- Navigation view
+- Automatically download offline map data around the user's location
+- Long press on the map to plan a route
+- Tap on the route for a guidance demo with the following features
     - Next instruction view
     - Route line progress view
     - Estimated time of arrival (ETA) view
@@ -38,61 +38,66 @@ obtained access,
 
 - Go to [repositories.tomtom.com](https://repositories.tomtom.com/) and log in with your account.
 - Expand the user menu in the top-right corner, and select "Edit profile" → "Generate an Identity Token".
-- Copy your token and paste into global gradle.properties as mentioned in the next step.
+- Copy your token and paste it into the global gradle.properties file, as described in the next step.
 
-### Add gradle.properties file
+### Add a gradle.properties file
 
 Add the entries below to the global `$HOME/.gradle/gradle.properties` file.
 
 ```bash
-# required to access artifactory
-repositoriesTomTomComUsername=###
-repositoriesTomTomComPassword=###
+# Required to access Artifactory
+repositoriesTomtomComUsername=###
+repositoriesTomtomComPassword=###
 
-# required in order to use TomTom's APIs
+# Required to use TomTom APIs
 tomtomApiKey=###
-ndsMapLicense=###
 ```
 
 ### Running the app
 
 - The first time you launch the app you will be prompted to allow the app access to your location. Choose "While using
   the app".
-- Initially the globe will be blank as the app is built with an empty NDS store. The app will need to be connected to
-  the internet initially to download the map data for offline use.
-- After a few seconds the current location marker will appear. Click the current location button to center on your
-  location. The map data for the regions around the location will be downloaded. This can take around 30 seconds. After
-  that time panning or zooming the map will trigger rendering with the downloaded map data.
+- Initially, the globe will be blank as the included NDS map is empty. The app will need to be connected to
+  the internet to download map data for offline use. Afterwards, an internet connection is no longer required.
+- After a few seconds, the current location marker will appear. Tap the current location button to center on your
+  location. The map data for the regions around the location will be downloaded. This can take anywhere from several
+  tens of seconds to several minutes, depending on your internet connection speed. After that time panning or zooming
+  the map will trigger rendering with the downloaded map data.
 
 ## Debugging
 
-The app is configured to default download the region around the user location. After running the project, the map
-downloading process will start automatically. It may take time to download the map. You can follow the process in
-the `Network Inspector` in `App Inspection` tool within Android Studio.
+The app is configured to download the map regions around the device location. After running the project, the map
+downloading process will start automatically. It will take time to download the map. You could follow the progress in
+the `Network Inspector` in the `App Inspection` tool within Android Studio.
 
 ## Preview
 
-You can see the downloaded map when the downloading process finished as below.
+You can see the downloaded map when the downloading and installation process has finished, as shown in the following
+example.
 
-| Zoomed Out                                                             | Region Downloaded                                                                          | 
+| Zoomed Out                                                             | Region Downloaded                                                                          |
 |------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
 | <img src="assets/offline-zoomed-out.png" width="250" alt="Zoomed Out"> | <img src="assets/offline-amsterdam-downloaded.png" width="250" alt="Amsterdam Downloaded"> |
 
-## Relevant map regions along the route
 
-You can enable the relevant maps region configuration as below.
+## Updating along the route
+
+For updates along the planned route, the `AutomaticNdsStoreUpdaterConfiguration` can be edited as follows.
 
 ```
-val relevantRegionUpdateConfig: NdsStoreUpdaterConfiguration = defaultUpdaterConfiguration.copy(
-     relevantRegions = RelevantRegionsAutomaticUpdatesConfiguration(
-                radius = Distance.kilometers(10.0),
-                updateInterval = 60.minutes
-            )
-)
+automaticUpdates = AutomaticNdsStoreUpdaterConfiguration(
+    relevantRegions = RelevantRegions(
+        radius = AUTOMATIC_UPDATES_RELEVANT_REGIONS_RADIUS,
+        updateInterval = AUTOMATIC_UPDATES_RELEVANT_REGIONS_UPDATE_INTERVAL,
+    ),
+    regionsAlongRoute = RegionsAlongRoute(
+        radius = AUTOMATIC_UPDATES_RELEVANT_REGIONS_RADIUS,
+    ),
+),
 ```
 
-When you set a route destination without a downloaded region, the region will be downloaded automatically and rendered
-in the map during the navigation continues.
+Configured as such, map regions close to the route will also be downloaded automatically as soon as navigation is
+started.
 
 ## Subdirectories
 - [Link to Use Case README](usecase/README.md)

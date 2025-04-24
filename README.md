@@ -13,7 +13,7 @@ please [read the documentation](https://developer.tomtom.com/navigation/android/
 
 Once you have obtained access, do the following:
 
-* Install the latest Android Studio. This sample code was build using Android Studio Koala | 2024.1.1
+* Install the latest Android Studio. This sample code was build using Android Studio Ladybug Feature Drop | 2024.2.2
 * Make sure that the minimum SDK API level is set to at least 26 (Android 8.0 "Oreo") and that the compile SDK API
   level is set to 34.
 

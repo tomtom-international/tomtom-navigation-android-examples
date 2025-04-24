@@ -19,7 +19,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.usecase.BuildConfig.NDS_MAP_LICENSE
 import com.example.usecase.BuildConfig.TOMTOM_API_KEY
 import com.example.usecase.assets.OnboardMapAssetsExtractor
 import com.tomtom.quantity.Distance
@@ -27,12 +26,12 @@ import com.tomtom.quantity.Speed
 import com.tomtom.sdk.annotations.InternalTomTomSdkApi
 import com.tomtom.sdk.common.fold
 import com.tomtom.sdk.datamanagement.nds.NdsStore
-import com.tomtom.sdk.datamanagement.nds.NdsStoreAccessPermit
 import com.tomtom.sdk.datamanagement.nds.NdsStoreConfiguration
 import com.tomtom.sdk.datamanagement.nds.update.NdsStoreUpdaterConfiguration
 import com.tomtom.sdk.datamanagement.nds.update.NdsStoreUpdater
 import com.tomtom.sdk.datamanagement.nds.update.automatic.AutomaticNdsStoreUpdaterConfiguration
 import com.tomtom.sdk.datamanagement.nds.update.automatic.AutomaticNdsStoreUpdaterConfiguration.RelevantRegions
+import com.tomtom.sdk.datamanagement.nds.update.automatic.AutomaticNdsStoreUpdaterConfiguration.RegionsAlongRoute
 import com.tomtom.sdk.featuretoggle.FeatureToggleController
 import com.tomtom.sdk.location.DefaultLocationProviderFactory
 import com.tomtom.sdk.location.GeoLocation
@@ -123,7 +122,6 @@ class MainActivity : AppCompatActivity() {
             context = applicationContext, NdsStoreConfiguration(
                 ndsStorePath,
                 keystorePath,
-                accessPermit = NdsStoreAccessPermit.MapLicense(NDS_MAP_LICENSE)
             )
         ).fold({ it }, {
             Toast.makeText(
@@ -132,19 +130,15 @@ class MainActivity : AppCompatActivity() {
             throw IllegalStateException(it.message)
         })
 
-        var relevantRegions : RelevantRegions? = null
-        if (AUTOMATIC_UPDATES_RELEVANT_REGIONS_UPDATE) {
-            relevantRegions = RelevantRegions(
-                radius = AUTOMATIC_UPDATES_RELEVANT_REGIONS_RADIUS,
-                updateInterval = AUTOMATIC_UPDATES_RELEVANT_REGIONS_UPDATE_INTERVAL
-            )
-        }
         ndsStoreUpdater = NdsStoreUpdater.create(
             context = applicationContext, ndsStore = ndsStore, configuration = NdsStoreUpdaterConfiguration(
                 updateStoragePath = path.resolve(RELATIVE_UPDATE_STORAGE_PATH),
                 persistentStoragePath = path.resolve(RELATIVE_MAP_UPDATE_PERSISTENCE_PATH),
                 automaticUpdates = AutomaticNdsStoreUpdaterConfiguration(
-                    relevantRegions = relevantRegions
+                    relevantRegions = RelevantRegions(
+                        radius = AUTOMATIC_UPDATES_RELEVANT_REGIONS_RADIUS,
+                        updateInterval = AUTOMATIC_UPDATES_RELEVANT_REGIONS_UPDATE_INTERVAL,
+                    ),
                 ),
                 updateServerUri = Uri.parse(UPDATE_SERVER_URL),
                 updateServerApiKey = TOMTOM_API_KEY
@@ -185,8 +179,6 @@ class MainActivity : AppCompatActivity() {
 
         val updateListener = object : OnLocationUpdateListener {
             override fun onLocationUpdate(location: GeoLocation) {
-                setNdsStorePosition(location.position)
-
                 tomTomMap.moveCamera(
                     CameraOptions(position = location.position, zoom = 12.0)
                 )
@@ -416,10 +408,6 @@ class MainActivity : AppCompatActivity() {
         this, Manifest.permission.ACCESS_COARSE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
 
-    private fun setNdsStorePosition(currentPosition: GeoPoint) {
-        ndsStoreUpdater.updatePosition(currentPosition)
-    }
-
     override fun onDestroy() {
         tomTomMap.setLocationProvider(null)
         if (::navigationFragment.isInitialized) {
@@ -438,10 +426,9 @@ class MainActivity : AppCompatActivity() {
         private const val RELATIVE_UPDATE_STORAGE_PATH = "updates"
         private const val RELATIVE_KEYSTORE_PATH = "keystore.sqlite"
         private const val RELATIVE_MAP_UPDATE_PERSISTENCE_PATH = "mapUpdatePersistence"
-        private const val AUTOMATIC_UPDATES_RELEVANT_REGIONS_UPDATE = true
         private val AUTOMATIC_UPDATES_RELEVANT_REGIONS_RADIUS = Distance.kilometers(20.0)
         private val AUTOMATIC_UPDATES_RELEVANT_REGIONS_UPDATE_INTERVAL = 60.minutes
-        private const val UPDATE_SERVER_URL = "https://api.tomtom.com/nds-test/updates/1/fetch"
+        private const val UPDATE_SERVER_URL = "https://api.tomtom.com/nds-prod/updates/1/fetch"
         private const val SPEED_METERS_PER_SECOND = 30.0
         private const val ZOOM_TO_ROUTE_PADDING = 100
     }

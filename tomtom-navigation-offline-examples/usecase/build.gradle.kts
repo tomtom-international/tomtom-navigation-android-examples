@@ -24,7 +24,6 @@ android {
         versionCode = 1
         versionName = "1.0"
         buildConfigField("String", "TOMTOM_API_KEY", "\"${extra["tomtomApiKey"].toString()}\"")
-        buildConfigField("String", "NDS_MAP_LICENSE", "\"${extra["ndsMapLicense"].toString()}\"")
     }
 
     compileOptions {
@@ -46,6 +45,7 @@ android {
 dependencies {
     // TomTom SDK dependencies.
     implementation(libs.dataProviderOffline)
+    implementation(libs.dataStoreUpdater)
     implementation(libs.ndsStore)
     implementation(libs.ndsStoreUpdater)
     implementation(libs.featureToggle)
