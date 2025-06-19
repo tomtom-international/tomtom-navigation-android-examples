@@ -23,7 +23,6 @@ import com.example.usecase.BuildConfig.TOMTOM_API_KEY
 import com.example.usecase.assets.OnboardMapAssetsExtractor
 import com.tomtom.quantity.Distance
 import com.tomtom.quantity.Speed
-import com.tomtom.sdk.annotations.InternalTomTomSdkApi
 import com.tomtom.sdk.common.fold
 import com.tomtom.sdk.datamanagement.nds.NdsStore
 import com.tomtom.sdk.datamanagement.nds.NdsStoreConfiguration
@@ -189,7 +188,6 @@ class MainActivity : AppCompatActivity() {
         locationProvider.addOnLocationUpdateListener(updateListener)
     }
 
-    @OptIn(InternalTomTomSdkApi::class)
     private fun initRouting() {
         routePlanner = OfflineRoutePlanner.create(ndsStore = ndsStore)
     }
@@ -265,8 +263,6 @@ class MainActivity : AppCompatActivity() {
         override fun onFailure(failure: RoutingFailure) {
             Toast.makeText(this@MainActivity, failure.message, Toast.LENGTH_SHORT).show()
         }
-
-        override fun onRoutePlanned(route: Route) = Unit
     }
 
     private fun drawRoute(route: Route) {

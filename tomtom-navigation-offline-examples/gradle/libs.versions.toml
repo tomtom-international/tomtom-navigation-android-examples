@@ -1,7 +1,7 @@
 [versions]
-androidx_compat = "1.6.1"
-androidx_constraintlayout = "2.1.4"
-tomtom_sdk = "1.24.5"
+androidx_compat = "1.7.0"
+androidx_constraintlayout = "2.2.1"
+tomtom_sdk = "1.25.3"
 default_world_map = "45424"
 
 [libraries]
@@ -29,7 +29,7 @@ defaultMap = { module = "com.tomtom.sdk.datamanagement.nds:default-world-map", v
 androidCommon = ["androidXCompat", "androidXConstraintLayout"]
 
 [plugins]
-androidApplication = { id = "com.android.application", version = "8.8.0" }
-androidLibrary = { id = "com.android.library", version = "8.8.0" }
+androidApplication = { id = "com.android.application", version = "8.8.2" }
+androidLibrary = { id = "com.android.library", version = "8.8.2" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "1.8.22"}
 

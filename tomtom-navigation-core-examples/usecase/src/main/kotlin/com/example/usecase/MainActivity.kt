@@ -298,8 +298,6 @@ class MainActivity : AppCompatActivity() {
         override fun onFailure(failure: RoutingFailure) {
             Toast.makeText(this@MainActivity, failure.message, Toast.LENGTH_SHORT).show()
         }
-
-        override fun onRoutePlanned(route: Route) = Unit
     }
 
     /**
