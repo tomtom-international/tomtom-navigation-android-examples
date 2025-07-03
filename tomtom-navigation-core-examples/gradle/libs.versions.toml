@@ -1,7 +1,7 @@
 [versions]
 androidx_compat = "1.7.0"
 androidx_constraintlayout = "2.2.1"
-tomtom_sdk = "1.25.3"
+tomtom_sdk = "1.25.5"
 
 [libraries]
 locationProvider = { module = "com.tomtom.sdk.location:provider-default", version.ref = "tomtom_sdk" }
