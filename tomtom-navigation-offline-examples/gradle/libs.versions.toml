@@ -1,7 +1,7 @@
 [versions]
 androidx_compat = "1.7.0"
 androidx_constraintlayout = "2.2.1"
-tomtom_sdk = "1.25.7"
+tomtom_sdk = "1.25.9"
 default_world_map = "45424"
 
 [libraries]
