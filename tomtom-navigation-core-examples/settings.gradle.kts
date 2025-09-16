@@ -19,9 +19,9 @@ fun RepositoryHandler.tomtomArtifactory() {
 
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 

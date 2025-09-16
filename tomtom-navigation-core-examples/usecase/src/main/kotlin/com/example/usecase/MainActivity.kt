@@ -509,6 +509,7 @@ class MainActivity : AppCompatActivity() {
         }
         super.onDestroy()
         tomTomNavigation.close()
+        routePlanner.close()
         navigationTileStore.close()
         locationProvider.close()
     }

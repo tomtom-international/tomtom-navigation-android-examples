@@ -411,6 +411,7 @@ class MainActivity : AppCompatActivity() {
         }
         super.onDestroy()
         tomTomNavigation.close()
+        routePlanner.close()
         locationProvider.close()
         ndsStoreUpdater.close()
         ndsStore.close()
