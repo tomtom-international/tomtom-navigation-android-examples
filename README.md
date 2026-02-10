@@ -1,3 +1,6 @@
+> [!WARNING]
+> This repository has been archived and is no longer maintained starting from Maps and Navigation SDK version `2.1.2`. Please refer to the [tomtom-example-app](https://github.com/tomtom-international/tomtom-example-app) for our latest Android examples.
+
 # TomTom Navigation SDK examples
 
 This repository contains a set of individual Android Studio projects showcasing features for TomTom Navigation SDK for
